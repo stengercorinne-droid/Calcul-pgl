@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculateur PGL</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #f97316 0%, #dc2626 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 20px;
+        }
+        .app {
+            max-width: 480px;
+            width: 100%;
+            background: #fef3c7;
+            border-radius: 30px;
+            padding: 24px 20px 30px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            margin-top: 10px;
+        }
+        h1 {
+            text-align: center;
+            font-size: 28px;
+            color: #7c2d12;
+            margin-bottom: 2px;
+        }
+        .subtitle {
+            text-align: center;
+            color: #92400e;
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+        
+        .card {
+            background: #fffbeb;
+            border-radius: 16px;
+            padding: 18px 16px;
+            margin-bottom: 16px;
+            border: 2px solid #f59e0b;
+            box-shadow: 0 4px 10px rgba(245, 158, 11, 0.15);
+        }
+        .card h2 {
+            font-size: 17px;
+            color: #78350f;
+            margin-bottom: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .card h2 span {
+            font-size: 20px;
+        }
+        
+        label {
+            display: block;
+            font-weight: 600;
+            font-size: 12px;
+            color: #92400e;
+            margin-top: 10px;
+            margin-bottom: 4px;
+        }
+        select, input {
+            width: 100%;
+            padding: 10px 14px;
+            border: 2px solid #f59e0b;
+            border-radius: 12px;
+            font-size: 15px;
+            background: #fffbeb;
+            transition: border-color 0.2s;
+            color: #451a03;
+        }
+        select:focus, input:focus {
+            outline: none;
+            border-color: #d97706;
+            box-shadow: 0 0 0 4px rgba(217, 119, 6, 0.2);
+        }
+        
+        .row {
+            display: flex;
+            gap: 10px;
+        }
+        .row > * {
+            flex: 1;
+        }
+        
+        .btn {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 14px;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: transform 0.15s;
+            margin-top: 12px;
+        }
+        .btn:active {
+            transform: scale(0.97);
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #f97316, #dc2626);
+            color: white;
+            box-shadow: 0 4px 15px rgba(220, 38, 38, 0.3);
+        }
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #fb923c, #ef4444);
+        }
+        .btn-outline {
+            background: #fffbeb;
+            color: #b45309;
+            border: 2px solid #f59e0b;
+            box-shadow: none;
+        }
+        .btn-outline:hover {
+            background: #fef3c7;
+        }
+        .btn-success {
+            background: linear-gradient(135deg, #d97706, #b45309);
+            color: white;
+            box-shadow: 0 4px 15px rgba(180, 83, 9, 0.3);
+        }
+        .btn-success:hover {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+        }
+        .btn-danger {
+            background: #dc2626;
+            color: white;
+            box-shadow: 0 4px 15px rgba(220, 38, 38, 0.3);
+        }
+        .btn-danger:hover {
+            background: #ef4444;
+        }
+        .btn-sm {
+            padding: 6px 14px;
+            font-size: 12px;
+            margin-top: 0;
+            width: auto;
+            border-radius: 10px;
+        }
+        
+        .result {
+            background: #fffbeb;
+            border-radius: 14px;
+            padding: 16px;
+            margin-top: 14px;
+            display: none;
+            border: 2px solid #f59e0b;
+            box-shadow: inset 0 2px 8px rgba(245, 158, 11, 0.1);
+        }
+        .result.show {
+            display: block;
+        }
+        
+        .pgl-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+        }
+        .pgl-item {
+            text-align: center;
+            padding: 10px 6px;
+            background: #fef3c7;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+            border: 1px solid #fcd34d;
+        }
+        .pgl-item .emoji {
+            font-size: 22px;
+            display: block;
+            margin-bottom: 2px;
+        }
+        .pgl-item .value {
+            font-size: 20px;
+            font-weight: 800;
+            color: #78350f;
+        }
+        .pgl-item .label {
+            font-size: 10px;
+            font-weight: 600;
+            color: #92400e;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .pgl-item.prot { border-left: 4px solid #3b82f6; }
+        .pgl-item.gluc { border-left: 4px solid #f59e0b; }
+        .pgl-item.lip { border-left: 4px solid #ef4444; }
+        
+        .total {
+            text-align: center;
+            font-size: 15px;
+            font-weight: 700;
+            color: #92400e;
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 2px dashed #f59e0b;
+        }
+        .total span {
+            color: #dc2626;
+            font-size: 18px;
+        }
+        
+        /* Liste recette */
+        .recipe-list {
+            list-style: none;
+            margin: 10px 0 4px 0;
+            max-height: 180px;
+            overflow-y: auto;
+        }
+        .recipe-list li {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 12px;
+            background: #fef3c7;
+            border-radius: 10px;
+            margin-bottom: 4px;
+            border: 1px solid #fcd34d;
+            font-size: 14px;
+            color: #78350f;
+        }
+        .recipe-list li .remove {
+            color: #dc2626;
+            font-weight: 800;
+            cursor: pointer;
+            padding: 0 6px;
+            font-size: 16px;
+        }
+        .recipe-list li .remove:hover {
+            background: #fecaca;
+            border-radius: 6px;
+        }
+        .recipe-empty {
+            text-align: center;
+            color: #92400e;
+            padding: 14px;
+            font-size: 13px;
+            opacity: 0.7;
+        }
+        
+        .badge {
+            background: #dc2626;
+            color: white;
+            padding: 2px 10px;
+            border-radius: 40px;
+            font-size: 11px;
+            font-weight: 700;
+            margin-left: 6px;
+        }
+        
+        .flex-between {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .mt-8 { margin-top: 8px; }
+        .mt-4 { margin-top: 4px; }
+        .gap-8 { gap: 8px; }
+        
+        .footer {
+            text-align: center;
+            font-size: 11px;
+            color: #92400e;
+            margin-top: 6px;
+            opacity: 0.7;
+        }
+        
+        /* Scrollbar */
+        .recipe-list::-webkit-scrollbar {
+            width: 4px;
+        }
+        .recipe-list::-webkit-scrollbar-track {
+            background: #fef3c7;
+            border-radius: 10px;
+        }
+        .recipe-list::-webkit-scrollbar-thumb {
+            background: #f59e0b;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="app">
+    <h1>🍽️ Calculateur PGL</h1>
+    <p class="subtitle">Protéines • Glucides • Lipides</p>
+    
+    <!-- ========== INGRÉDIENT UNIQUE ========== -->
+    <div class="card">
+        <h2><span>🔹</span> Ingrédient unique</h2>
+        <div class="row">
+            <div>
+                <label>🍱 Aliment</label>
+                <select id="ingredientSelect"></select>
+            </div>
+            <div>
+                <label>⚖️ Grammes</label>
+                <input type="number" id="qtyInput" value="100" min="1" step="1" />
+            </div>
+        </div>
+        
+        <button class="btn btn-primary" id="calcBtn">📊 Calculer</button>
+        
+        <div class="result" id="singleResult">
+            <div class="pgl-grid">
+                <div class="pgl-item prot">
+                    <span class="emoji">💪</span>
+                    <div class="value" id="singleProt">0</div>
+                    <div class="label">Protéines</div>
+                </div>
+                <div class="pgl-item gluc">
+                    <span class="emoji">🌾</span>
+                    <div class="value" id="singleGluc">0</div>
+                    <div class="label">Glucides</div>
+                </div>
+                <div class="pgl-item lip">
+                    <span class="emoji">🥑</span>
+                    <div class="value" id="singleLip">0</div>
+                    <div class="label">Lipides</div>
+                </div>
+            </div>
+            <div class="total">🔥 Calories : <span id="singleCal">0</span> kcal</div>
+        </div>
+    </div>
+    
+    <!-- ========== RECETTE ========== -->
+    <div class="card">
+        <h2><span>🔸</span> Recette <span class="badge" id="recipeBadge">0</span></h2>
+        
+        <div class="row">
+            <div>
+                <label>🍱 Ajouter un ingrédient</label>
+                <select id="recipeSelect"></select>
+            </div>
+            <div>
+                <label>⚖️ Grammes</label>
+                <input type="number" id="recipeQty" value="50" min="1" step="1" />
+            </div>
+        </div>
+        
+        <button class="btn btn-outline" id="addRecipeBtn">➕ Ajouter à la recette</button>
+        
+        <ul class="recipe-list" id="recipeList">
+            <li class="recipe-empty">Aucun ingrédient — ajoute-en un !</li>
+        </ul>
+        
+        <div class="flex-between mt-8">
+            <button class="btn btn-success" id="calcRecipeBtn" style="flex:3;margin-right:8px;">📊 Calculer la recette</button>
+            <button class="btn btn-danger btn-sm" id="clearRecipeBtn" style="flex:1;">🗑️</button>
+        </div>
+        
+        <div class="result" id="recipeResult">
+            <div class="pgl-grid">
+                <div class="pgl-item prot">
+                    <span class="emoji">💪</span>
+                    <div class="value" id="recipeProt">0</div>
+                    <div class="label">Protéines</div>
+                </div>
+                <div class="pgl-item gluc">
+                    <span class="emoji">🌾</span>
+                    <div class="value" id="recipeGluc">0</div>
+                    <div class="label">Glucides</div>
+                </div>
+                <div class="pgl-item lip">
+                    <span class="emoji">🥑</span>
+                    <div class="value" id="recipeLip">0</div>
+                    <div class="label">Lipides</div>
+                </div>
+            </div>
+            <div class="total">🔥 Calories : <span id="recipeCal">0</span> kcal • <span id="recipeCount">0</span> ingrédients</div>
+        </div>
+    </div>
+    
+    <div class="footer">✨ Données pour 100g • Base de 50 aliments</div>
+</div>
+
+<script>
+// ============================================================
+// BASE DE DONNÉES (pour 100g)
+// ============================================================
+const FOOD_DB = [
+    { name: "Poulet (blanc)", calories: 165, protein: 31, carbs: 0, fat: 3.6 },
+    { name: "Poulet (cuisse)", calories: 177, protein: 26, carbs: 0, fat: 8 },
+    { name: "Dinde (blanc)", calories: 135, protein: 30, carbs: 0, fat: 1.5 },
+    { name: "Bœuf (haché 5%)", calories: 150, protein: 20, carbs: 0, fat: 7 },
+    { name: "Bœuf (haché 15%)", calories: 250, protein: 17, carbs: 0, fat: 20 },
+    { name: "Saumon", calories: 208, protein: 22, carbs: 0, fat: 13 },
+    { name: "Crevettes", calories: 85, protein: 20, carbs: 0, fat: 0.5 },
+    { name: "Thon au naturel", calories: 110, protein: 25, carbs: 0, fat: 0.8 },
+    { name: "Sardines (huile)", calories: 208, protein: 24, carbs: 0, fat: 12 },
+    { name: "Maquereau", calories: 262, protein: 20, carbs: 0, fat: 20 },
+    { name: "Œuf entier", calories: 155, protein: 13, carbs: 1.1, fat: 11 },
+    { name: "Blanc d'œuf", calories: 52, protein: 11, carbs: 1, fat: 0.2 },
+    { name: "Jaune d'œuf", calories: 322, protein: 16, carbs: 3.6, fat: 27 },
+    { name: "Riz (cuit)", calories: 130, protein: 2.7, carbs: 28, fat: 0.3 },
+    { name: "Riz brun (cuit)", calories: 111, protein: 2.6, carbs: 23, fat: 0.9 },
+    { name: "Pâtes (cuites)", calories: 131, protein: 5, carbs: 25, fat: 0.5 },
+    { name: "Pâtes complètes", calories: 124, protein: 5.3, carbs: 26, fat: 0.9 },
+    { name: "Quinoa (cuit)", calories: 120, protein: 4.4, carbs: 21, fat: 1.9 },
+    { name: "Pain complet", calories: 247, protein: 9, carbs: 46, fat: 1.5 },
+    { name: "Pain blanc", calories: 265, protein: 9, carbs: 49, fat: 1.5 },
+    { name: "Flocons d'avoine", calories: 389, protein: 16.9, carbs: 66, fat: 6.9 },
+    { name: "Lait (demi-écrémé)", calories: 50, protein: 3.3, carbs: 4.8, fat: 1.6 },
+    { name: "Lait (entier)", calories: 64, protein: 3.2, carbs: 4.8, fat: 3.6 },
+    { name: "Fromage blanc 0%", calories: 45, protein: 8, carbs: 4, fat: 0.2 },
+    { name: "Fromage blanc 20%", calories: 95, protein: 7, carbs: 3.5, fat: 5.5 },
+    { name: "Yaourt nature", calories: 61, protein: 4.3, carbs: 4.7, fat: 2.9 },
+    { name: "Parmesan", calories: 431, protein: 35, carbs: 3.2, fat: 30 },
+    { name: "Mozzarella", calories: 280, protein: 28, carbs: 1.5, fat: 18 },
+    { name: "Beurre", calories: 717, protein: 0.9, carbs: 0.1, fat: 81 },
+    { name: "Huile d'olive", calories: 884, protein: 0, carbs: 0, fat: 100 },
+    { name: "Amandes", calories: 579, protein: 21, carbs: 22, fat: 49 },
+    { name: "Noix de cajou", calories: 553, protein: 18, carbs: 30, fat: 44 },
+    { name: "Noisettes", calories: 628, protein: 15, carbs: 17, fat: 61 },
+    { name: "Banane", calories: 89, protein: 1.1, carbs: 23, fat: 0.3 },
+    { name: "Pomme", calories: 52, protein: 0.3, carbs: 14, fat: 0.2 },
+    { name: "Avocat", calories: 160, protein: 2, carbs: 9, fat: 15 },
+    { name: "Brocoli (cuit)", calories: 35, protein: 2.4, carbs: 7, fat: 0.4 },
+    { name: "Carotte", calories: 41, protein: 0.9, carbs: 10, fat: 0.2 },
+    { name: "Tomate", calories: 18, protein: 0.9, carbs: 3.9, fat: 0.2 },
+    { name: "Lentilles (cuites)", calories: 116, protein: 9, carbs: 20, fat: 0.4 },
+    { name: "Pois chiches (cuits)", calories: 139, protein: 8.9, carbs: 27, fat: 2.6 },
+    { name: "Haricots rouges (cuits)", calories: 127, protein: 8.7, carbs: 23, fat: 0.5 },
+    { name: "Tofu nature", calories: 76, protein: 8, carbs: 2, fat: 4.5 },
+    { name: "Tofu soyeux", calories: 55, protein: 5, carbs: 3, fat: 2.5 },
+    { name: "Seitan", calories: 120, protein: 25, carbs: 4, fat: 1.5 },
+    { name: "Tempeh", calories: 193, protein: 20, carbs: 9, fat: 11 },
+    { name: "Edamame", calories: 122, protein: 11, carbs: 10, fat: 5 },
+    { name: "Pomme de terre (cuite)", calories: 87, protein: 1.9, carbs: 20, fat: 0.1 },
+    { name: "Patate douce (cuite)", calories: 90, protein: 2, carbs: 21, fat: 0.1 },
+    { name: "Miel", calories: 304, protein: 0.3, carbs: 82, fat: 0 },
+    { name: "Sucre blanc", calories: 399, protein: 0, carbs: 100, fat: 0 },
+    { name: "Chocolat noir 70%", calories: 598, protein: 7.8, carbs: 46, fat: 43 },
+    { name: "Jambon blanc", calories: 108, protein: 20, carbs: 0.5, fat: 2.5 },
+    { name: "Sauce soja", calories: 53, protein: 8.5, carbs: 4.5, fat: 0.5 },
+    { name: "Betterave (cuite)", calories: 44, protein: 1.6, carbs: 10, fat: 0.1 },
+    { name: "Maïs (en boîte)", calories: 86, protein: 3.2, carbs: 19, fat: 1.2 },
+    { name: "Petit pois (cuits)", calories: 81, protein: 5.4, carbs: 14, fat: 0.4 },
+];
+
+// ============================================================
+// FONCTIONS UTILES
+// ============================================================
+function findFood(name) {
+    return FOOD_DB.find(f => f.name === name);
+}
+
+function round(v) {
+    return Math.round(v * 10) / 10;
+}
+
+function getEmoji(name) {
+    const map = {
+        'poulet': '🍗', 'boeuf': '🥩', 'saumon': '🐟', 'thon': '🐟', 'sardine': '🐟',
+        'maquereau': '🐟', 'œuf': '🥚', 'oeuf': '🥚', 'lait': '🥛', 'fromage': '🧀',
+        'yaourt': '🫗', 'riz': '🍚', 'pâtes': '🍝', 'quinoa': '🌾', 'pain': '🍞',
+        'avoine': '🌾', 'banane': '🍌', 'pomme': '🍎', 'avocat': '🥑', 'brocoli': '🥦',
+        'carotte': '🥕', 'tomate': '🍅', 'lentille': '🫘', 'pois chiche': '🫘',
+        'tofu': '🧈', 'seitan': '🥩', 'tempeh': '🧈', 'edamame': '🫘',
+        'pomme de terre': '🥔', 'patate douce': '🍠', 'miel': '🍯', 'sucre': '🍬',
+        'chocolat': '🍫', 'parmesan': '🧀', 'mozzarella': '🧀', 'jambon': '🥓',
+        'soja': '🫘', 'betterave': '🟣', 'maïs': '🌽', 'petit pois': '🫛',
+        'dinde': '🦃', 'crevette': '🦐', 'amande': '🥜', 'cajou': '🥜', 'noisette': '🥜'
+    };
+    const lower = name.toLowerCase();
+    for (const [key, emoji] of Object.entries(map)) {
+        if (lower.includes(key)) return emoji;
+    }
+    return '🍽️';
+}
+
+// ============================================================
+// INIT LISTES
+// ============================================================
+function populateSelects() {
+    ['ingredientSelect', 'recipeSelect'].forEach(id => {
+        const sel = document.getElementById(id);
+        sel.innerHTML = '';
+        FOOD_DB.sort((a, b) => a.name.localeCompare(b.name));
+        FOOD_DB.forEach(f => {
+            const opt = document.createElement('option');
+            opt.value = f.name;
+            opt.textContent = f.name;
+            sel.appendChild(opt);
+        });
+    });
+}
+populateSelects();
+
+// ============================================================
+// INGRÉDIENT UNIQUE
+// ============================================================
+document.getElementById('calcBtn').addEventListener('click', function() {
+    const name = document.getElementById('ingredientSelect').value;
+    const qty = parseFloat(document.getElementById('qtyInput').value) || 0;
+    const food = findFood(name);
+    
+    if (!food || qty <= 0) {
+        document.getElementById('singleResult').classList.remove('show');
+        return;
+    }
+    
+    const ratio = qty / 100;
+    const cal = Math.round(food.calories * ratio);
+    const prot = round(food.protein * ratio);
+    const gluc = round(food.carbs * ratio);
+    const lip = round(food.fat * ratio);
+    
+    document.getElementById('singleProt').textContent = prot;
+    document.getElementById('singleGluc').textContent = gluc;
+    document.getElementById('singleLip').textContent = lip;
+    document.getElementById('singleCal').textContent = cal;
+    
+    document.getElementById('singleResult').classList.add('show');
+});
+
+document.getElementById('qtyInput').addEventListener('keypress', function(e) {
+    if (e.key === 'Enter') document.getElementById('calcBtn').click();
+});
+
+// ============================================================
+// RECETTE
+// ============================================================
+const recipeItems = [];
+
+function renderRecipeList() {
+    const ul = document.getElementById('recipeList');
+    ul.innerHTML = '';
+    
+    if (recipeItems.length === 0) {
+        ul.innerHTML = '<li class="recipe-empty">Aucun ingrédient — ajoute-en un !</li>';
+        document.getElementById('recipeBadge').textContent = '0';
+        return;
+    }
+    
+    recipeItems.forEach((item, index) => {
+        const li = document.createElement('li');
+        const emoji = getEmoji(item.name);
+        li.innerHTML = `
+            <span>${emoji} <strong>${item.name}</strong> — ${item.qty}g</span>
+            <span class="remove" data-index="${index}">✕</span>
+        `;
+        ul.appendChild(li);
+    });
+    
+    document.getElementById('recipeBadge').textContent = recipeItems.length;
+    
+    document.querySelectorAll('.recipe-list .remove').forEach(el => {
+        el.addEventListener('click', function() {
+            const idx = parseInt(this.dataset.index);
+            recipeItems.splice(idx, 1);
+            renderRecipeList();
+            document.getElementById('recipeResult').classList.remove('show');
+        });
+    });
+}
+
+document.getElementById('addRecipeBtn').addEventListener('click', function() {
+    const name = document.getElementById('recipeSelect').value;
+    const qty = parseFloat(document.getElementById('recipeQty').value) || 0;
+    
+    if (!name || qty <= 0) {
+        alert('Sélectionne un ingrédient et une quantité valide.');
+        return;
+    }
+    
+    recipeItems.push({ name, qty });
+    renderRecipeList();
+    document.getElementById('recipeResult').classList.remove('show');
+    document.getElementById('recipeQty').value = 50;
+});
+
+document.getElementById('calcRecipeBtn').addEventListener('click', function() {
+    if (recipeItems.length === 0) {
+        alert('Ajoute au moins un ingrédient à ta recette.');
+        return;
+    }
+    
+    let totalCal = 0, totalProt = 0, totalGluc = 0, totalLip = 0;
+    
+    recipeItems.forEach(item => {
+        const food = findFood(item.name);
+        if (!food) return;
+        const ratio = item.qty / 100;
+        totalCal += food.calories * ratio;
+        totalProt += food.protein * ratio;
+        totalGluc += food.carbs * ratio;
+        totalLip += food.fat * ratio;
+    });
+    
+    document.getElementById('recipeProt').textContent = round(totalProt);
+    document.getElementById('recipeGluc').textContent = round(totalGluc);
+    document.getElementById('recipeLip').textContent = round(totalLip);
+    document.getElementById('recipeCal').textContent = Math.round(totalCal);
+    document.getElementById('recipeCount').textContent = recipeItems.length;
+    
+    document.getElementById('recipeResult').classList.add('show');
+});
+
+document.getElementById('clearRecipeBtn').addEventListener('click', function() {
+    if (recipeItems.length === 0) return;
+    if (confirm('Vider la recette ?')) {
+        recipeItems.length = 0;
+        renderRecipeList();
+        document.getElementById('recipeResult').classList.remove('show');
+    }
+});
+
+document.getElementById('recipeQty').addEventListener('keypress', function(e) {
+    if (e.key === 'Enter') document.getElementById('addRecipeBtn').click();
+});
+</script>
+</body>
+</html>
