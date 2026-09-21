@@ -11,190 +11,92 @@
 <style>
 :root {
   --black: #1a1815;
-  --prot: #5b7a99;
-  --prot-dark: #44607a;
-  --gluc: #7ba69e;
-  --gluc-dark: #5d8a82;
-  --lip: #7a9668;
-  --lip-dark: #5d7a4a;
-  --danger: #a8453c;
-  --danger-dark: #8a352d;
-  --cream: #f8f5f0;
-  --paper: #fdfbf7;
-  --bg: #d4c9b8;
-  --text: #2c2c2c;
+  --prot: #5b7a99; --prot-dark: #44607a;
+  --gluc: #7ba69e; --gluc-dark: #5d8a82;
+  --lip: #7a9668; --lip-dark: #5d7a4a;
+  --danger: #a8453c; --danger-dark: #8a352d;
+  --cream: #f8f5f0; --paper: #fdfbf7; --bg: #d4c9b8; --text: #2c2c2c;
   --shadow: 4px 4px 0 var(--black);
   --shadow-sm: 2px 2px 0 var(--black);
 }
 * { box-sizing: border-box; margin: 0; padding: 0; }
-
 body {
   font-family: 'Inter', system-ui, sans-serif;
   background-color: var(--bg);
   background-image: radial-gradient(circle, rgba(26,24,21,0.08) 1px, transparent 1px);
   background-size: 16px 16px;
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  padding: 20px;
-  color: var(--text);
+  min-height: 100vh; display: flex; justify-content: center; align-items: flex-start;
+  padding: 20px; color: var(--text);
 }
 .app { max-width: 480px; width: 100%; margin-top: 10px; }
-
 h1 {
-  display: block;
-  width: fit-content;
-  margin: 0 auto 8px;
-  font-family: 'Bangers', cursive;
-  font-size: clamp(32px, 9vw, 46px);
-  letter-spacing: 2px;
-  color: var(--cream);
-  background: var(--prot);
-  padding: 6px 22px 10px;
-  border: 3px solid var(--black);
-  box-shadow: var(--shadow);
-  text-shadow: 2px 2px 0 var(--black);
-  transform: rotate(-2deg);
-  line-height: 1;
+  display: block; width: fit-content; margin: 0 auto 8px;
+  font-family: 'Bangers', cursive; font-size: clamp(32px, 9vw, 46px);
+  letter-spacing: 2px; color: var(--cream); background: var(--prot);
+  padding: 6px 22px 10px; border: 3px solid var(--black); box-shadow: var(--shadow);
+  text-shadow: 2px 2px 0 var(--black); transform: rotate(-2deg); line-height: 1;
 }
 .subtitle {
-  display: block;
-  width: fit-content;
-  margin: 14px auto 24px;
-  font-family: 'Archivo Black', sans-serif;
-  font-size: 10px;
-  letter-spacing: 1.5px;
-  text-transform: uppercase;
-  color: var(--black);
-  background: var(--cream);
-  padding: 5px 12px;
-  border: 2px solid var(--black);
-  box-shadow: var(--shadow-sm);
+  display: block; width: fit-content; margin: 14px auto 24px;
+  font-family: 'Archivo Black', sans-serif; font-size: 10px; letter-spacing: 1.5px;
+  text-transform: uppercase; color: var(--black); background: var(--cream);
+  padding: 5px 12px; border: 2px solid var(--black); box-shadow: var(--shadow-sm);
   transform: rotate(1deg);
 }
-
-/* Onglets Calculateur / Journal */
-.tabs {
-  display: flex;
-  gap: 8px;
-  margin: 0 0 20px;
-}
+.tabs { display: flex; gap: 8px; margin: 0 0 20px; }
 .tab {
-  flex: 1;
-  font-family: 'Archivo Black', sans-serif;
-  font-size: 12px;
-  letter-spacing: 0.5px;
-  text-transform: uppercase;
-  padding: 11px 6px;
-  cursor: pointer;
-  color: var(--black);
-  background: var(--cream);
-  border: 3px solid var(--black);
-  box-shadow: var(--shadow-sm);
-  transition: transform 0.1s, box-shadow 0.1s, background 0.15s;
+  flex: 1; font-family: 'Archivo Black', sans-serif; font-size: 12px;
+  letter-spacing: 0.5px; text-transform: uppercase; padding: 11px 6px; cursor: pointer;
+  color: var(--black); background: var(--cream); border: 3px solid var(--black);
+  box-shadow: var(--shadow-sm); transition: transform 0.1s, box-shadow 0.1s, background 0.15s;
 }
 .tab:active { transform: translate(2px, 2px); box-shadow: 0 0 0 var(--black); }
 .tab.active { background: var(--prot); color: white; }
 .view { display: none; }
 .view.active { display: block; }
-
 .card {
-  background: var(--paper);
-  border: 3px solid var(--black);
-  box-shadow: var(--shadow);
-  padding: 18px 16px 20px;
-  margin-bottom: 22px;
+  background: var(--paper); border: 3px solid var(--black); box-shadow: var(--shadow);
+  padding: 18px 16px 20px; margin-bottom: 22px;
 }
 .card h2 {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  font-family: 'Archivo Black', sans-serif;
-  font-size: 14px;
-  color: var(--black);
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  padding-bottom: 12px;
-  border-bottom: 2px solid var(--black);
-  margin-bottom: 4px;
+  display: flex; align-items: center; gap: 10px;
+  font-family: 'Archivo Black', sans-serif; font-size: 14px; color: var(--black);
+  text-transform: uppercase; letter-spacing: 0.5px; padding-bottom: 12px;
+  border-bottom: 2px solid var(--black); margin-bottom: 4px;
 }
 .card h2 span:first-child {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 28px;
-  height: 28px;
-  background: var(--gluc);
-  border: 2px solid var(--black);
-  box-shadow: var(--shadow-sm);
-  font-size: 13px;
-  filter: grayscale(0.4);
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 28px; height: 28px; background: var(--gluc);
+  border: 2px solid var(--black); box-shadow: var(--shadow-sm);
+  font-size: 13px; filter: grayscale(0.4);
 }
 .badge {
-  margin-left: auto;
-  background: var(--prot);
-  color: white;
-  padding: 3px 10px;
-  border: 2px solid var(--black);
-  box-shadow: var(--shadow-sm);
-  font-size: 10px;
-  font-family: 'Archivo Black', sans-serif;
+  margin-left: auto; background: var(--prot); color: white;
+  padding: 3px 10px; border: 2px solid var(--black); box-shadow: var(--shadow-sm);
+  font-size: 10px; font-family: 'Archivo Black', sans-serif;
 }
-
 label {
-  display: block;
-  font-family: 'Archivo Black', sans-serif;
-  font-size: 9px;
-  text-transform: uppercase;
-  letter-spacing: 0.8px;
-  margin-top: 14px;
-  margin-bottom: 5px;
+  display: block; font-family: 'Archivo Black', sans-serif; font-size: 9px;
+  text-transform: uppercase; letter-spacing: 0.8px; margin-top: 14px; margin-bottom: 5px;
   color: var(--black);
 }
-select, input {
-  width: 100%;
-  padding: 11px 13px;
-  border: 2px solid var(--black);
-  border-radius: 0;
-  background: white;
-  font-size: 15px;
-  font-weight: 700;
-  font-family: 'Inter', sans-serif;
-  color: var(--black);
-  box-shadow: var(--shadow-sm);
+select, input[type="text"], input[type="number"] {
+  width: 100%; padding: 11px 13px; border: 2px solid var(--black); border-radius: 0;
+  background: white; font-size: 15px; font-weight: 700; font-family: 'Inter', sans-serif;
+  color: var(--black); box-shadow: var(--shadow-sm);
   transition: transform 0.12s, box-shadow 0.12s;
-  -webkit-appearance: none;
-  appearance: none;
-}
-select {
-  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 6'><path d='M0 0l5 6 5-6z' fill='black'/></svg>");
-  background-repeat: no-repeat;
-  background-position: right 12px center;
-  background-size: 10px;
-  padding-right: 32px;
+  -webkit-appearance: none; appearance: none;
 }
 select:focus, input:focus {
-  outline: none;
-  transform: translate(-1px, -1px);
-  box-shadow: 4px 4px 0 var(--black);
+  outline: none; transform: translate(-1px, -1px); box-shadow: 4px 4px 0 var(--black);
 }
 .row { display: flex; gap: 10px; }
 .row > * { flex: 1; }
-
 .btn {
-  width: 100%;
-  padding: 12px 14px;
-  border: 2px solid var(--black);
-  border-radius: 0;
-  font-family: 'Archivo Black', sans-serif;
-  font-size: 13px;
-  text-transform: uppercase;
-  letter-spacing: 1.2px;
-  cursor: pointer;
-  box-shadow: var(--shadow);
-  transition: transform 0.1s, box-shadow 0.1s, background 0.15s;
-  margin-top: 18px;
+  width: 100%; padding: 12px 14px; border: 2px solid var(--black); border-radius: 0;
+  font-family: 'Archivo Black', sans-serif; font-size: 13px; text-transform: uppercase;
+  letter-spacing: 1.2px; cursor: pointer; box-shadow: var(--shadow);
+  transition: transform 0.1s, box-shadow 0.1s, background 0.15s; margin-top: 18px;
 }
 .btn:active { transform: translate(3px, 3px); box-shadow: 0 0 0 var(--black); }
 .btn-primary { background: var(--prot); color: white; }
@@ -206,26 +108,15 @@ select:focus, input:focus {
 .btn-danger { background: var(--danger); color: white; }
 .btn-danger:hover { background: var(--danger-dark); }
 .btn-sm { padding: 8px 12px; font-size: 12px; margin-top: 0; width: auto; }
-
 .result {
-  margin-top: 20px;
-  padding: 16px 12px;
-  background: white;
-  border: 2px solid var(--black);
-  box-shadow: var(--shadow-sm);
-  display: none;
+  margin-top: 20px; padding: 16px 12px; background: white;
+  border: 2px solid var(--black); box-shadow: var(--shadow-sm); display: none;
 }
 .result.show { display: block; }
-.pgl-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 8px;
-}
+.pgl-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
 .pgl-item {
-  text-align: center;
-  padding: 10px 6px;
-  border: 2px solid var(--black);
-  box-shadow: var(--shadow-sm);
+  text-align: center; padding: 10px 6px;
+  border: 2px solid var(--black); box-shadow: var(--shadow-sm);
 }
 .pgl-item.prot { background: var(--prot); color: var(--cream); }
 .pgl-item.gluc { background: var(--gluc); color: var(--cream); }
@@ -234,429 +125,276 @@ select:focus, input:focus {
 .pgl-item .value { font-family: 'Archivo Black', sans-serif; font-size: 20px; line-height: 1; letter-spacing: -0.5px; }
 .pgl-item .label { font-family: 'Archivo Black', sans-serif; font-size: 8px; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 4px; }
 .total {
-  margin-top: 14px;
-  padding: 12px;
-  background: var(--cream);
-  border: 2px solid var(--black);
-  box-shadow: var(--shadow-sm);
-  text-align: center;
-  font-family: 'Archivo Black', sans-serif;
-  font-size: 12px;
-  text-transform: uppercase;
-  letter-spacing: 0.8px;
-  color: var(--black);
+  margin-top: 14px; padding: 12px; background: var(--cream);
+  border: 2px solid var(--black); box-shadow: var(--shadow-sm); text-align: center;
+  font-family: 'Archivo Black', sans-serif; font-size: 12px; text-transform: uppercase;
+  letter-spacing: 0.8px; color: var(--black);
 }
 .total span {
-  font-family: 'Bangers', cursive;
-  font-size: 24px;
-  color: var(--prot);
-  letter-spacing: 1.5px;
-  text-shadow: 1px 1px 0 var(--black);
-  margin: 0 2px;
+  font-family: 'Bangers', cursive; font-size: 24px; color: var(--prot);
+  letter-spacing: 1.5px; text-shadow: 1px 1px 0 var(--black); margin: 0 2px;
 }
-
 .recipe-list {
-  list-style: none;
-  margin: 12px 0 4px;
-  max-height: 180px;
-  overflow-y: auto;
+  list-style: none; margin: 12px 0 4px; max-height: 180px; overflow-y: auto;
 }
 .recipe-list li {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 8px 12px;
-  background: var(--cream);
-  border: 2px solid var(--black);
-  box-shadow: var(--shadow-sm);
-  margin-bottom: 6px;
-  font-size: 13px;
-  font-weight: 600;
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 8px 12px; background: var(--cream); border: 2px solid var(--black);
+  box-shadow: var(--shadow-sm); margin-bottom: 6px; font-size: 13px; font-weight: 600;
   color: var(--black);
 }
 .recipe-list li .remove {
-  color: var(--danger);
-  font-weight: 800;
-  cursor: pointer;
-  padding: 0 6px;
-  font-size: 16px;
-  transition: transform 0.12s;
+  color: var(--danger); font-weight: 800; cursor: pointer; padding: 0 6px;
+  font-size: 16px; transition: transform 0.12s;
 }
 .recipe-list li .remove:hover { transform: scale(1.3); }
 .recipe-empty {
-  text-align: center;
-  color: var(--black);
-  padding: 14px;
-  font-size: 12px;
-  opacity: 0.6;
-  font-style: italic;
-  border: none !important;
-  background: transparent !important;
-  box-shadow: none !important;
-  justify-content: center !important;
+  text-align: center; color: var(--black); padding: 14px; font-size: 12px;
+  opacity: 0.6; font-style: italic;
+  border: none !important; background: transparent !important;
+  box-shadow: none !important; justify-content: center !important;
 }
 .flex-between { display: flex; justify-content: space-between; align-items: center; }
 .mt-8 { margin-top: 8px; }
-
 .search-hint {
-  font-size: 11px;
-  font-style: italic;
-  color: #6b5e50;
-  margin-top: 6px;
-  text-align: center;
+  font-size: 11px; font-style: italic; color: #6b5e50;
+  margin-top: 6px; text-align: center;
 }
-.usda-results {
-  margin-top: 14px;
-  max-height: 340px;
-  overflow-y: auto;
-}
+.usda-results { margin-top: 14px; max-height: 340px; overflow-y: auto; }
 .usda-food {
-  background: var(--cream);
-  border: 2px solid var(--black);
-  box-shadow: var(--shadow-sm);
-  padding: 10px 12px;
-  margin-bottom: 8px;
+  background: var(--cream); border: 2px solid var(--black);
+  box-shadow: var(--shadow-sm); padding: 10px 12px; margin-bottom: 8px;
 }
 .usda-food .name {
-  font-family: 'Archivo Black', sans-serif;
-  font-size: 12px;
-  color: var(--black);
-  margin-bottom: 6px;
-  line-height: 1.3;
-  word-break: break-word;
+  font-family: 'Archivo Black', sans-serif; font-size: 12px; color: var(--black);
+  margin-bottom: 6px; line-height: 1.3; word-break: break-word;
 }
 .usda-food .macros {
-  font-size: 12px;
-  color: #5d4e3e;
-  margin-bottom: 8px;
-  font-weight: 600;
+  font-size: 12px; color: #5d4e3e; margin-bottom: 8px; font-weight: 600;
 }
 .usda-food .macros span { display: inline-block; margin-right: 8px; }
 .usda-food .add-btn {
-  width: 100%;
-  padding: 8px;
-  border: 2px solid var(--black);
-  background: var(--lip);
-  color: white;
-  font-family: 'Archivo Black', sans-serif;
-  font-size: 11px;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  cursor: pointer;
-  box-shadow: var(--shadow-sm);
-  transition: transform 0.1s, box-shadow 0.1s;
+  width: 100%; padding: 8px; border: 2px solid var(--black); background: var(--lip);
+  color: white; font-family: 'Archivo Black', sans-serif; font-size: 11px;
+  text-transform: uppercase; letter-spacing: 1px; cursor: pointer;
+  box-shadow: var(--shadow-sm); transition: transform 0.1s, box-shadow 0.1s;
 }
 .usda-food .add-btn:hover { background: var(--lip-dark); }
 .usda-food .add-btn:active { transform: translate(2px, 2px); box-shadow: 0 0 0 var(--black); }
 .usda-food .add-btn:disabled { background: #888; cursor: default; opacity: 0.7; }
 .usda-empty {
-  text-align: center;
-  padding: 14px;
-  font-size: 13px;
-  color: var(--black);
-  font-style: italic;
-  opacity: 0.7;
+  text-align: center; padding: 14px; font-size: 13px; color: var(--black);
+  font-style: italic; opacity: 0.7;
 }
-
 .translate-prompt {
-  background: #fff3cd;
-  border: 2px solid var(--black);
-  box-shadow: var(--shadow-sm);
-  padding: 12px;
-  margin-top: 12px;
+  background: #fff3cd; border: 2px solid var(--black);
+  box-shadow: var(--shadow-sm); padding: 12px; margin-top: 12px;
 }
 .translate-prompt p { font-size: 12px; margin-bottom: 8px; color: var(--black); }
 .translate-prompt input { margin-bottom: 8px; }
 .translate-prompt .actions { display: flex; gap: 8px; }
 .translate-prompt .actions .btn { flex: 1; margin-top: 0; padding: 9px; font-size: 11px; }
 
+/* ============================================================
+   AUTOCOMPLETE
+   ============================================================ */
+.ac-wrap { position: relative; }
+.ac-input {
+  width: 100%; padding: 11px 32px 11px 13px;
+  border: 2px solid var(--black); background: white; font-size: 15px; font-weight: 700;
+  font-family: 'Inter', sans-serif; color: var(--black); box-shadow: var(--shadow-sm);
+  -webkit-appearance: none; appearance: none;
+}
+.ac-input:focus {
+  outline: none; transform: translate(-1px, -1px); box-shadow: 4px 4px 0 var(--black);
+}
+.ac-clear {
+  position: absolute; top: 50%; right: 10px; transform: translateY(-50%);
+  width: 22px; height: 22px; padding: 0; border: none; background: transparent;
+  font-size: 16px; font-weight: 800; color: #999; cursor: pointer; display: none;
+}
+.ac-wrap.has-value .ac-clear { display: block; }
+.ac-list {
+  position: absolute; top: calc(100% + 4px); left: 0; right: 0;
+  background: white; border: 2px solid var(--black); box-shadow: var(--shadow);
+  max-height: 240px; overflow-y: auto; z-index: 100;
+  display: none;
+}
+.ac-list.show { display: block; }
+.ac-item {
+  padding: 9px 12px; font-size: 14px; font-weight: 600; cursor: pointer;
+  border-bottom: 1px solid #eee; color: var(--black);
+}
+.ac-item:last-child { border-bottom: none; }
+.ac-item:hover, .ac-item.active { background: var(--gluc); color: white; }
+.ac-empty {
+  padding: 12px; font-size: 12px; font-style: italic;
+  opacity: 0.6; text-align: center;
+}
+
+/* ============================================================
+   MODALS
+   ============================================================ */
 .modal-overlay {
-  position: fixed;
-  top: 0; left: 0; right: 0; bottom: 0;
-  background: rgba(26,24,21,0.6);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 20px;
-  z-index: 1000;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.15s;
+  position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(26,24,21,0.6); display: flex; justify-content: center;
+  align-items: center; padding: 20px; z-index: 1000;
+  opacity: 0; pointer-events: none; transition: opacity 0.15s;
 }
 .modal-overlay.show { opacity: 1; pointer-events: auto; }
 .modal {
-  background: var(--paper);
-  border: 3px solid var(--black);
-  box-shadow: 6px 6px 0 var(--black);
-  padding: 20px 18px;
-  max-width: 380px;
-  width: 100%;
-  max-height: 90vh;
-  overflow-y: auto;
+  background: var(--paper); border: 3px solid var(--black);
+  box-shadow: 6px 6px 0 var(--black); padding: 20px 18px;
+  max-width: 400px; width: 100%; max-height: 90vh; overflow-y: auto;
 }
 .modal h3 {
-  font-family: 'Archivo Black', sans-serif;
-  font-size: 14px;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  margin-bottom: 10px;
-  color: var(--black);
+  font-family: 'Archivo Black', sans-serif; font-size: 14px; text-transform: uppercase;
+  letter-spacing: 1px; margin-bottom: 10px; color: var(--black);
 }
 .modal p { font-size: 13px; margin-bottom: 10px; line-height: 1.4; color: var(--black); }
 .modal .old, .modal .new {
-  padding: 8px 10px;
-  margin-bottom: 6px;
-  border: 2px solid var(--black);
-  font-family: 'Inter', sans-serif;
-  font-size: 12px;
-  font-weight: 700;
-  background: white;
+  padding: 8px 10px; margin-bottom: 6px; border: 2px solid var(--black);
+  font-family: 'Inter', sans-serif; font-size: 12px; font-weight: 700; background: white;
 }
 .modal .old { border-color: #999; }
 .modal .new { border-color: var(--prot); }
 .modal .actions {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  gap: 6px;
-  margin-top: 14px;
+  display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px; margin-top: 14px;
 }
 .modal .actions .btn { margin-top: 0; padding: 10px 6px; font-size: 10px; letter-spacing: 0.5px; }
 .modal .actions-2 {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 8px;
-  margin-top: 16px;
+  display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 16px;
 }
 .modal .actions-2 .btn { margin-top: 0; padding: 11px 8px; font-size: 12px; }
 .modal .preview {
-  margin-top: 14px;
-  padding: 10px;
-  background: var(--cream);
-  border: 2px dashed var(--black);
-  text-align: center;
-  font-size: 12px;
-  font-weight: 700;
+  margin-top: 14px; padding: 10px; background: var(--cream);
+  border: 2px dashed var(--black); text-align: center;
+  font-size: 12px; font-weight: 700;
+}
+.modal .hint {
+  font-size: 11px; font-style: italic; color: #6b5e50;
+  margin-top: -4px; margin-bottom: 10px; line-height: 1.3;
+}
+.modal .macros-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.modal .usda-preview {
+  padding: 10px; background: var(--cream); border: 2px solid var(--black);
+  font-size: 11px; font-weight: 700; margin-top: 8px; text-align: center;
 }
 
 /* ============================================================
-   JOURNAL ALIMENTAIRE
+   JOURNAL
    ============================================================ */
-.daynav {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 14px;
-}
+.daynav { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
 .daynav button {
-  width: 42px;
-  height: 42px;
-  flex: 0 0 42px;
-  font-size: 18px;
-  font-weight: 800;
-  cursor: pointer;
-  color: var(--black);
-  background: var(--cream);
-  border: 3px solid var(--black);
-  box-shadow: var(--shadow-sm);
-  line-height: 1;
+  width: 42px; height: 42px; flex: 0 0 42px; font-size: 18px; font-weight: 800;
+  cursor: pointer; color: var(--black); background: var(--cream);
+  border: 3px solid var(--black); box-shadow: var(--shadow-sm); line-height: 1;
 }
 .daynav button:active { transform: translate(2px, 2px); box-shadow: 0 0 0 var(--black); }
 .daynav .date-label {
-  flex: 1;
-  text-align: center;
-  font-family: 'Bangers', cursive;
-  font-size: 22px;
-  letter-spacing: 1.5px;
-  color: var(--black);
+  flex: 1; text-align: center; font-family: 'Bangers', cursive;
+  font-size: 22px; letter-spacing: 1.5px; color: var(--black);
 }
-
 .day-total {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  padding: 12px 14px;
-  margin-bottom: 16px;
-  background: var(--black);
-  color: var(--cream);
-  border: 3px solid var(--black);
-  box-shadow: var(--shadow);
+  display: flex; flex-direction: column; gap: 6px;
+  padding: 12px 14px; margin-bottom: 16px;
+  background: var(--black); color: var(--cream);
+  border: 3px solid var(--black); box-shadow: var(--shadow);
 }
 .day-total .dt-kcal {
-  font-family: 'Archivo Black', sans-serif;
-  font-size: 18px;
-  text-align: center;
-  letter-spacing: 0.5px;
+  font-family: 'Archivo Black', sans-serif; font-size: 18px;
+  text-align: center; letter-spacing: 0.5px;
 }
 .day-total .dt-macros {
-  display: flex;
-  justify-content: space-around;
-  font-size: 12px;
-  font-weight: 700;
+  display: flex; justify-content: space-around; font-size: 12px; font-weight: 700;
 }
 .day-total .dt-macros .m-prot { color: #9dbbd6; }
 .day-total .dt-macros .m-gluc { color: #a8d1c9; }
 .day-total .dt-macros .m-lip  { color: #b3cc9d; }
 .day-total .dt-macros b { font-family: 'Archivo Black', sans-serif; font-size: 13px; }
-
 .meal {
-  background: var(--cream);
-  border: 3px solid var(--black);
-  box-shadow: var(--shadow-sm);
-  margin-bottom: 12px;
-  overflow: hidden;
+  background: var(--cream); border: 3px solid var(--black);
+  box-shadow: var(--shadow-sm); margin-bottom: 12px; overflow: hidden;
 }
 .meal-head {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 8px;
-  padding: 8px 12px;
-  background: #e8dcc4;
-  border-bottom: 2px solid var(--black);
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 8px; padding: 8px 12px; background: #e8dcc4; border-bottom: 2px solid var(--black);
 }
 .meal-head .meal-title {
-  font-family: 'Bangers', cursive;
-  font-size: 18px;
-  letter-spacing: 1px;
-  margin: 0;
-  color: var(--black);
+  font-family: 'Bangers', cursive; font-size: 18px; letter-spacing: 1px;
+  margin: 0; color: var(--black);
 }
 .meal-head .meal-kcal {
-  font-family: 'Archivo Black', sans-serif;
-  font-size: 12px;
-  color: var(--black);
-  white-space: nowrap;
+  font-family: 'Archivo Black', sans-serif; font-size: 12px;
+  color: var(--black); white-space: nowrap;
 }
 .meal-macros {
-  display: flex;
-  gap: 12px;
-  padding: 5px 12px;
-  font-size: 11px;
-  font-weight: 700;
-  background: #f1e8d2;
-  border-bottom: 2px dashed #c9bda3;
+  display: flex; gap: 12px; padding: 5px 12px; font-size: 11px; font-weight: 700;
+  background: #f1e8d2; border-bottom: 2px dashed #c9bda3;
 }
 .meal-macros .m-prot { color: var(--prot); }
 .meal-macros .m-gluc { color: var(--gluc-dark); }
 .meal-macros .m-lip  { color: var(--lip-dark); }
-
 .meal-items { list-style: none; margin: 0; padding: 0; }
 .meal-item {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 8px 12px;
-  border-bottom: 2px solid #efe4cd;
+  display: flex; align-items: center; gap: 8px;
+  padding: 8px 12px; border-bottom: 2px solid #efe4cd;
 }
 .meal-item:last-child { border-bottom: none; }
 .meal-item .item-name {
-  flex: 1;
-  font-size: 13px;
-  font-weight: 700;
-  line-height: 1.25;
-  color: var(--black);
+  flex: 1; font-size: 13px; font-weight: 700; line-height: 1.25; color: var(--black);
 }
 .meal-item .item-name .qty {
-  display: block;
-  font-size: 11px;
-  opacity: 0.6;
-  font-weight: 400;
-  margin-top: 1px;
+  display: block; font-size: 11px; opacity: 0.6; font-weight: 400; margin-top: 1px;
 }
 .meal-item .item-kcal {
-  font-size: 12px;
-  font-weight: 800;
-  white-space: nowrap;
-  color: var(--black);
+  font-size: 12px; font-weight: 800; white-space: nowrap; color: var(--black);
 }
 .meal-item .item-del {
-  flex: 0 0 24px;
-  width: 24px;
-  height: 24px;
-  font-size: 13px;
-  line-height: 1;
-  cursor: pointer;
-  color: white;
-  background: var(--danger);
-  border: 2px solid var(--black);
-  box-shadow: var(--shadow-sm);
+  flex: 0 0 24px; width: 24px; height: 24px; font-size: 13px; line-height: 1;
+  cursor: pointer; color: white; background: var(--danger);
+  border: 2px solid var(--black); box-shadow: var(--shadow-sm);
 }
 .meal-item .item-del:active { transform: translate(1px, 1px); box-shadow: 0 0 0 var(--black); }
-
 .meal-empty {
-  padding: 12px;
-  font-size: 12px;
-  font-style: italic;
-  opacity: 0.55;
-  text-align: center;
-  color: var(--black);
+  padding: 12px; font-size: 12px; font-style: italic;
+  opacity: 0.55; text-align: center; color: var(--black);
 }
-
 .meal-add {
-  display: block;
-  width: calc(100% - 24px);
-  margin: 8px 12px 12px;
-  padding: 8px;
-  font-family: 'Archivo Black', sans-serif;
-  font-size: 11px;
-  letter-spacing: 0.5px;
-  text-transform: uppercase;
-  cursor: pointer;
-  color: white;
-  background: var(--gluc);
-  border: 2px solid var(--black);
-  box-shadow: var(--shadow-sm);
+  display: block; width: calc(100% - 24px); margin: 8px 12px 12px; padding: 8px;
+  font-family: 'Archivo Black', sans-serif; font-size: 11px; letter-spacing: 0.5px;
+  text-transform: uppercase; cursor: pointer; color: white; background: var(--gluc);
+  border: 2px solid var(--black); box-shadow: var(--shadow-sm);
 }
 .meal-add:active { transform: translate(2px, 2px); box-shadow: 0 0 0 var(--black); }
-
-.recents-list {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-  margin-top: 6px;
-}
+.recents-list { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
 .recent-chip {
-  padding: 6px 11px;
-  font-size: 12px;
-  font-weight: 700;
-  cursor: pointer;
-  color: var(--black);
-  background: var(--cream);
-  border: 2px solid var(--black);
-  border-radius: 20px;
-  box-shadow: var(--shadow-sm);
+  padding: 6px 11px; font-size: 12px; font-weight: 700; cursor: pointer;
+  color: var(--black); background: var(--cream); border: 2px solid var(--black);
+  border-radius: 20px; box-shadow: var(--shadow-sm);
   transition: transform 0.1s, box-shadow 0.1s;
 }
 .recent-chip:active { transform: translate(1px, 1px); box-shadow: 0 0 0 var(--black); }
 .recents-empty {
-  font-size: 12px;
-  font-style: italic;
-  opacity: 0.55;
-  text-align: center;
-  padding: 8px;
+  font-size: 12px; font-style: italic; opacity: 0.55; text-align: center; padding: 8px;
 }
-
 .footer {
-  text-align: center;
-  font-family: 'Archivo Black', sans-serif;
-  font-size: 9px;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-  color: var(--cream);
-  background: var(--black);
-  padding: 9px;
-  border: 2px solid var(--black);
-  margin-top: 6px;
+  text-align: center; font-family: 'Archivo Black', sans-serif; font-size: 9px;
+  letter-spacing: 1px; text-transform: uppercase; color: var(--cream);
+  background: var(--black); padding: 9px; border: 2px solid var(--black); margin-top: 6px;
 }
 .recipe-list::-webkit-scrollbar,
 .usda-results::-webkit-scrollbar,
-.modal::-webkit-scrollbar { width: 4px; }
+.modal::-webkit-scrollbar,
+.ac-list::-webkit-scrollbar { width: 4px; }
 .recipe-list::-webkit-scrollbar-track,
 .usda-results::-webkit-scrollbar-track,
-.modal::-webkit-scrollbar-track { background: var(--cream); }
+.modal::-webkit-scrollbar-track,
+.ac-list::-webkit-scrollbar-track { background: var(--cream); }
 .recipe-list::-webkit-scrollbar-thumb,
 .usda-results::-webkit-scrollbar-thumb,
-.modal::-webkit-scrollbar-thumb { background: var(--prot); }
+.modal::-webkit-scrollbar-thumb,
+.ac-list::-webkit-scrollbar-thumb { background: var(--prot); }
 </style>
 </head>
 <body>
@@ -670,7 +408,7 @@ select:focus, input:focus {
     <button class="tab" data-view="journal">📓 Journal</button>
   </div>
 
-  <!-- ============ VUE CALCULATEUR ============ -->
+  <!-- VUE CALCULATEUR -->
   <div class="view active" id="view-calc">
 
     <div class="card">
@@ -678,7 +416,12 @@ select:focus, input:focus {
       <div class="row">
         <div>
           <label>🍱 Aliment</label>
-          <select id="ingredientSelect"></select>
+          <div class="ac-wrap" id="ingredientSelectWrap">
+            <input type="text" class="ac-input" id="ingredientSelectInput" placeholder="Tape pour chercher..." autocomplete="off">
+            <button type="button" class="ac-clear" data-target="ingredientSelectWrap">✕</button>
+            <div class="ac-list" id="ingredientSelectList"></div>
+            <input type="hidden" id="ingredientSelect">
+          </div>
         </div>
         <div>
           <label>⚖️ Grammes</label>
@@ -701,7 +444,12 @@ select:focus, input:focus {
       <div class="row">
         <div>
           <label>🍱 Ajouter un ingrédient</label>
-          <select id="recipeSelect"></select>
+          <div class="ac-wrap" id="recipeSelectWrap">
+            <input type="text" class="ac-input" id="recipeSelectInput" placeholder="Tape pour chercher..." autocomplete="off">
+            <button type="button" class="ac-clear" data-target="recipeSelectWrap">✕</button>
+            <div class="ac-list" id="recipeSelectList"></div>
+            <input type="hidden" id="recipeSelect">
+          </div>
         </div>
         <div>
           <label>⚖️ Grammes</label>
@@ -728,17 +476,18 @@ select:focus, input:focus {
 
     <div class="card">
       <h2><span>➕</span> Ajouter un aliment</h2>
-      <label>🔍 Rechercher</label>
+      <label>🔍 Rechercher sur USDA</label>
       <input type="text" id="usdaSearch" placeholder="Ex: poulet, saumon, œuf, oats..." autocomplete="off" />
       <p class="search-hint">💡 FR ou EN acceptés • Base USDA (aliments bruts)</p>
       <button class="btn btn-primary" id="usdaSearchBtn">🔎 Rechercher</button>
+      <button class="btn btn-outline" id="openManualBtn" style="margin-top:8px;font-size:11px;padding:10px;">✏️ Ajouter un aliment manuellement</button>
       <div id="usdaPromptZone"></div>
       <div id="usdaResultsZone" class="usda-results"></div>
     </div>
 
   </div>
 
-  <!-- ============ VUE JOURNAL ============ -->
+  <!-- VUE JOURNAL -->
   <div class="view" id="view-journal">
     <div class="card">
       <div class="daynav">
@@ -786,13 +535,73 @@ select:focus, input:focus {
   <div class="modal">
     <h3 id="addMealTitle">➕ Ajouter un aliment</h3>
     <label>🍱 Aliment</label>
-    <select id="addMealFood"></select>
+    <div class="ac-wrap" id="addMealFoodWrap">
+      <input type="text" class="ac-input" id="addMealFoodInput" placeholder="Tape pour chercher..." autocomplete="off">
+      <button type="button" class="ac-clear" data-target="addMealFoodWrap">✕</button>
+      <div class="ac-list" id="addMealFoodList"></div>
+      <input type="hidden" id="addMealFood">
+    </div>
     <label>⚖️ Quantité (g)</label>
     <input type="number" id="addMealQty" value="100" min="1" step="1" />
     <div class="preview" id="addMealPreview">—</div>
     <div class="actions-2">
       <button class="btn btn-outline" id="addMealCancel">Annuler</button>
       <button class="btn btn-primary" id="addMealConfirm">Ajouter</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal ajout manuel -->
+<div class="modal-overlay" id="manualModal">
+  <div class="modal">
+    <h3>✏️ Ajouter manuellement</h3>
+    <p class="hint">Pour les produits de marque, plats maison, ou tout ce qu'USDA ne connaît pas.</p>
+    <label>🇫🇷 Nom en français *</label>
+    <input type="text" id="manualName" placeholder="Ex: Skyr nature" autocomplete="off" />
+    <label>🇬🇧 Nom en anglais (optionnel)</label>
+    <input type="text" id="manualNameEn" placeholder="Ex: skyr plain" autocomplete="off" />
+    <p class="hint">Si tu remplis ce champ, la traduction sera mémorisée pour les futures recherches.</p>
+    <div class="macros-row">
+      <div>
+        <label>🔥 Kcal / 100g *</label>
+        <input type="number" id="manualKcal" value="0" min="0" step="1" />
+      </div>
+      <div>
+        <label>💪 Protéines / 100g</label>
+        <input type="number" id="manualProt" value="0" min="0" step="0.1" />
+      </div>
+    </div>
+    <div class="macros-row">
+      <div>
+        <label>🌾 Glucides / 100g</label>
+        <input type="number" id="manualGluc" value="0" min="0" step="0.1" />
+      </div>
+      <div>
+        <label>🥑 Lipides / 100g</label>
+        <input type="number" id="manualLip" value="0" min="0" step="0.1" />
+      </div>
+    </div>
+    <div class="actions-2">
+      <button class="btn btn-outline" id="manualCancel">Annuler</button>
+      <button class="btn btn-primary" id="manualConfirm">Ajouter</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal renommage USDA -->
+<div class="modal-overlay" id="renameModal">
+  <div class="modal">
+    <h3>🏷️ Nommer cet aliment</h3>
+    <p class="hint">Tu peux renommer l'aliment avant de l'ajouter à ta base (ex : "Chicken, broilers..." → "Poulet").</p>
+    <label>🇫🇷 Nom en français *</label>
+    <input type="text" id="renameNameFr" autocomplete="off" />
+    <label>🇬🇧 Nom en anglais (optionnel)</label>
+    <input type="text" id="renameNameEn" autocomplete="off" />
+    <p class="hint">Utile pour associer ce mot anglais à sa traduction FR future.</p>
+    <div class="usda-preview" id="renamePreview">—</div>
+    <div class="actions-2">
+      <button class="btn btn-outline" id="renameCancel">Annuler</button>
+      <button class="btn btn-primary" id="renameConfirm">Ajouter</button>
     </div>
   </div>
 </div>
@@ -826,12 +635,19 @@ const FOOD_DB = [
   { name: "Lait (demi-écrémé)", calories: 50, protein: 3.3, carbs: 4.8, fat: 1.6 },
   { name: "Lait (entier)", calories: 64, protein: 3.2, carbs: 4.8, fat: 3.6 },
   { name: "Fromage blanc 0%", calories: 45, protein: 8, carbs: 4, fat: 0.2 },
+  { name: "Fromage blanc 3%", calories: 62, protein: 7.5, carbs: 3.8, fat: 3 },
   { name: "Fromage blanc 20%", calories: 95, protein: 7, carbs: 3.5, fat: 5.5 },
-  { name: "Yaourt nature", calories: 61, protein: 4.3, carbs: 4.7, fat: 2.9 },
   { name: "Skyr nature", calories: 63, protein: 11, carbs: 4, fat: 0.2 },
+  { name: "Faisselle", calories: 78, protein: 8, carbs: 3.5, fat: 3.5 },
+  { name: "Petit-suisse", calories: 165, protein: 9, carbs: 3, fat: 13 },
+  { name: "Yaourt nature", calories: 61, protein: 4.3, carbs: 4.7, fat: 2.9 },
+  { name: "Yaourt grec", calories: 97, protein: 9, carbs: 3.6, fat: 5 },
   { name: "Parmesan", calories: 431, protein: 35, carbs: 3.2, fat: 30 },
   { name: "Mozzarella", calories: 280, protein: 28, carbs: 1.5, fat: 18 },
+  { name: "Ricotta", calories: 174, protein: 11, carbs: 3, fat: 13 },
   { name: "Beurre", calories: 717, protein: 0.9, carbs: 0.1, fat: 81 },
+  { name: "Crème fraîche 30%", calories: 292, protein: 2.4, carbs: 3, fat: 30 },
+  { name: "Crème fraîche 15%", calories: 162, protein: 2.8, carbs: 3.5, fat: 15 },
   { name: "Huile d'olive", calories: 884, protein: 0, carbs: 0, fat: 100 },
   { name: "Amandes", calories: 579, protein: 21, carbs: 22, fat: 49 },
   { name: "Noix de cajou", calories: 553, protein: 18, carbs: 30, fat: 44 },
@@ -839,6 +655,14 @@ const FOOD_DB = [
   { name: "Banane", calories: 89, protein: 1.1, carbs: 23, fat: 0.3 },
   { name: "Pomme", calories: 52, protein: 0.3, carbs: 14, fat: 0.2 },
   { name: "Avocat", calories: 160, protein: 2, carbs: 9, fat: 15 },
+  { name: "Fraise", calories: 32, protein: 0.7, carbs: 7.7, fat: 0.3 },
+  { name: "Framboise", calories: 52, protein: 1.2, carbs: 12, fat: 0.7 },
+  { name: "Myrtille", calories: 57, protein: 0.7, carbs: 14, fat: 0.3 },
+  { name: "Mûre", calories: 43, protein: 1.4, carbs: 10, fat: 0.5 },
+  { name: "Groseille", calories: 56, protein: 1.4, carbs: 14, fat: 0.2 },
+  { name: "Cassis", calories: 63, protein: 1.4, carbs: 15, fat: 0.4 },
+  { name: "Fruits rouges (mélange)", calories: 45, protein: 1, carbs: 9, fat: 0.3 },
+  { name: "Compote de pommes", calories: 68, protein: 0.2, carbs: 17, fat: 0.1 },
   { name: "Brocoli (cuit)", calories: 35, protein: 2.4, carbs: 7, fat: 0.4 },
   { name: "Carotte", calories: 41, protein: 0.9, carbs: 10, fat: 0.2 },
   { name: "Tomate", calories: 18, protein: 0.9, carbs: 3.9, fat: 0.2 },
@@ -893,13 +717,20 @@ const FR_TO_EN = {
   "lait": "milk", "lait entier": "whole milk", "lait demi-écrémé": "semi-skimmed milk",
   "lait écrémé": "skim milk", "lait de soja": "soy milk", "lait d'amande": "almond milk",
   "lait d'avoine": "oat milk", "yaourt": "yogurt", "yaourt nature": "plain yogurt",
-  "yaourt grec": "greek yogurt", "fromage": "cheese", "fromage blanc": "fromage blanc",
+  "yaourt grec": "greek yogurt", "yaourt à la grecque": "greek yogurt",
+  "fromage": "cheese", "fromage blanc": "fromage blanc",
+  "fromage blanc 0%": "nonfat fromage blanc", "fromage blanc 3%": "fromage blanc 3%",
+  "fromage blanc 20%": "fromage blanc 20%",
   "fromage frais": "cream cheese", "fromage râpé": "grated cheese", "parmesan": "parmesan",
   "mozzarella": "mozzarella", "gruyère": "gruyere", "emmental": "emmental", "chèvre": "goat cheese",
   "feta": "feta", "ricotta": "ricotta", "mascarpone": "mascarpone", "brie": "brie",
   "camembert": "camembert", "roquefort": "roquefort", "comté": "comte",
-  "beurre": "butter", "beurre salé": "salted butter", "crème": "cream",
-  "crème fraîche": "sour cream", "crème liquide": "heavy cream", "crème chantilly": "whipped cream",
+  "skyr": "skyr", "faisselle": "faisselle", "petit-suisse": "petit-suisse",
+  "beurre": "butter", "beurre salé": "salted butter", "beurre demi-sel": "semi-salted butter",
+  "crème": "cream", "crème fraîche": "sour cream", "crème liquide": "heavy cream",
+  "crème épaisse": "sour cream", "crème chantilly": "whipped cream",
+  "ribot": "buttermilk", "babeurre": "buttermilk",
+  "compote": "applesauce", "compote de pommes": "applesauce",
   "riz": "rice", "riz blanc": "white rice", "riz complet": "brown rice",
   "riz basmati": "basmati rice", "riz jasmin": "jasmine rice",
   "pâtes": "pasta", "spaghetti": "spaghetti", "macaroni": "macaroni", "penne": "penne",
@@ -938,11 +769,14 @@ const FR_TO_EN = {
   "citron": "lemon", "citron vert": "lime", "pamplemousse": "grapefruit",
   "clémentine": "clementine", "mandarine": "tangerine", "fraise": "strawberry",
   "framboise": "raspberry", "myrtille": "blueberry", "mûre": "blackberry",
+  "groseille": "redcurrant", "cassis": "blackcurrant",
+  "groseille à maquereau": "gooseberry", "airelle": "cranberry", "sureau": "elderberry",
   "cerise": "cherry", "raisin": "grape", "pêche": "peach", "abricot": "apricot",
   "prune": "plum", "mirabelle": "mirabelle plum", "kiwi": "kiwi", "ananas": "pineapple",
   "mangue": "mango", "papaye": "papaya", "melon": "melon", "pastèque": "watermelon",
   "figue": "fig", "datte": "date", "grenade": "pomegranate", "avocat": "avocado",
   "noix de coco": "coconut", "rhubarbe": "rhubarb", "coing": "quince",
+  "fruit rouge": "berry", "fruits rouges": "berries", "baie": "berry", "baies": "berries",
   "amande": "almond", "noix": "walnut", "noix de cajou": "cashew",
   "noisette": "hazelnut", "pistache": "pistachio", "cacahuète": "peanut",
   "pécan": "pecan", "noix de macadamia": "macadamia nut", "noix du brésil": "brazil nut",
@@ -953,6 +787,7 @@ const FR_TO_EN = {
   "huile": "oil", "huile d'olive": "olive oil", "huile de tournesol": "sunflower oil",
   "huile de colza": "rapeseed oil", "huile de coco": "coconut oil",
   "huile de sésame": "sesame oil", "huile d'arachide": "peanut oil",
+  "huile de noix": "walnut oil", "huile de lin": "flaxseed oil",
   "huile de palme": "palm oil", "margarine": "margarine", "saindoux": "lard",
   "sucre": "sugar", "sucre blanc": "white sugar", "sucre roux": "brown sugar",
   "sucre glace": "powdered sugar", "sucre vanillé": "vanilla sugar", "miel": "honey",
@@ -993,7 +828,6 @@ let customFoods = JSON.parse(localStorage.getItem('customFoods') || '[]');
 let customTranslations = JSON.parse(localStorage.getItem('customTranslations') || '{}');
 let journal = JSON.parse(localStorage.getItem('journal') || '{}');
 let recentFoods = JSON.parse(localStorage.getItem('recentFoods') || '[]');
-
 function saveCustomFoods() { localStorage.setItem('customFoods', JSON.stringify(customFoods)); }
 function saveCustomTranslations() { localStorage.setItem('customTranslations', JSON.stringify(customTranslations)); }
 function saveJournal() { localStorage.setItem('journal', JSON.stringify(journal)); }
@@ -1008,19 +842,25 @@ function findFood(name) { return getAllFoods().find(f => f.name === name); }
 function normaliserPourComparaison(texte) {
   return texte.toLowerCase().trim().replace(/œ/g, 'oe').replace(/æ/g, 'ae');
 }
-
+function normaliserSansAccents(texte) {
+  return texte.toLowerCase().trim()
+    .replace(/œ/g, 'oe').replace(/æ/g, 'ae')
+    .normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+}
 function getEmoji(name) {
   const map = {
     'poulet': '🍗', 'boeuf': '🥩', 'bœuf': '🥩', 'saumon': '🐟', 'thon': '🐟', 'sardine': '🐟',
     'maquereau': '🐟', 'œuf': '🥚', 'oeuf': '🥚', 'lait': '🥛', 'fromage': '🧀',
-    'yaourt': '🫗', 'riz': '🍚', 'pâtes': '🍝', 'quinoa': '🌾', 'pain': '🍞',
-    'avoine': '🌾', 'banane': '🍌', 'pomme': '🍎', 'avocat': '🥑', 'brocoli': '🥦',
-    'carotte': '🥕', 'tomate': '🍅', 'lentille': '🫘', 'pois chiche': '🫘',
-    'tofu': '🧈', 'seitan': '🥩', 'tempeh': '🧈', 'edamame': '🫘',
-    'pomme de terre': '🥔', 'patate douce': '🍠', 'miel': '🍯', 'sucre': '🍬',
-    'chocolat': '🍫', 'parmesan': '🧀', 'mozzarella': '🧀', 'jambon': '🥓',
-    'soja': '🫘', 'betterave': '🟣', 'maïs': '🌽', 'petit pois': '🫛',
-    'dinde': '🦃', 'crevette': '🦐', 'amande': '🥜', 'cajou': '🥜', 'noisette': '🥜'
+    'skyr': '🥛', 'faisselle': '🥛', 'yaourt': '🫗', 'riz': '🍚', 'pâtes': '🍝',
+    'quinoa': '🌾', 'pain': '🍞', 'avoine': '🌾', 'banane': '🍌', 'pomme': '🍎',
+    'avocat': '🥑', 'brocoli': '🥦', 'carotte': '🥕', 'tomate': '🍅',
+    'lentille': '🫘', 'pois chiche': '🫘', 'tofu': '🧈', 'seitan': '🥩', 'tempeh': '🧈',
+    'edamame': '🫘', 'pomme de terre': '🥔', 'patate douce': '🍠', 'miel': '🍯',
+    'sucre': '🍬', 'chocolat': '🍫', 'parmesan': '🧀', 'mozzarella': '🧀',
+    'jambon': '🥓', 'soja': '🫘', 'betterave': '🟣', 'maïs': '🌽',
+    'petit pois': '🫛', 'dinde': '🦃', 'crevette': '🦐', 'amande': '🥜', 'cajou': '🥜',
+    'noisette': '🥜', 'fraise': '🍓', 'framboise': '🫐', 'myrtille': '🫐',
+    'mûre': '🫐', 'groseille': '🫐', 'cassis': '🫐', 'fruit rouge': '🫐'
   };
   const lower = name.toLowerCase();
   for (const [key, emoji] of Object.entries(map)) {
@@ -1081,15 +921,20 @@ function filtrerAlimentsValides(foods) {
 }
 
 // ============================================================
-// AJOUT ALIMENT CUSTOM
+// AJOUT ALIMENT CUSTOM + ANTI-DOUBLON
 // ============================================================
+function isDuplicateFood(name) {
+  const n = normaliserSansAccents(name);
+  return getAllFoods().some(f => normaliserSansAccents(f.name) === n);
+}
 function ajouterAlimentCustom(food) {
-  const exists = getAllFoods().some(f => f.name.toLowerCase() === food.name.toLowerCase());
-  if (exists) { alert(`"${food.name}" existe déjà dans ta base.`); return false; }
+  if (isDuplicateFood(food.name)) {
+    alert(`"${food.name}" existe déjà dans ta base.`);
+    return false;
+  }
   customFoods.push(food);
   saveCustomFoods();
-  populateSelects();
-  populateAddMealFoodSelect();
+  refreshAllAutocompletes();
   return true;
 }
 
@@ -1140,42 +985,135 @@ async function ajouterTraduction(fr, en) {
 }
 
 // ============================================================
-// POPULATE SELECTS
+// AUTOCOMPLETE
 // ============================================================
-function populateSelects() {
-  const foods = getAllFoods().slice().sort((a, b) => a.name.localeCompare(b.name));
-  ['ingredientSelect', 'recipeSelect'].forEach(id => {
-    const sel = document.getElementById(id);
-    const current = sel.value;
-    sel.innerHTML = '';
-    foods.forEach(f => {
-      const opt = document.createElement('option');
-      opt.value = f.name;
-      opt.textContent = f.name;
-      sel.appendChild(opt);
-    });
-    if (current) sel.value = current;
-  });
+const autocompletes = {};
+
+function scoreFood(foodName, query) {
+  const n = normaliserSansAccents(foodName);
+  const q = normaliserSansAccents(query);
+  if (n === q) return 0;
+  if (n.startsWith(q)) return 1;
+  const words = n.split(/[\s(,)\-\/]+/).filter(Boolean);
+  if (words.some(w => w.startsWith(q))) return 2;
+  if (n.includes(q)) return 3;
+  return -1;
 }
-function populateAddMealFoodSelect() {
-  const sel = document.getElementById('addMealFood');
-  const foods = getAllFoods().slice().sort((a, b) => a.name.localeCompare(b.name));
-  const current = sel.value;
-  sel.innerHTML = '';
-  foods.forEach(f => {
-    const opt = document.createElement('option');
-    opt.value = f.name;
-    opt.textContent = f.name;
-    sel.appendChild(opt);
+
+function initAutocomplete(inputId, listId, hiddenId, wrapId) {
+  const input = document.getElementById(inputId);
+  const list = document.getElementById(listId);
+  const hidden = document.getElementById(hiddenId);
+  const wrap = document.getElementById(wrapId);
+
+  function renderList(query) {
+    const foods = getAllFoods();
+    let results;
+    if (!query) {
+      results = foods.slice().sort((a, b) => a.name.localeCompare(b.name)).slice(0, 60);
+      list.innerHTML = results.map(f =>
+        `<div class="ac-item" data-name="${f.name.replace(/"/g, '&quot;')}">${getEmoji(f.name)} ${f.name}</div>`
+      ).join('') || '<div class="ac-empty">Aucun aliment</div>';
+    } else {
+      const scored = foods.map(f => ({ food: f, s: scoreFood(f.name, query) }))
+        .filter(x => x.s >= 0)
+        .sort((a, b) => a.s - b.s || a.food.name.localeCompare(b.food.name))
+        .slice(0, 30);
+      if (scored.length === 0) {
+        list.innerHTML = '<div class="ac-empty">Aucun aliment trouvé</div>';
+      } else {
+        list.innerHTML = scored.map(x =>
+          `<div class="ac-item" data-name="${x.food.name.replace(/"/g, '&quot;')}">${getEmoji(x.food.name)} ${x.food.name}</div>`
+        ).join('');
+      }
+    }
+    list.querySelectorAll('.ac-item').forEach(el => {
+      el.addEventListener('mousedown', e => {
+        e.preventDefault();
+        selectValue(el.dataset.name);
+      });
+    });
+  }
+
+  function selectValue(name) {
+    input.value = name;
+    hidden.value = name;
+    wrap.classList.add('has-value');
+    list.classList.remove('show');
+    input.dispatchEvent(new Event('change', { bubbles: true }));
+  }
+
+  function clearValue() {
+    input.value = '';
+    hidden.value = '';
+    wrap.classList.remove('has-value');
+    input.focus();
+    renderList('');
+    list.classList.add('show');
+  }
+
+  input.addEventListener('focus', () => {
+    renderList(input.value && input.value !== hidden.value ? input.value : '');
+    list.classList.add('show');
   });
-  if (current) sel.value = current;
+  input.addEventListener('input', () => {
+    hidden.value = '';
+    wrap.classList.toggle('has-value', !!input.value);
+    renderList(input.value);
+    list.classList.add('show');
+  });
+  input.addEventListener('blur', () => {
+    setTimeout(() => list.classList.remove('show'), 120);
+  });
+  input.addEventListener('keydown', e => {
+    const items = list.querySelectorAll('.ac-item');
+    if (!items.length) return;
+    const current = list.querySelector('.ac-item.active');
+    if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      const next = current ? current.nextElementSibling : items[0];
+      if (current) current.classList.remove('active');
+      if (next && next.classList.contains('ac-item')) next.classList.add('active');
+      else items[0].classList.add('active');
+      (list.querySelector('.ac-item.active') || items[0]).scrollIntoView({ block: 'nearest' });
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      const prev = current ? current.previousElementSibling : items[items.length - 1];
+      if (current) current.classList.remove('active');
+      if (prev && prev.classList.contains('ac-item')) prev.classList.add('active');
+      else items[items.length - 1].classList.add('active');
+      (list.querySelector('.ac-item.active') || items[items.length - 1]).scrollIntoView({ block: 'nearest' });
+    } else if (e.key === 'Enter') {
+      const active = list.querySelector('.ac-item.active');
+      if (active) {
+        e.preventDefault();
+        selectValue(active.dataset.name);
+      }
+    } else if (e.key === 'Escape') {
+      list.classList.remove('show');
+    }
+  });
+
+  const clearBtn = wrap.querySelector('.ac-clear');
+  if (clearBtn) clearBtn.addEventListener('click', clearValue);
+
+  autocompletes[hiddenId] = {
+    setValue: selectValue,
+    getValue: () => hidden.value || input.value,
+    clear: clearValue,
+    refresh: () => { if (list.classList.contains('show')) renderList(input.value); }
+  };
+}
+
+function refreshAllAutocompletes() {
+  Object.values(autocompletes).forEach(ac => ac.refresh());
 }
 
 // ============================================================
 // INGRÉDIENT UNIQUE
 // ============================================================
 document.getElementById('calcBtn').addEventListener('click', function() {
-  const name = document.getElementById('ingredientSelect').value;
+  const name = autocompletes.ingredientSelect.getValue();
   const qty = parseFloat(document.getElementById('qtyInput').value) || 0;
   const food = findFood(name);
   if (!food || qty <= 0) { document.getElementById('singleResult').classList.remove('show'); return; }
@@ -1204,8 +1142,7 @@ function renderRecipeList() {
   }
   recipeItems.forEach((item, index) => {
     const li = document.createElement('li');
-    const emoji = getEmoji(item.name);
-    li.innerHTML = `<span>${emoji} <strong>${item.name}</strong> — ${item.qty}g</span>
+    li.innerHTML = `<span>${getEmoji(item.name)} <strong>${item.name}</strong> — ${item.qty}g</span>
                     <span class="remove" data-index="${index}">✕</span>`;
     ul.appendChild(li);
   });
@@ -1220,9 +1157,10 @@ function renderRecipeList() {
   });
 }
 document.getElementById('addRecipeBtn').addEventListener('click', function() {
-  const name = document.getElementById('recipeSelect').value;
+  const name = autocompletes.recipeSelect.getValue();
   const qty = parseFloat(document.getElementById('recipeQty').value) || 0;
   if (!name || qty <= 0) { alert('Sélectionne un ingrédient et une quantité valide.'); return; }
+  if (!findFood(name)) { alert('Aliment introuvable. Sélectionne-le dans la liste.'); return; }
   recipeItems.push({ name, qty });
   renderRecipeList();
   document.getElementById('recipeResult').classList.remove('show');
@@ -1260,7 +1198,7 @@ document.getElementById('recipeQty').addEventListener('keypress', function(e) {
 });
 
 // ============================================================
-// RECHERCHE USDA + AJOUT ALIMENT
+// RECHERCHE USDA
 // ============================================================
 const usdaSearchInput = document.getElementById('usdaSearch');
 const usdaSearchBtn = document.getElementById('usdaSearchBtn');
@@ -1301,8 +1239,7 @@ async function lancerRecherche(query) {
     usdaResultsZone.querySelectorAll('.add-btn').forEach(btn => {
       btn.addEventListener('click', function() {
         const f = valides[parseInt(this.dataset.idx)];
-        const ok = ajouterAlimentCustom(f);
-        if (ok) { this.textContent = '✅ Ajouté !'; this.disabled = true; }
+        ouvrirModalRenommage(f, this);
       });
     });
   } catch (e) {
@@ -1344,6 +1281,84 @@ usdaSearchInput.addEventListener('keypress', e => {
 });
 
 // ============================================================
+// MODAL RENOMMAGE USDA
+// ============================================================
+let renameFood = null;
+let renameBtn = null;
+function ouvrirModalRenommage(food, btn) {
+  renameFood = food;
+  renameBtn = btn;
+  document.getElementById('renameNameFr').value = food.name;
+  document.getElementById('renameNameEn').value = food.name;
+  document.getElementById('renamePreview').textContent =
+    `🔥 ${food.calories} kcal • 💪 ${food.protein}g • 🌾 ${food.carbs}g • 🥑 ${food.fat}g (pour 100g)`;
+  document.getElementById('renameModal').classList.add('show');
+  document.getElementById('renameNameFr').focus();
+}
+function fermerModalRenommage() {
+  document.getElementById('renameModal').classList.remove('show');
+  renameFood = null;
+  renameBtn = null;
+}
+document.getElementById('renameCancel').addEventListener('click', fermerModalRenommage);
+document.getElementById('renameModal').addEventListener('click', e => {
+  if (e.target.id === 'renameModal') fermerModalRenommage();
+});
+document.getElementById('renameConfirm').addEventListener('click', async () => {
+  if (!renameFood) return;
+  const nameFr = document.getElementById('renameNameFr').value.trim();
+  const nameEn = document.getElementById('renameNameEn').value.trim();
+  if (!nameFr) { alert('Le nom en français est obligatoire.'); return; }
+  const foodToAdd = { ...renameFood, name: nameFr };
+  const ok = ajouterAlimentCustom(foodToAdd);
+  if (!ok) return;
+  if (nameEn && normaliserSansAccents(nameEn) !== normaliserSansAccents(nameFr)) {
+    await ajouterTraduction(nameFr, nameEn);
+  }
+  if (renameBtn) { renameBtn.textContent = '✅ Ajouté !'; renameBtn.disabled = true; }
+  fermerModalRenommage();
+  refreshAllAutocompletes();
+});
+
+// ============================================================
+// MODAL AJOUT MANUEL
+// ============================================================
+document.getElementById('openManualBtn').addEventListener('click', () => {
+  document.getElementById('manualName').value = '';
+  document.getElementById('manualNameEn').value = '';
+  document.getElementById('manualKcal').value = 0;
+  document.getElementById('manualProt').value = 0;
+  document.getElementById('manualGluc').value = 0;
+  document.getElementById('manualLip').value = 0;
+  document.getElementById('manualModal').classList.add('show');
+  document.getElementById('manualName').focus();
+});
+function fermerManual() {
+  document.getElementById('manualModal').classList.remove('show');
+}
+document.getElementById('manualCancel').addEventListener('click', fermerManual);
+document.getElementById('manualModal').addEventListener('click', e => {
+  if (e.target.id === 'manualModal') fermerManual();
+});
+document.getElementById('manualConfirm').addEventListener('click', async () => {
+  const name = document.getElementById('manualName').value.trim();
+  const nameEn = document.getElementById('manualNameEn').value.trim();
+  const kcal = parseFloat(document.getElementById('manualKcal').value) || 0;
+  const prot = parseFloat(document.getElementById('manualProt').value) || 0;
+  const gluc = parseFloat(document.getElementById('manualGluc').value) || 0;
+  const lip = parseFloat(document.getElementById('manualLip').value) || 0;
+  if (!name) { alert('Le nom en français est obligatoire.'); return; }
+  const food = { name, calories: Math.round(kcal), protein: prot, carbs: gluc, fat: lip };
+  const ok = ajouterAlimentCustom(food);
+  if (!ok) return;
+  if (nameEn && normaliserSansAccents(nameEn) !== normaliserSansAccents(name)) {
+    await ajouterTraduction(name, nameEn);
+  }
+  fermerManual();
+  refreshAllAutocompletes();
+});
+
+// ============================================================
 // ONGLETS
 // ============================================================
 document.querySelectorAll('.tab').forEach(tab => {
@@ -1357,7 +1372,7 @@ document.querySelectorAll('.tab').forEach(tab => {
 });
 
 // ============================================================
-// JOURNAL ALIMENTAIRE
+// JOURNAL
 // ============================================================
 const MEALS = [
   { key: 'petitdej', label: 'Petit-déj', emoji: '☕' },
@@ -1365,22 +1380,15 @@ const MEALS = [
   { key: 'diner',    label: 'Dîner',     emoji: '🍷' },
   { key: 'collation',label: 'Collation', emoji: '🍎' }
 ];
-
 function todayKey() {
   const d = new Date();
-  const y = d.getFullYear();
-  const m = String(d.getMonth() + 1).padStart(2, '0');
-  const day = String(d.getDate()).padStart(2, '0');
-  return `${y}-${m}-${day}`;
+  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
 }
 function shiftDay(key, delta) {
   const [y, m, d] = key.split('-').map(Number);
   const date = new Date(y, m - 1, d);
   date.setDate(date.getDate() + delta);
-  const yy = date.getFullYear();
-  const mm = String(date.getMonth() + 1).padStart(2, '0');
-  const dd = String(date.getDate()).padStart(2, '0');
-  return `${yy}-${mm}-${dd}`;
+  return `${date.getFullYear()}-${String(date.getMonth()+1).padStart(2,'0')}-${String(date.getDate()).padStart(2,'0')}`;
 }
 function formatDayLabel(key) {
   const today = todayKey();
@@ -1394,12 +1402,8 @@ function formatDayLabel(key) {
   return `${jours[date.getDay()]} ${d} ${mois[m - 1]}`;
 }
 function getDayEntry(key) {
-  if (!journal[key]) {
-    journal[key] = { petitdej: [], dejeuner: [], diner: [], collation: [] };
-  }
-  for (const m of MEALS) {
-    if (!Array.isArray(journal[key][m.key])) journal[key][m.key] = [];
-  }
+  if (!journal[key]) journal[key] = { petitdej: [], dejeuner: [], diner: [], collation: [] };
+  for (const m of MEALS) if (!Array.isArray(journal[key][m.key])) journal[key][m.key] = [];
   return journal[key];
 }
 function computeTotals(items) {
@@ -1408,28 +1412,22 @@ function computeTotals(items) {
     const f = findFood(it.name);
     if (!f) return;
     const r = it.qty / 100;
-    cal += f.calories * r;
-    prot += f.protein * r;
-    gluc += f.carbs * r;
-    lip += f.fat * r;
+    cal += f.calories * r; prot += f.protein * r;
+    gluc += f.carbs * r; lip += f.fat * r;
   });
   return { cal: Math.round(cal), prot: round(prot), gluc: round(gluc), lip: round(lip) };
 }
-
 let currentDay = todayKey();
-
 function renderJournal() {
   document.getElementById('dayLabel').textContent = formatDayLabel(currentDay);
   const entry = getDayEntry(currentDay);
   const container = document.getElementById('mealsContainer');
   container.innerHTML = '';
-
   MEALS.forEach(meal => {
     const items = entry[meal.key];
     const totals = computeTotals(items);
     const div = document.createElement('div');
     div.className = 'meal';
-
     let itemsHtml = '';
     if (items.length === 0) {
       itemsHtml = '<li class="meal-empty">Aucun aliment pour ce repas</li>';
@@ -1446,7 +1444,6 @@ function renderJournal() {
         </li>`;
       });
     }
-
     div.innerHTML = `
       <div class="meal-head">
         <h3 class="meal-title">${meal.emoji} ${meal.label}</h3>
@@ -1462,21 +1459,16 @@ function renderJournal() {
     `;
     container.appendChild(div);
   });
-
   container.querySelectorAll('.meal-add').forEach(btn => {
     btn.addEventListener('click', () => openAddMealModal(btn.dataset.meal));
   });
   container.querySelectorAll('.item-del').forEach(btn => {
     btn.addEventListener('click', () => {
-      const mealKey = btn.dataset.meal;
-      const idx = parseInt(btn.dataset.idx);
-      entry[mealKey].splice(idx, 1);
+      entry[btn.dataset.meal].splice(parseInt(btn.dataset.idx), 1);
       saveJournal();
       renderJournal();
     });
   });
-
-  // Total du jour
   const allItems = [];
   MEALS.forEach(m => { allItems.push(...entry[m.key]); });
   const dayTotals = computeTotals(allItems);
@@ -1485,8 +1477,6 @@ function renderJournal() {
   document.getElementById('dayGluc').textContent = dayTotals.gluc;
   document.getElementById('dayLip').textContent = dayTotals.lip;
 }
-
-// --- Navigation jour ---
 document.getElementById('dayPrev').addEventListener('click', () => {
   currentDay = shiftDay(currentDay, -1);
   renderJournal();
@@ -1499,17 +1489,12 @@ document.getElementById('dayNext').addEventListener('click', () => {
 
 // --- Modal ajout au repas ---
 let addMealTarget = null;
-let addMealPresetFood = null;
-
 function openAddMealModal(mealKey, presetFood) {
   addMealTarget = mealKey;
-  addMealPresetFood = presetFood || null;
   const meal = MEALS.find(m => m.key === mealKey);
   document.getElementById('addMealTitle').textContent = `➕ Ajouter à : ${meal.label}`;
-  populateAddMealFoodSelect();
-  if (addMealPresetFood) {
-    document.getElementById('addMealFood').value = addMealPresetFood;
-  }
+  if (presetFood) autocompletes.addMealFood.setValue(presetFood);
+  else autocompletes.addMealFood.clear();
   document.getElementById('addMealQty').value = 100;
   updateAddMealPreview();
   document.getElementById('addMealModal').classList.add('show');
@@ -1517,10 +1502,9 @@ function openAddMealModal(mealKey, presetFood) {
 function closeAddMealModal() {
   document.getElementById('addMealModal').classList.remove('show');
   addMealTarget = null;
-  addMealPresetFood = null;
 }
 function updateAddMealPreview() {
-  const name = document.getElementById('addMealFood').value;
+  const name = autocompletes.addMealFood.getValue();
   const qty = parseFloat(document.getElementById('addMealQty').value) || 0;
   const f = findFood(name);
   if (!f || qty <= 0) { document.getElementById('addMealPreview').textContent = '—'; return; }
@@ -1528,14 +1512,13 @@ function updateAddMealPreview() {
   document.getElementById('addMealPreview').textContent =
     `🔥 ${Math.round(f.calories * r)} kcal • 💪 ${round(f.protein * r)}g • 🌾 ${round(f.carbs * r)}g • 🥑 ${round(f.fat * r)}g`;
 }
-document.getElementById('addMealFood').addEventListener('change', updateAddMealPreview);
 document.getElementById('addMealQty').addEventListener('input', updateAddMealPreview);
 document.getElementById('addMealCancel').addEventListener('click', closeAddMealModal);
 document.getElementById('addMealConfirm').addEventListener('click', () => {
   if (!addMealTarget) return;
-  const name = document.getElementById('addMealFood').value;
+  const name = autocompletes.addMealFood.getValue();
   const qty = parseFloat(document.getElementById('addMealQty').value) || 0;
-  if (!name || qty <= 0) return;
+  if (!name || qty <= 0 || !findFood(name)) return;
   const entry = getDayEntry(currentDay);
   entry[addMealTarget].push({ name, qty });
   saveJournal();
@@ -1546,6 +1529,9 @@ document.getElementById('addMealConfirm').addEventListener('click', () => {
 });
 document.getElementById('addMealModal').addEventListener('click', e => {
   if (e.target.id === 'addMealModal') closeAddMealModal();
+});
+document.addEventListener('change', e => {
+  if (e.target.id === 'addMealFoodInput') updateAddMealPreview();
 });
 
 // --- Aliments récents ---
@@ -1564,10 +1550,7 @@ function renderRecents() {
     const chip = document.createElement('button');
     chip.className = 'recent-chip';
     chip.textContent = `${getEmoji(name)} ${name}`;
-    chip.addEventListener('click', () => {
-      // Ouvre le modal sur le dernier repas utilisé (par défaut : déjeuner)
-      openAddMealModal('dejeuner', name);
-    });
+    chip.addEventListener('click', () => openAddMealModal('dejeuner', name));
     zone.appendChild(chip);
   });
 }
@@ -1575,8 +1558,9 @@ function renderRecents() {
 // ============================================================
 // INIT
 // ============================================================
-populateSelects();
-populateAddMealFoodSelect();
+initAutocomplete('ingredientSelectInput', 'ingredientSelectList', 'ingredientSelect', 'ingredientSelectWrap');
+initAutocomplete('recipeSelectInput', 'recipeSelectList', 'recipeSelect', 'recipeSelectWrap');
+initAutocomplete('addMealFoodInput', 'addMealFoodList', 'addMealFood', 'addMealFoodWrap');
 renderRecipeList();
 renderRecents();
 renderJournal();
