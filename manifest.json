@@ -1,0 +1,12 @@
+{
+  "name": "Calculateur PGL",
+  "short_name": "PGL",
+  "description": "Calculateur nutritionnel Protéines Glucides Lipides",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#d4c9b8",
+  "theme_color": "#5b7a99",
+  "lang": "fr"
+}
