@@ -1,0 +1,1255 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Calculateur PGL</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bangers&family=Archivo+Black&family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+<script src="config.js"></script>
+<style>
+:root {
+  --black: #1a1815;
+  --prot: #5b7a99;
+  --prot-dark: #44607a;
+  --gluc: #7ba69e;
+  --gluc-dark: #5d8a82;
+  --lip: #7a9668;
+  --lip-dark: #5d7a4a;
+  --danger: #a8453c;
+  --danger-dark: #8a352d;
+  --cream: #f8f5f0;
+  --paper: #fdfbf7;
+  --bg: #d4c9b8;
+  --text: #2c2c2c;
+  --shadow: 4px 4px 0 var(--black);
+  --shadow-sm: 2px 2px 0 var(--black);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Inter', system-ui, sans-serif;
+  background-color: var(--bg);
+  background-image: radial-gradient(circle, rgba(26,24,21,0.08) 1px, transparent 1px);
+  background-size: 16px 16px;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 20px;
+  color: var(--text);
+}
+
+.app { max-width: 480px; width: 100%; margin-top: 10px; }
+
+h1 {
+  display: block;
+  width: fit-content;
+  margin: 0 auto 8px;
+  font-family: 'Bangers', cursive;
+  font-size: clamp(32px, 9vw, 46px);
+  letter-spacing: 2px;
+  color: var(--cream);
+  background: var(--prot);
+  padding: 6px 22px 10px;
+  border: 3px solid var(--black);
+  box-shadow: var(--shadow);
+  text-shadow: 2px 2px 0 var(--black);
+  transform: rotate(-2deg);
+  line-height: 1;
+}
+
+.subtitle {
+  display: block;
+  width: fit-content;
+  margin: 14px auto 24px;
+  font-family: 'Archivo Black', sans-serif;
+  font-size: 10px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--black);
+  background: var(--cream);
+  padding: 5px 12px;
+  border: 2px solid var(--black);
+  box-shadow: var(--shadow-sm);
+  transform: rotate(1deg);
+}
+
+.card {
+  background: var(--paper);
+  border: 3px solid var(--black);
+  box-shadow: var(--shadow);
+  padding: 18px 16px 20px;
+  margin-bottom: 22px;
+}
+
+.card h2 {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: 'Archivo Black', sans-serif;
+  font-size: 14px;
+  color: var(--black);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding-bottom: 12px;
+  border-bottom: 2px solid var(--black);
+  margin-bottom: 4px;
+}
+
+.card h2 span:first-child {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  background: var(--gluc);
+  border: 2px solid var(--black);
+  box-shadow: var(--shadow-sm);
+  font-size: 13px;
+  filter: grayscale(0.4);
+}
+
+.badge {
+  margin-left: auto;
+  background: var(--prot);
+  color: white;
+  padding: 3px 10px;
+  border: 2px solid var(--black);
+  box-shadow: var(--shadow-sm);
+  font-size: 10px;
+  font-family: 'Archivo Black', sans-serif;
+}
+
+label {
+  display: block;
+  font-family: 'Archivo Black', sans-serif;
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  margin-top: 14px;
+  margin-bottom: 5px;
+  color: var(--black);
+}
+
+select, input {
+  width: 100%;
+  padding: 11px 13px;
+  border: 2px solid var(--black);
+  border-radius: 0;
+  background: white;
+  font-size: 15px;
+  font-weight: 700;
+  font-family: 'Inter', sans-serif;
+  color: var(--black);
+  box-shadow: var(--shadow-sm);
+  transition: transform 0.12s, box-shadow 0.12s;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+select {
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 6'><path d='M0 0l5 6 5-6z' fill='black'/></svg>");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  background-size: 10px;
+  padding-right: 32px;
+}
+
+select:focus, input:focus {
+  outline: none;
+  transform: translate(-1px, -1px);
+  box-shadow: 4px 4px 0 var(--black);
+}
+
+.row { display: flex; gap: 10px; }
+.row > * { flex: 1; }
+
+.btn {
+  width: 100%;
+  padding: 12px 14px;
+  border: 2px solid var(--black);
+  border-radius: 0;
+  font-family: 'Archivo Black', sans-serif;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+  cursor: pointer;
+  box-shadow: var(--shadow);
+  transition: transform 0.1s, box-shadow 0.1s, background 0.15s;
+  margin-top: 18px;
+}
+
+.btn:active {
+  transform: translate(3px, 3px);
+  box-shadow: 0 0 0 var(--black);
+}
+
+.btn-primary { background: var(--prot); color: white; }
+.btn-primary:hover { background: var(--prot-dark); }
+.btn-outline { background: var(--cream); color: var(--black); }
+.btn-outline:hover { background: #ece6db; }
+.btn-success { background: var(--lip); color: white; }
+.btn-success:hover { background: var(--lip-dark); }
+.btn-danger { background: var(--danger); color: white; }
+.btn-danger:hover { background: var(--danger-dark); }
+
+.btn-sm {
+  padding: 8px 12px;
+  font-size: 12px;
+  margin-top: 0;
+  width: auto;
+}
+
+.result {
+  margin-top: 20px;
+  padding: 16px 12px;
+  background: white;
+  border: 2px solid var(--black);
+  box-shadow: var(--shadow-sm);
+  display: none;
+}
+.result.show { display: block; }
+
+.pgl-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+
+.pgl-item {
+  text-align: center;
+  padding: 10px 6px;
+  border: 2px solid var(--black);
+  box-shadow: var(--shadow-sm);
+}
+
+.pgl-item.prot { background: var(--prot); color: var(--cream); }
+.pgl-item.gluc { background: var(--gluc); color: var(--cream); }
+.pgl-item.lip  { background: var(--lip);  color: var(--cream); }
+
+.pgl-item .emoji { font-size: 18px; display: block; margin-bottom: 3px; filter: grayscale(0.4); }
+.pgl-item .value { font-family: 'Archivo Black', sans-serif; font-size: 20px; line-height: 1; letter-spacing: -0.5px; }
+.pgl-item .label { font-family: 'Archivo Black', sans-serif; font-size: 8px; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 4px; }
+
+.total {
+  margin-top: 14px;
+  padding: 12px;
+  background: var(--cream);
+  border: 2px solid var(--black);
+  box-shadow: var(--shadow-sm);
+  text-align: center;
+  font-family: 'Archivo Black', sans-serif;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: var(--black);
+}
+
+.total span {
+  font-family: 'Bangers', cursive;
+  font-size: 24px;
+  color: var(--prot);
+  letter-spacing: 1.5px;
+  text-shadow: 1px 1px 0 var(--black);
+  margin: 0 2px;
+}
+
+.recipe-list {
+  list-style: none;
+  margin: 12px 0 4px;
+  max-height: 180px;
+  overflow-y: auto;
+}
+
+.recipe-list li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 12px;
+  background: var(--cream);
+  border: 2px solid var(--black);
+  box-shadow: var(--shadow-sm);
+  margin-bottom: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--black);
+}
+
+.recipe-list li .remove {
+  color: var(--danger);
+  font-weight: 800;
+  cursor: pointer;
+  padding: 0 6px;
+  font-size: 16px;
+  transition: transform 0.12s;
+}
+.recipe-list li .remove:hover { transform: scale(1.3); }
+
+.recipe-empty {
+  text-align: center;
+  color: var(--black);
+  padding: 14px;
+  font-size: 12px;
+  opacity: 0.6;
+  font-style: italic;
+  border: none !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  justify-content: center !important;
+}
+
+.flex-between { display: flex; justify-content: space-between; align-items: center; }
+.mt-8 { margin-top: 8px; }
+
+/* ===== NOUVEAU : carte ajout aliment ===== */
+.search-hint {
+  font-size: 11px;
+  font-style: italic;
+  color: #6b5e50;
+  margin-top: 6px;
+  text-align: center;
+}
+
+.usda-results {
+  margin-top: 14px;
+  max-height: 340px;
+  overflow-y: auto;
+}
+
+.usda-food {
+  background: var(--cream);
+  border: 2px solid var(--black);
+  box-shadow: var(--shadow-sm);
+  padding: 10px 12px;
+  margin-bottom: 8px;
+}
+
+.usda-food .name {
+  font-family: 'Archivo Black', sans-serif;
+  font-size: 12px;
+  color: var(--black);
+  margin-bottom: 6px;
+  line-height: 1.3;
+  word-break: break-word;
+}
+
+.usda-food .macros {
+  font-size: 12px;
+  color: #5d4e3e;
+  margin-bottom: 8px;
+  font-weight: 600;
+}
+
+.usda-food .macros span {
+  display: inline-block;
+  margin-right: 8px;
+}
+
+.usda-food .add-btn {
+  width: 100%;
+  padding: 8px;
+  border: 2px solid var(--black);
+  background: var(--lip);
+  color: white;
+  font-family: 'Archivo Black', sans-serif;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  cursor: pointer;
+  box-shadow: var(--shadow-sm);
+  transition: transform 0.1s, box-shadow 0.1s;
+}
+
+.usda-food .add-btn:hover { background: var(--lip-dark); }
+.usda-food .add-btn:active { transform: translate(2px, 2px); box-shadow: 0 0 0 var(--black); }
+.usda-food .add-btn:disabled { background: #888; cursor: default; opacity: 0.7; }
+
+.usda-empty {
+  text-align: center;
+  padding: 14px;
+  font-size: 13px;
+  color: var(--black);
+  font-style: italic;
+  opacity: 0.7;
+}
+
+/* ===== Translate prompt ===== */
+.translate-prompt {
+  background: #fff3cd;
+  border: 2px solid var(--black);
+  box-shadow: var(--shadow-sm);
+  padding: 12px;
+  margin-top: 12px;
+}
+
+.translate-prompt p {
+  font-size: 12px;
+  margin-bottom: 8px;
+  color: var(--black);
+}
+
+.translate-prompt input {
+  margin-bottom: 8px;
+}
+
+.translate-prompt .actions {
+  display: flex;
+  gap: 8px;
+}
+
+.translate-prompt .actions .btn {
+  flex: 1;
+  margin-top: 0;
+  padding: 9px;
+  font-size: 11px;
+}
+
+/* ===== Modal doublon ===== */
+.modal-overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(26,24,21,0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  z-index: 1000;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.15s;
+}
+
+.modal-overlay.show {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.modal {
+  background: var(--paper);
+  border: 3px solid var(--black);
+  box-shadow: 6px 6px 0 var(--black);
+  padding: 20px 18px;
+  max-width: 380px;
+  width: 100%;
+}
+
+.modal h3 {
+  font-family: 'Archivo Black', sans-serif;
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 10px;
+  color: var(--black);
+}
+
+.modal p {
+  font-size: 13px;
+  margin-bottom: 10px;
+  line-height: 1.4;
+  color: var(--black);
+}
+
+.modal .old, .modal .new {
+  padding: 8px 10px;
+  margin-bottom: 6px;
+  border: 2px solid var(--black);
+  font-family: 'Inter', sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  background: white;
+}
+
+.modal .old { border-color: #999; }
+.modal .new { border-color: var(--prot); }
+
+.modal .actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 6px;
+  margin-top: 14px;
+}
+
+.modal .actions .btn {
+  margin-top: 0;
+  padding: 10px 6px;
+  font-size: 10px;
+  letter-spacing: 0.5px;
+}
+
+.footer {
+  text-align: center;
+  font-family: 'Archivo Black', sans-serif;
+  font-size: 9px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--cream);
+  background: var(--black);
+  padding: 9px;
+  border: 2px solid var(--black);
+  margin-top: 6px;
+}
+
+.recipe-list::-webkit-scrollbar,
+.usda-results::-webkit-scrollbar { width: 4px; }
+.recipe-list::-webkit-scrollbar-track,
+.usda-results::-webkit-scrollbar-track { background: var(--cream); }
+.recipe-list::-webkit-scrollbar-thumb,
+.usda-results::-webkit-scrollbar-thumb { background: var(--prot); }
+</style>
+</head>
+<body>
+
+<div class="app">
+    <h1>🍽️ Calculateur PGL</h1>
+    <p class="subtitle">Protéines • Glucides • Lipides</p>
+
+    <!-- INGRÉDIENT UNIQUE -->
+    <div class="card">
+        <h2><span>🔹</span> Ingrédient unique</h2>
+        <div class="row">
+            <div>
+                <label>🍱 Aliment</label>
+                <select id="ingredientSelect"></select>
+            </div>
+            <div>
+                <label>⚖️ Grammes</label>
+                <input type="number" id="qtyInput" value="100" min="1" step="1" />
+            </div>
+        </div>
+        <button class="btn btn-primary" id="calcBtn">📊 Calculer</button>
+        <div class="result" id="singleResult">
+            <div class="pgl-grid">
+                <div class="pgl-item prot"><span class="emoji">💪</span><div class="value" id="singleProt">0</div><div class="label">Protéines</div></div>
+                <div class="pgl-item gluc"><span class="emoji">🌾</span><div class="value" id="singleGluc">0</div><div class="label">Glucides</div></div>
+                <div class="pgl-item lip"><span class="emoji">🥑</span><div class="value" id="singleLip">0</div><div class="label">Lipides</div></div>
+            </div>
+            <div class="total">🔥 Calories : <span id="singleCal">0</span> kcal</div>
+        </div>
+    </div>
+
+    <!-- RECETTE -->
+    <div class="card">
+        <h2><span>🔸</span> Recette <span class="badge" id="recipeBadge">0</span></h2>
+        <div class="row">
+            <div>
+                <label>🍱 Ajouter un ingrédient</label>
+                <select id="recipeSelect"></select>
+            </div>
+            <div>
+                <label>⚖️ Grammes</label>
+                <input type="number" id="recipeQty" value="50" min="1" step="1" />
+            </div>
+        </div>
+        <button class="btn btn-outline" id="addRecipeBtn">➕ Ajouter à la recette</button>
+        <ul class="recipe-list" id="recipeList">
+            <li class="recipe-empty">Aucun ingrédient — ajoute-en un !</li>
+        </ul>
+        <div class="flex-between mt-8">
+            <button class="btn btn-success" id="calcRecipeBtn" style="flex:3;margin-right:8px;">📊 Calculer la recette</button>
+            <button class="btn btn-danger btn-sm" id="clearRecipeBtn" style="flex:1;">🗑️</button>
+        </div>
+        <div class="result" id="recipeResult">
+            <div class="pgl-grid">
+                <div class="pgl-item prot"><span class="emoji">💪</span><div class="value" id="recipeProt">0</div><div class="label">Protéines</div></div>
+                <div class="pgl-item gluc"><span class="emoji">🌾</span><div class="value" id="recipeGluc">0</div><div class="label">Glucides</div></div>
+                <div class="pgl-item lip"><span class="emoji">🥑</span><div class="value" id="recipeLip">0</div><div class="label">Lipides</div></div>
+            </div>
+            <div class="total">🔥 Calories : <span id="recipeCal">0</span> kcal • <span id="recipeCount">0</span> ingrédients</div>
+        </div>
+    </div>
+
+    <!-- AJOUTER UN ALIMENT -->
+    <div class="card">
+        <h2><span>➕</span> Ajouter un aliment</h2>
+        <label>🔍 Rechercher</label>
+        <input type="text" id="usdaSearch"
+               placeholder="Ex: poulet, saumon, œuf, oats..."
+               autocomplete="off" />
+        <p class="search-hint">💡 FR ou EN acceptés • Base USDA (aliments bruts)</p>
+        <button class="btn btn-primary" id="usdaSearchBtn">🔎 Rechercher</button>
+
+        <div id="usdaPromptZone"></div>
+        <div id="usdaResultsZone" class="usda-results"></div>
+    </div>
+
+    <div class="footer">✨ Données pour 100g • Base USDA FoodData Central</div>
+</div>
+
+<!-- Modal doublon -->
+<div class="modal-overlay" id="modalOverlay">
+    <div class="modal">
+        <h3>⚠️ Ce mot existe déjà</h3>
+        <p id="modalMessage"></p>
+        <div class="old" id="modalOld"></div>
+        <div class="new" id="modalNew"></div>
+        <div class="actions">
+            <button class="btn btn-outline" id="modalKeep">Garder</button>
+            <button class="btn btn-primary" id="modalReplace">Remplacer</button>
+            <button class="btn btn-danger" id="modalCancel">Annuler</button>
+        </div>
+    </div>
+</div>
+
+<script>
+// ============================================================
+// CONFIGURATION — La clé API est chargée depuis config.js
+// ============================================================
+// (voir <script src="config.js"> dans le <head>)
+
+// ============================================================
+// BASE DE DONNÉES DE BASE (pour 100g)
+// ============================================================
+const FOOD_DB = [
+    { name: "Poulet (blanc)", calories: 165, protein: 31, carbs: 0, fat: 3.6 },
+    { name: "Poulet (cuisse)", calories: 177, protein: 26, carbs: 0, fat: 8 },
+    { name: "Dinde (blanc)", calories: 135, protein: 30, carbs: 0, fat: 1.5 },
+    { name: "Bœuf (haché 5%)", calories: 150, protein: 20, carbs: 0, fat: 7 },
+    { name: "Bœuf (haché 15%)", calories: 250, protein: 17, carbs: 0, fat: 20 },
+    { name: "Saumon", calories: 208, protein: 22, carbs: 0, fat: 13 },
+    { name: "Crevettes", calories: 85, protein: 20, carbs: 0, fat: 0.5 },
+    { name: "Thon au naturel", calories: 110, protein: 25, carbs: 0, fat: 0.8 },
+    { name: "Sardines (huile)", calories: 208, protein: 24, carbs: 0, fat: 12 },
+    { name: "Maquereau", calories: 262, protein: 20, carbs: 0, fat: 20 },
+    { name: "Œuf entier", calories: 155, protein: 13, carbs: 1.1, fat: 11 },
+    { name: "Blanc d'œuf", calories: 52, protein: 11, carbs: 1, fat: 0.2 },
+    { name: "Jaune d'œuf", calories: 322, protein: 16, carbs: 3.6, fat: 27 },
+    { name: "Riz (cuit)", calories: 130, protein: 2.7, carbs: 28, fat: 0.3 },
+    { name: "Riz brun (cuit)", calories: 111, protein: 2.6, carbs: 23, fat: 0.9 },
+    { name: "Pâtes (cuites)", calories: 131, protein: 5, carbs: 25, fat: 0.5 },
+    { name: "Pâtes complètes", calories: 124, protein: 5.3, carbs: 26, fat: 0.9 },
+    { name: "Quinoa (cuit)", calories: 120, protein: 4.4, carbs: 21, fat: 1.9 },
+    { name: "Pain complet", calories: 247, protein: 9, carbs: 46, fat: 1.5 },
+    { name: "Pain blanc", calories: 265, protein: 9, carbs: 49, fat: 1.5 },
+    { name: "Flocons d'avoine", calories: 389, protein: 16.9, carbs: 66, fat: 6.9 },
+    { name: "Lait (demi-écrémé)", calories: 50, protein: 3.3, carbs: 4.8, fat: 1.6 },
+    { name: "Lait (entier)", calories: 64, protein: 3.2, carbs: 4.8, fat: 3.6 },
+    { name: "Fromage blanc 0%", calories: 45, protein: 8, carbs: 4, fat: 0.2 },
+    { name: "Fromage blanc 20%", calories: 95, protein: 7, carbs: 3.5, fat: 5.5 },
+    { name: "Yaourt nature", calories: 61, protein: 4.3, carbs: 4.7, fat: 2.9 },
+    { name: "Parmesan", calories: 431, protein: 35, carbs: 3.2, fat: 30 },
+    { name: "Mozzarella", calories: 280, protein: 28, carbs: 1.5, fat: 18 },
+    { name: "Beurre", calories: 717, protein: 0.9, carbs: 0.1, fat: 81 },
+    { name: "Huile d'olive", calories: 884, protein: 0, carbs: 0, fat: 100 },
+    { name: "Amandes", calories: 579, protein: 21, carbs: 22, fat: 49 },
+    { name: "Noix de cajou", calories: 553, protein: 18, carbs: 30, fat: 44 },
+    { name: "Noisettes", calories: 628, protein: 15, carbs: 17, fat: 61 },
+    { name: "Banane", calories: 89, protein: 1.1, carbs: 23, fat: 0.3 },
+    { name: "Pomme", calories: 52, protein: 0.3, carbs: 14, fat: 0.2 },
+    { name: "Avocat", calories: 160, protein: 2, carbs: 9, fat: 15 },
+    { name: "Brocoli (cuit)", calories: 35, protein: 2.4, carbs: 7, fat: 0.4 },
+    { name: "Carotte", calories: 41, protein: 0.9, carbs: 10, fat: 0.2 },
+    { name: "Tomate", calories: 18, protein: 0.9, carbs: 3.9, fat: 0.2 },
+    { name: "Lentilles (cuites)", calories: 116, protein: 9, carbs: 20, fat: 0.4 },
+    { name: "Pois chiches (cuits)", calories: 139, protein: 8.9, carbs: 27, fat: 2.6 },
+    { name: "Haricots rouges (cuits)", calories: 127, protein: 8.7, carbs: 23, fat: 0.5 },
+    { name: "Tofu nature", calories: 76, protein: 8, carbs: 2, fat: 4.5 },
+    { name: "Tofu soyeux", calories: 55, protein: 5, carbs: 3, fat: 2.5 },
+    { name: "Seitan", calories: 120, protein: 25, carbs: 4, fat: 1.5 },
+    { name: "Tempeh", calories: 193, protein: 20, carbs: 9, fat: 11 },
+    { name: "Edamame", calories: 122, protein: 11, carbs: 10, fat: 5 },
+    { name: "Pomme de terre (cuite)", calories: 87, protein: 1.9, carbs: 20, fat: 0.1 },
+    { name: "Patate douce (cuite)", calories: 90, protein: 2, carbs: 21, fat: 0.1 },
+    { name: "Miel", calories: 304, protein: 0.3, carbs: 82, fat: 0 },
+    { name: "Sucre blanc", calories: 399, protein: 0, carbs: 100, fat: 0 },
+    { name: "Chocolat noir 70%", calories: 598, protein: 7.8, carbs: 46, fat: 43 },
+    { name: "Jambon blanc", calories: 108, protein: 20, carbs: 0.5, fat: 2.5 },
+    { name: "Sauce soja", calories: 53, protein: 8.5, carbs: 4.5, fat: 0.5 },
+    { name: "Betterave (cuite)", calories: 44, protein: 1.6, carbs: 10, fat: 0.1 },
+    { name: "Maïs (en boîte)", calories: 86, protein: 3.2, carbs: 19, fat: 1.2 },
+    { name: "Petit pois (cuits)", calories: 81, protein: 5.4, carbs: 14, fat: 0.4 },
+];
+
+// ============================================================
+// DICTIONNAIRE FR → EN
+// ============================================================
+const FR_TO_EN = {
+    // Volailles
+    "poulet": "chicken", "blanc de poulet": "chicken breast", "cuisse de poulet": "chicken thigh",
+    "poulet rôti": "roasted chicken", "dinde": "turkey", "escalope de dinde": "turkey breast",
+    "canard": "duck", "magret de canard": "duck breast", "pintade": "guinea fowl",
+    "lapin": "rabbit", "caille": "quail",
+    // Viandes rouges
+    "bœuf": "beef", "steak": "beef steak", "steak haché": "ground beef",
+    "bœuf haché": "ground beef", "rumsteck": "rump steak", "entrecôte": "ribeye",
+    "filet de bœuf": "beef tenderloin", "veau": "veal", "côte de veau": "veal chop",
+    "agneau": "lamb", "gigot d'agneau": "leg of lamb", "côtelette d'agneau": "lamb chop",
+    "porc": "pork", "côte de porc": "pork chop", "filet mignon": "pork tenderloin",
+    "lardon": "bacon bits", "bacon": "bacon", "jambon": "ham", "jambon blanc": "ham",
+    "jambon cru": "cured ham", "saucisse": "sausage", "saucisson": "dry sausage", "chorizo": "chorizo",
+    // Abats
+    "foie": "liver", "foie de veau": "veal liver", "foie gras": "foie gras",
+    "rognon": "kidney", "cœur": "heart", "gésier": "gizzard",
+    // Poissons
+    "poisson": "fish", "saumon": "salmon", "saumon fumé": "smoked salmon",
+    "thon": "tuna", "thon en boîte": "canned tuna", "cabillaud": "cod", "morue": "cod",
+    "lieu": "pollock", "colin": "hake", "merlu": "hake", "truite": "trout",
+    "sardine": "sardine", "maquereau": "mackerel", "hareng": "herring", "anchois": "anchovy",
+    "dorade": "sea bream", "bar": "sea bass", "loup": "sea bass", "sole": "sole",
+    "raie": "ray", "flétan": "halibut", "espadon": "swordfish", "anguille": "eel", "turbot": "turbot",
+    // Fruits de mer
+    "crevette": "shrimp", "gambas": "prawn", "langoustine": "langoustine",
+    "homard": "lobster", "crabe": "crab", "moule": "mussel", "huître": "oyster",
+    "coquille saint-jacques": "scallop", "saint-jacques": "scallop",
+    "calamar": "squid", "poulpe": "octopus", "seiche": "cuttlefish", "escargot": "snail",
+    // Œufs
+    "œuf": "egg", "blanc d'œuf": "egg white", "jaune d'œuf": "egg yolk", "omelette": "omelette",
+    // Produits laitiers
+    "lait": "milk", "lait entier": "whole milk", "lait demi-écrémé": "semi-skimmed milk",
+    "lait écrémé": "skim milk", "lait de soja": "soy milk", "lait d'amande": "almond milk",
+    "lait d'avoine": "oat milk", "yaourt": "yogurt", "yaourt nature": "plain yogurt",
+    "yaourt grec": "greek yogurt", "fromage": "cheese", "fromage blanc": "fromage blanc",
+    "fromage frais": "cream cheese", "fromage râpé": "grated cheese", "parmesan": "parmesan",
+    "mozzarella": "mozzarella", "gruyère": "gruyere", "emmental": "emmental", "chèvre": "goat cheese",
+    "feta": "feta", "ricotta": "ricotta", "mascarpone": "mascarpone", "brie": "brie",
+    "camembert": "camembert", "roquefort": "roquefort", "comté": "comte",
+    "beurre": "butter", "beurre salé": "salted butter", "crème": "cream",
+    "crème fraîche": "sour cream", "crème liquide": "heavy cream", "crème chantilly": "whipped cream",
+    // Céréales et féculents
+    "riz": "rice", "riz blanc": "white rice", "riz complet": "brown rice",
+    "riz basmati": "basmati rice", "riz jasmin": "jasmine rice",
+    "pâtes": "pasta", "spaghetti": "spaghetti", "macaroni": "macaroni", "penne": "penne",
+    "tagliatelles": "tagliatelle", "lasagnes": "lasagna", "nouilles": "noodles",
+    "nouilles chinoises": "ramen noodles", "pain": "bread", "pain complet": "whole wheat bread",
+    "pain blanc": "white bread", "baguette": "baguette", "pain de mie": "sandwich bread",
+    "brioche": "brioche", "croissant": "croissant", "pain au chocolat": "chocolate croissant",
+    "avoine": "oats", "flocons d'avoine": "oat flakes", "muesli": "muesli",
+    "quinoa": "quinoa", "boulgour": "bulgur", "couscous": "couscous", "semoule": "semolina",
+    "polenta": "polenta", "orge": "barley", "seigle": "rye", "épeautre": "spelt",
+    "blé": "wheat", "farine": "flour", "farine complète": "whole wheat flour",
+    "maïs": "corn", "pomme de terre": "potato", "patate douce": "sweet potato",
+    "purée": "mashed potato", "frites": "fries",
+    // Légumineuses
+    "lentilles": "lentils", "lentilles vertes": "green lentils", "pois chiches": "chickpeas",
+    "haricots": "beans", "haricots rouges": "red beans", "haricots blancs": "white beans",
+    "flageolet": "flageolet bean", "pois": "peas", "petits pois": "green peas",
+    "pois cassés": "split peas", "fève": "fava bean", "soja": "soybean",
+    "edamame": "edamame", "tofu": "tofu", "tofu soyeux": "silken tofu",
+    "seitan": "seitan", "tempeh": "tempeh",
+    // Légumes
+    "tomate": "tomato", "tomate cerise": "cherry tomato", "concentré de tomate": "tomato paste",
+    "coulis de tomate": "tomato sauce", "carotte": "carrot", "courgette": "zucchini",
+    "aubergine": "eggplant", "poivron": "bell pepper", "poivron rouge": "red bell pepper",
+    "poivron vert": "green bell pepper", "piment": "chili pepper", "oignon": "onion",
+    "oignon rouge": "red onion", "échalote": "shallot", "ail": "garlic", "brocoli": "broccoli",
+    "chou-fleur": "cauliflower", "chou": "cabbage", "chou rouge": "red cabbage",
+    "chou de bruxelles": "brussels sprouts", "épinards": "spinach", "salade": "lettuce",
+    "laitue": "lettuce", "roquette": "arugula", "mâche": "corn salad", "endive": "endive",
+    "radis": "radish", "betterave": "beetroot", "navet": "turnip", "céleri": "celery",
+    "fenouil": "fennel", "poireau": "leek", "asperge": "asparagus", "artichaut": "artichoke",
+    "haricots verts": "green beans", "concombre": "cucumber", "cornichon": "pickle",
+    "potiron": "pumpkin", "citrouille": "pumpkin", "courge": "squash",
+    "butternut": "butternut squash", "champignon": "mushroom",
+    "champignon de paris": "button mushroom", "pleurote": "oyster mushroom",
+    "shiitake": "shiitake", "truffe": "truffle", "gingembre": "ginger", "curcuma": "turmeric",
+    // Fruits
+    "pomme": "apple", "poire": "pear", "banane": "banana", "orange": "orange",
+    "citron": "lemon", "citron vert": "lime", "pamplemousse": "grapefruit",
+    "clémentine": "clementine", "mandarine": "tangerine", "fraise": "strawberry",
+    "framboise": "raspberry", "myrtille": "blueberry", "mûre": "blackberry",
+    "cerise": "cherry", "raisin": "grape", "pêche": "peach", "abricot": "apricot",
+    "prune": "plum", "mirabelle": "mirabelle plum", "kiwi": "kiwi", "ananas": "pineapple",
+    "mangue": "mango", "papaye": "papaya", "melon": "melon", "pastèque": "watermelon",
+    "figue": "fig", "datte": "date", "grenade": "pomegranate", "avocat": "avocado",
+    "noix de coco": "coconut", "rhubarbe": "rhubarb", "coing": "quince",
+    // Oléagineux et graines
+    "amande": "almond", "noix": "walnut", "noix de cajou": "cashew",
+    "noisette": "hazelnut", "pistache": "pistachio", "cacahuète": "peanut",
+    "pécan": "pecan", "noix de macadamia": "macadamia nut", "noix du brésil": "brazil nut",
+    "pignon": "pine nut", "graines de tournesol": "sunflower seeds",
+    "graines de courge": "pumpkin seeds", "graines de lin": "flaxseeds",
+    "graines de chia": "chia seeds", "graines de sésame": "sesame seeds",
+    "graines de pavot": "poppy seeds",
+    // Matières grasses
+    "huile": "oil", "huile d'olive": "olive oil", "huile de tournesol": "sunflower oil",
+    "huile de colza": "rapeseed oil", "huile de coco": "coconut oil",
+    "huile de sésame": "sesame oil", "huile d'arachide": "peanut oil",
+    "huile de palme": "palm oil", "margarine": "margarine", "saindoux": "lard",
+    // Sucres et sucreries
+    "sucre": "sugar", "sucre blanc": "white sugar", "sucre roux": "brown sugar",
+    "sucre glace": "powdered sugar", "sucre vanillé": "vanilla sugar", "miel": "honey",
+    "sirop d'érable": "maple syrup", "confiture": "jam",
+    "confiture de fraise": "strawberry jam", "chocolat": "chocolate",
+    "chocolat noir": "dark chocolate", "chocolat au lait": "milk chocolate",
+    "chocolat blanc": "white chocolate", "cacao": "cocoa",
+    "poudre de cacao": "cocoa powder", "bonbon": "candy", "caramel": "caramel", "nougat": "nougat",
+    // Condiments et sauces
+    "sel": "salt", "poivre": "pepper", "poivre noir": "black pepper",
+    "moutarde": "mustard", "mayonnaise": "mayonnaise", "ketchup": "ketchup",
+    "sauce soja": "soy sauce", "sauce tomate": "tomato sauce", "sauce blanche": "white sauce",
+    "béchamel": "bechamel", "pesto": "pesto", "vinaigre": "vinegar",
+    "vinaigre balsamique": "balsamic vinegar", "vinaigrette": "vinaigrette",
+    "bouillon": "broth", "bouillon de poulet": "chicken broth",
+    "bouillon de légumes": "vegetable broth", "bouillon de bœuf": "beef broth",
+    "herbes de provence": "herbes de provence", "thym": "thyme", "romarin": "rosemary",
+    "basilic": "basil", "persil": "parsley", "coriandre": "cilantro", "menthe": "mint",
+    "origan": "oregano", "laurier": "bay leaf", "cannelle": "cinnamon",
+    "muscade": "nutmeg", "vanille": "vanilla", "curry": "curry", "paprika": "paprika",
+    "cumin": "cumin", "safran": "saffron", "clou de girofle": "clove",
+    // Boissons
+    "eau": "water", "café": "coffee", "thé": "tea", "thé vert": "green tea",
+    "jus d'orange": "orange juice", "jus de pomme": "apple juice",
+    "jus de citron": "lemon juice", "soda": "soda", "vin": "wine",
+    "vin rouge": "red wine", "vin blanc": "white wine", "bière": "beer",
+    "cidre": "cider", "whisky": "whiskey", "vodka": "vodka", "rhum": "rum",
+    // Plats préparés / divers
+    "pizza": "pizza", "burger": "burger", "hamburger": "hamburger",
+    "sandwich": "sandwich", "quiche": "quiche", "quiche lorraine": "quiche lorraine",
+    "croque-monsieur": "croque monsieur", "soupe": "soup",
+    "soupe à l'oignon": "onion soup", "gaspacho": "gazpacho",
+    "ratatouille": "ratatouille", "houmous": "hummus", "guacamole": "guacamole",
+    "tapenade": "tapenade", "rillettes": "rillettes", "pâté": "pate", "terrine": "terrine",
+};
+
+// ============================================================
+// PERSISTANCE — Aliments custom + Traductions custom
+// ============================================================
+let customFoods = JSON.parse(localStorage.getItem('customFoods') || '[]');
+let customTranslations = JSON.parse(localStorage.getItem('customTranslations') || '{}');
+
+function saveCustomFoods() {
+    localStorage.setItem('customFoods', JSON.stringify(customFoods));
+}
+
+function saveCustomTranslations() {
+    localStorage.setItem('customTranslations', JSON.stringify(customTranslations));
+}
+
+// ============================================================
+// FONCTIONS UTILES
+// ============================================================
+function round(v) { return Math.round(v * 10) / 10; }
+
+function getAllFoods() { return [...FOOD_DB, ...customFoods]; }
+
+function findFood(name) {
+    return getAllFoods().find(f => f.name === name);
+}
+
+function normaliserPourComparaison(texte) {
+    return texte.toLowerCase().trim()
+        .replace(/œ/g, 'oe')
+        .replace(/æ/g, 'ae');
+}
+
+function getEmoji(name) {
+    const map = {
+        'poulet': '🍗', 'boeuf': '🥩', 'saumon': '🐟', 'thon': '🐟', 'sardine': '🐟',
+        'maquereau': '🐟', 'œuf': '🥚', 'oeuf': '🥚', 'lait': '🥛', 'fromage': '🧀',
+        'yaourt': '🫗', 'riz': '🍚', 'pâtes': '🍝', 'quinoa': '🌾', 'pain': '🍞',
+        'avoine': '🌾', 'banane': '🍌', 'pomme': '🍎', 'avocat': '🥑', 'brocoli': '🥦',
+        'carotte': '🥕', 'tomate': '🍅', 'lentille': '🫘', 'pois chiche': '🫘',
+        'tofu': '🧈', 'seitan': '🥩', 'tempeh': '🧈', 'edamame': '🫘',
+        'pomme de terre': '🥔', 'patate douce': '🍠', 'miel': '🍯', 'sucre': '🍬',
+        'chocolat': '🍫', 'parmesan': '🧀', 'mozzarella': '🧀', 'jambon': '🥓',
+        'soja': '🫘', 'betterave': '🟣', 'maïs': '🌽', 'petit pois': '🫛',
+        'dinde': '🦃', 'crevette': '🦐', 'amande': '🥜', 'cajou': '🥜', 'noisette': '🥜'
+    };
+    const lower = name.toLowerCase();
+    for (const [key, emoji] of Object.entries(map)) {
+        if (lower.includes(key)) return emoji;
+    }
+    return '🍽️';
+}
+
+// ============================================================
+// TRADUCTION FR → EN
+// ============================================================
+function traduire(texte) {
+    const lower = texte.toLowerCase().trim();
+    const normalisé = normaliserPourComparaison(lower);
+
+    // 1. Traductions custom (prioritaires)
+    if (customTranslations[lower]) return customTranslations[lower];
+    for (const [fr, en] of Object.entries(customTranslations)) {
+        if (normaliserPourComparaison(fr) === normalisé) return en;
+    }
+
+    // 2. Dico de base — exact
+    if (FR_TO_EN[lower]) return FR_TO_EN[lower];
+
+    // 3. Dico de base — normalisé (œ ↔ oe)
+    for (const [fr, en] of Object.entries(FR_TO_EN)) {
+        if (normaliserPourComparaison(fr) === normalisé) return en;
+    }
+
+    // 4. Dico de base — mot inclus dans la phrase
+    for (const [fr, en] of Object.entries(FR_TO_EN)) {
+        if (normaliserPourComparaison(fr).includes(normalisé)) return en;
+    }
+
+    // 5. Rien trouvé
+    return null;
+}
+
+// ============================================================
+// API USDA
+// ============================================================
+async function searchUSDA(query) {
+    const url = new URL("https://api.nal.usda.gov/fdc/v1/foods/search");
+    url.searchParams.set("api_key", USDA_API_KEY);
+    url.searchParams.set("query", query);
+    url.searchParams.set("pageSize", "8");
+    url.searchParams.set("dataType", "Foundation,SR Legacy");
+
+    const res = await fetch(url);
+    if (!res.ok) throw new Error("Erreur HTTP " + res.status);
+    const data = await res.json();
+    return data.foods || [];
+}
+
+function extractMacros(food) {
+    const get = (id) => {
+        const n = food.foodNutrients?.find(x => x.nutrientId === id);
+        return n ? n.value : 0;
+    };
+    return {
+        name: food.description,
+        calories: Math.round(get(1008) || get(2047) || 0),
+        protein: Math.round((get(1003) || 0) * 10) / 10,
+        carbs: Math.round((get(1005) || 0) * 10) / 10,
+        fat: Math.round((get(1004) || 0) * 10) / 10
+    };
+}
+
+function filtrerAlimentsValides(foods) {
+    return foods
+        .map(extractMacros)
+        .filter(f => f.calories > 0 || f.protein > 0 || f.carbs > 0 || f.fat > 0);
+}
+
+// ============================================================
+// AJOUT ALIMENT CUSTOM
+// ============================================================
+function ajouterAlimentCustom(food) {
+    // Vérif doublon par nom exact
+    const exists = getAllFoods().some(f => f.name.toLowerCase() === food.name.toLowerCase());
+    if (exists) {
+        alert(`"${food.name}" existe déjà dans ta base.`);
+        return false;
+    }
+    customFoods.push(food);
+    saveCustomFoods();
+    populateSelects();
+    return true;
+}
+
+// ============================================================
+// GESTION DOUBLONS DE TRADUCTION (modal)
+// ============================================================
+let modalResolve = null;
+
+function demanderChoixDoublon(key, ancienne, nouvelle, source) {
+    return new Promise(resolve => {
+        modalResolve = resolve;
+        const overlay = document.getElementById('modalOverlay');
+        document.getElementById('modalMessage').innerHTML =
+            `Le mot <strong>"${key}"</strong> existe déjà dans ` +
+            (source === 'custom' ? 'tes traductions personnelles.' : 'le dictionnaire de base.');
+        document.getElementById('modalOld').innerHTML =
+            `📌 Actuel : <span style="color:#666">${ancienne}</span>`;
+        document.getElementById('modalNew').innerHTML =
+            `✨ Nouveau : <span style="color:var(--prot)">${nouvelle}</span>`;
+        overlay.classList.add('show');
+    });
+}
+
+document.getElementById('modalKeep').addEventListener('click', () => {
+    document.getElementById('modalOverlay').classList.remove('show');
+    if (modalResolve) modalResolve('garder');
+    modalResolve = null;
+});
+document.getElementById('modalReplace').addEventListener('click', () => {
+    document.getElementById('modalOverlay').classList.remove('show');
+    if (modalResolve) modalResolve('remplacer');
+    modalResolve = null;
+});
+document.getElementById('modalCancel').addEventListener('click', () => {
+    document.getElementById('modalOverlay').classList.remove('show');
+    if (modalResolve) modalResolve('annuler');
+    modalResolve = null;
+});
+
+async function ajouterTraduction(fr, en) {
+    const key = fr.toLowerCase().trim();
+    const value = en.toLowerCase().trim();
+    if (!key || !value) return;
+
+    // Vérif dans les customs
+    if (customTranslations[key] && customTranslations[key] !== value) {
+        const choix = await demanderChoixDoublon(key, customTranslations[key], value, 'custom');
+        if (choix === 'remplacer') {
+            customTranslations[key] = value;
+            saveCustomTranslations();
+        }
+        return;
+    }
+
+    // Vérif dans le dico de base
+    if (FR_TO_EN[key] && FR_TO_EN[key] !== value) {
+        const choix = await demanderChoixDoublon(key, FR_TO_EN[key], value, 'base');
+        if (choix === 'remplacer') {
+            customTranslations[key] = value;
+            saveCustomTranslations();
+        }
+        return;
+    }
+
+    // Pas de conflit
+    customTranslations[key] = value;
+    saveCustomTranslations();
+}
+
+// ============================================================
+// INIT LISTES
+// ============================================================
+function populateSelects() {
+    const foods = getAllFoods().slice().sort((a, b) => a.name.localeCompare(b.name));
+    ['ingredientSelect', 'recipeSelect'].forEach(id => {
+        const sel = document.getElementById(id);
+        const current = sel.value;
+        sel.innerHTML = '';
+        foods.forEach(f => {
+            const opt = document.createElement('option');
+            opt.value = f.name;
+            opt.textContent = f.name;
+            sel.appendChild(opt);
+        });
+        if (current) sel.value = current;
+    });
+}
+
+// ============================================================
+// INGRÉDIENT UNIQUE
+// ============================================================
+document.getElementById('calcBtn').addEventListener('click', function() {
+    const name = document.getElementById('ingredientSelect').value;
+    const qty = parseFloat(document.getElementById('qtyInput').value) || 0;
+    const food = findFood(name);
+
+    if (!food || qty <= 0) {
+        document.getElementById('singleResult').classList.remove('show');
+        return;
+    }
+
+    const ratio = qty / 100;
+    document.getElementById('singleProt').textContent = round(food.protein * ratio);
+    document.getElementById('singleGluc').textContent = round(food.carbs * ratio);
+    document.getElementById('singleLip').textContent = round(food.fat * ratio);
+    document.getElementById('singleCal').textContent = Math.round(food.calories * ratio);
+    document.getElementById('singleResult').classList.add('show');
+});
+
+document.getElementById('qtyInput').addEventListener('keypress', function(e) {
+    if (e.key === 'Enter') document.getElementById('calcBtn').click();
+});
+
+// ============================================================
+// RECETTE
+// ============================================================
+const recipeItems = [];
+
+function renderRecipeList() {
+    const ul = document.getElementById('recipeList');
+    ul.innerHTML = '';
+
+    if (recipeItems.length === 0) {
+        ul.innerHTML = '<li class="recipe-empty">Aucun ingrédient — ajoute-en un !</li>';
+        document.getElementById('recipeBadge').textContent = '0';
+        return;
+    }
+
+    recipeItems.forEach((item, index) => {
+        const li = document.createElement('li');
+        const emoji = getEmoji(item.name);
+        li.innerHTML = `
+            <span>${emoji} <strong>${item.name}</strong> — ${item.qty}g</span>
+            <span class="remove" data-index="${index}">✕</span>
+        `;
+        ul.appendChild(li);
+    });
+
+    document.getElementById('recipeBadge').textContent = recipeItems.length;
+
+    document.querySelectorAll('.recipe-list .remove').forEach(el => {
+        el.addEventListener('click', function() {
+            const idx = parseInt(this.dataset.index);
+            recipeItems.splice(idx, 1);
+            renderRecipeList();
+            document.getElementById('recipeResult').classList.remove('show');
+        });
+    });
+}
+
+document.getElementById('addRecipeBtn').addEventListener('click', function() {
+    const name = document.getElementById('recipeSelect').value;
+    const qty = parseFloat(document.getElementById('recipeQty').value) || 0;
+
+    if (!name || qty <= 0) {
+        alert('Sélectionne un ingrédient et une quantité valide.');
+        return;
+    }
+
+    recipeItems.push({ name, qty });
+    renderRecipeList();
+    document.getElementById('recipeResult').classList.remove('show');
+    document.getElementById('recipeQty').value = 50;
+});
+
+document.getElementById('calcRecipeBtn').addEventListener('click', function() {
+    if (recipeItems.length === 0) {
+        alert('Ajoute au moins un ingrédient à ta recette.');
+        return;
+    }
+
+    let totalCal = 0, totalProt = 0, totalGluc = 0, totalLip = 0;
+
+    recipeItems.forEach(item => {
+        const food = findFood(item.name);
+        if (!food) return;
+        const ratio = item.qty / 100;
+        totalCal += food.calories * ratio;
+        totalProt += food.protein * ratio;
+        totalGluc += food.carbs * ratio;
+        totalLip += food.fat * ratio;
+    });
+
+    document.getElementById('recipeProt').textContent = round(totalProt);
+    document.getElementById('recipeGluc').textContent = round(totalGluc);
+    document.getElementById('recipeLip').textContent = round(totalLip);
+    document.getElementById('recipeCal').textContent = Math.round(totalCal);
+    document.getElementById('recipeCount').textContent = recipeItems.length;
+    document.getElementById('recipeResult').classList.add('show');
+});
+
+document.getElementById('clearRecipeBtn').addEventListener('click', function() {
+    if (recipeItems.length === 0) return;
+    if (confirm('Vider la recette ?')) {
+        recipeItems.length = 0;
+        renderRecipeList();
+        document.getElementById('recipeResult').classList.remove('show');
+    }
+});
+
+document.getElementById('recipeQty').addEventListener('keypress', function(e) {
+    if (e.key === 'Enter') document.getElementById('addRecipeBtn').click();
+});
+
+// ============================================================
+// RECHERCHE USDA + AJOUT ALIMENT
+// ============================================================
+const usdaSearchInput = document.getElementById('usdaSearch');
+const usdaSearchBtn = document.getElementById('usdaSearchBtn');
+const usdaResultsZone = document.getElementById('usdaResultsZone');
+const usdaPromptZone = document.getElementById('usdaPromptZone');
+
+async function lancerRecherche(query) {
+    usdaPromptZone.innerHTML = '';
+    usdaResultsZone.innerHTML = '<div class="usda-empty">Recherche en cours...</div>';
+
+    const traduit = traduire(query);
+    const recherche = traduit || query;
+
+    try {
+        const foods = await searchUSDA(recherche);
+        const valides = filtrerAlimentsValides(foods);
+
+        if (valides.length === 0) {
+            // Rien trouvé → proposer d'ajouter une traduction
+            if (!traduit) {
+                afficherPromptTraduction(query);
+            } else {
+                usdaResultsZone.innerHTML = `<div class="usda-empty">Aucun aliment trouvé pour "${recherche}".</div>`;
+            }
+            return;
+        }
+
+        let html = '';
+        if (traduit && traduit !== query.toLowerCase().trim()) {
+            html += `<div class="usda-empty" style="text-align:left;font-style:normal;opacity:1;padding:4px 0 8px;">
+                🇫🇷 "${query}" → 🇬🇧 <strong>${recherche}</strong></div>`;
+        }
+
+        valides.forEach((f, i) => {
+            html += `
+                <div class="usda-food">
+                    <div class="name">${f.name}</div>
+                    <div class="macros">
+                        <span>🔥 ${f.calories} kcal</span>
+                        <span>💪 ${f.protein}g</span>
+                        <span>🌾 ${f.carbs}g</span>
+                        <span>🥑 ${f.fat}g</span>
+                    </div>
+                    <button class="add-btn" data-idx="${i}">➕ Ajouter à ma base</button>
+                </div>
+            `;
+        });
+        usdaResultsZone.innerHTML = html;
+
+        usdaResultsZone.querySelectorAll('.add-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const f = valides[parseInt(this.dataset.idx)];
+                const ok = ajouterAlimentCustom(f);
+                if (ok) {
+                    this.textContent = '✅ Ajouté !';
+                    this.disabled = true;
+                }
+            });
+        });
+    } catch (e) {
+        usdaResultsZone.innerHTML = `<div class="usda-empty" style="color:#a8453c;">Erreur : ${e.message}</div>`;
+    }
+}
+
+function afficherPromptTraduction(query) {
+    usdaPromptZone.innerHTML = `
+        <div class="translate-prompt">
+            <p>❓ <strong>"${query}"</strong> n'est pas dans le dictionnaire.<br>
+            Comment dit-on en anglais ?</p>
+            <input type="text" id="enTranslation" placeholder="Ex: chicken breast" autocomplete="off" />
+            <div class="actions">
+                <button class="btn btn-success" id="confirmTranslation">➕ Ajouter et rechercher</button>
+                <button class="btn btn-outline" id="cancelTranslation">Annuler</button>
+            </div>
+        </div>
+    `;
+    usdaResultsZone.innerHTML = '';
+
+    document.getElementById('confirmTranslation').addEventListener('click', async () => {
+        const en = document.getElementById('enTranslation').value.trim();
+        if (!en) return;
+        await ajouterTraduction(query, en);
+        lancerRecherche(query);
+    });
+
+    document.getElementById('cancelTranslation').addEventListener('click', () => {
+        usdaPromptZone.innerHTML = '';
+    });
+
+    document.getElementById('enTranslation').addEventListener('keypress', e => {
+        if (e.key === 'Enter') document.getElementById('confirmTranslation').click();
+    });
+
+    document.getElementById('enTranslation').focus();
+}
+
+usdaSearchBtn.addEventListener('click', () => {
+    const q = usdaSearchInput.value.trim();
+    if (!q) return;
+    lancerRecherche(q);
+});
+
+usdaSearchInput.addEventListener('keypress', e => {
+    if (e.key === 'Enter') usdaSearchBtn.click();
+});
+
+// ============================================================
+// INIT
+// ============================================================
+populateSelects();
+renderRecipeList();
+</script>
+</body>
+</html>

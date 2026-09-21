@@ -1,0 +1,17 @@
+# Clé API — NE JAMAIS COMMITER
+config.js
+
+# Fichiers de test
+test_api.html
+
+# Fichiers système
+.DS_Store
+Thumbs.db
+
+# Logs et temporaires
+*.log
+*.tmp
+
+# Sauvegardes locales
+* html.backup*
+*.backup*
