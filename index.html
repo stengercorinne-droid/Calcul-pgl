@@ -12,7 +12,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Archivo+Black&family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
-<script>window.USDA_API_KEY = 'fIR8VkC9CTbHLYuP06BnfhrlFoVeQZgo0Bx8vSI6';</script>
+<script src="config.js"></script>
 <style>
 :root {
   --black: #1a1815;
@@ -200,9 +200,7 @@ select:focus, input:focus {
 .translate-prompt .actions { display: flex; gap: 8px; }
 .translate-prompt .actions .btn { flex: 1; margin-top: 0; padding: 9px; font-size: 11px; }
 
-/* ============================================================
-   AUTOCOMPLETE
-   ============================================================ */
+/* AUTOCOMPLETE */
 .ac-wrap { position: relative; }
 .ac-input {
   width: 100%; padding: 11px 32px 11px 13px;
@@ -222,8 +220,7 @@ select:focus, input:focus {
 .ac-list {
   position: absolute; top: calc(100% + 4px); left: 0; right: 0;
   background: white; border: 2px solid var(--black); box-shadow: var(--shadow);
-  max-height: 240px; overflow-y: auto; z-index: 100;
-  display: none;
+  max-height: 240px; overflow-y: auto; z-index: 100; display: none;
 }
 .ac-list.show { display: block; }
 .ac-item {
@@ -237,9 +234,7 @@ select:focus, input:focus {
   opacity: 0.6; text-align: center;
 }
 
-/* ============================================================
-   MODALS
-   ============================================================ */
+/* MODALS */
 .modal-overlay {
   position: fixed; top: 0; left: 0; right: 0; bottom: 0;
   background: rgba(26,24,21,0.6); display: flex; justify-content: center;
@@ -286,9 +281,7 @@ select:focus, input:focus {
   font-size: 11px; font-weight: 700; margin-top: 8px; text-align: center;
 }
 
-/* ============================================================
-   JOURNAL
-   ============================================================ */
+/* JOURNAL */
 .daynav { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
 .daynav button {
   width: 42px; height: 42px; flex: 0 0 42px; font-size: 18px; font-weight: 800;
@@ -383,6 +376,57 @@ select:focus, input:focus {
 .recents-empty {
   font-size: 12px; font-style: italic; opacity: 0.55; text-align: center; padding: 8px;
 }
+
+/* MES RECETTES (v0.5) */
+.recipes-list { list-style: none; margin: 0; padding: 0; }
+.recipe-card {
+  background: var(--cream); border: 2px solid var(--black);
+  box-shadow: var(--shadow-sm); padding: 10px 12px; margin-bottom: 8px;
+}
+.recipe-card .rc-head {
+  display: flex; justify-content: space-between; align-items: baseline;
+  margin-bottom: 4px; gap: 8px;
+}
+.recipe-card .rc-name {
+  font-family: 'Archivo Black', sans-serif; font-size: 13px; color: var(--black);
+  word-break: break-word;
+}
+.recipe-card .rc-kcal {
+  font-size: 12px; font-weight: 700; color: var(--black); white-space: nowrap;
+}
+.recipe-card .rc-macros {
+  display: flex; gap: 10px; font-size: 11px; font-weight: 700; margin-bottom: 8px;
+}
+.recipe-card .rc-macros .m-prot { color: var(--prot); }
+.recipe-card .rc-macros .m-gluc { color: var(--gluc-dark); }
+.recipe-card .rc-macros .m-lip { color: var(--lip-dark); }
+.recipe-card .rc-actions { display: flex; gap: 6px; }
+.recipe-card .rc-actions button {
+  flex: 1; padding: 6px; border: 2px solid var(--black);
+  font-family: 'Archivo Black', sans-serif; font-size: 10px;
+  text-transform: uppercase; letter-spacing: 0.5px; cursor: pointer;
+  box-shadow: var(--shadow-sm); color: var(--black); background: var(--cream);
+}
+.recipe-card .rc-actions .rc-load { background: var(--gluc); color: white; }
+.recipe-card .rc-actions .rc-journal { background: var(--prot); color: white; }
+.recipe-card .rc-actions .rc-del { background: var(--danger); color: white; flex: 0 0 34px; }
+.recipe-card .rc-actions button:active { transform: translate(1px, 1px); box-shadow: 0 0 0 var(--black); }
+.recipes-empty {
+  text-align: center; padding: 14px; font-size: 12px;
+  opacity: 0.55; font-style: italic; color: var(--black);
+}
+.meal-choice {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 6px 0 8px;
+}
+.meal-choice button {
+  padding: 10px; border: 2px solid var(--black);
+  font-family: 'Archivo Black', sans-serif; font-size: 11px;
+  text-transform: uppercase; cursor: pointer; background: var(--cream);
+  color: var(--black); box-shadow: var(--shadow-sm);
+}
+.meal-choice button.active { background: var(--prot); color: white; }
+.meal-choice button:active { transform: translate(1px, 1px); box-shadow: 0 0 0 var(--black); }
+
 .footer {
   text-align: center; font-family: 'Archivo Black', sans-serif; font-size: 9px;
   letter-spacing: 1px; text-transform: uppercase; color: var(--cream);
@@ -413,7 +457,6 @@ select:focus, input:focus {
     <button class="tab" data-view="journal">📓 Journal</button>
   </div>
 
-  <!-- VUE CALCULATEUR -->
   <div class="view active" id="view-calc">
 
     <div class="card">
@@ -444,7 +487,7 @@ select:focus, input:focus {
       </div>
     </div>
 
-    <div class="card">
+    <div class="card" id="recipeCard">
       <h2><span>🔸</span> Recette <span class="badge" id="recipeBadge">0</span></h2>
       <div class="row">
         <div>
@@ -469,6 +512,7 @@ select:focus, input:focus {
         <button class="btn btn-success" id="calcRecipeBtn" style="flex:3;margin-right:8px;">📊 Calculer la recette</button>
         <button class="btn btn-danger btn-sm" id="clearRecipeBtn" style="flex:1;">🗑️</button>
       </div>
+      <button class="btn btn-primary" id="saveRecipeBtn" style="margin-top:8px;">💾 Sauvegarder cette recette</button>
       <div class="result" id="recipeResult">
         <div class="pgl-grid">
           <div class="pgl-item prot"><span class="emoji">💪</span><div class="value" id="recipeProt">0</div><div class="label">Protéines</div></div>
@@ -477,6 +521,13 @@ select:focus, input:focus {
         </div>
         <div class="total">🔥 Calories : <span id="recipeCal">0</span> kcal • <span id="recipeCount">0</span> ingrédients</div>
       </div>
+    </div>
+
+    <div class="card">
+      <h2><span>📚</span> Mes recettes <span class="badge" id="recipesBadge">0</span></h2>
+      <ul class="recipes-list" id="recipesList">
+        <li class="recipes-empty">Aucune recette sauvegardée pour l'instant.</li>
+      </ul>
     </div>
 
     <div class="card">
@@ -492,7 +543,6 @@ select:focus, input:focus {
 
   </div>
 
-  <!-- VUE JOURNAL -->
   <div class="view" id="view-journal">
     <div class="card">
       <div class="daynav">
@@ -597,7 +647,7 @@ select:focus, input:focus {
 <div class="modal-overlay" id="renameModal">
   <div class="modal">
     <h3>🏷️ Nommer cet aliment</h3>
-    <p class="hint">Tu peux renommer l'aliment avant de l'ajouter à ta base (ex : "Chicken, broilers..." → "Poulet").</p>
+    <p class="hint">Tu peux renommer l'aliment avant de l'ajouter à ta base.</p>
     <label>🇫🇷 Nom en français *</label>
     <input type="text" id="renameNameFr" autocomplete="off" />
     <label>🇬🇧 Nom en anglais (optionnel)</label>
@@ -607,6 +657,34 @@ select:focus, input:focus {
     <div class="actions-2">
       <button class="btn btn-outline" id="renameCancel">Annuler</button>
       <button class="btn btn-primary" id="renameConfirm">Ajouter</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal sauvegarder recette (v0.5) -->
+<div class="modal-overlay" id="saveRecipeModal">
+  <div class="modal">
+    <h3>💾 Nommer la recette</h3>
+    <label>Nom de la recette *</label>
+    <input type="text" id="saveRecipeName" placeholder="Ex: Bolognaise maison" autocomplete="off" />
+    <p class="hint" id="saveRecipeHint">—</p>
+    <div class="actions-2">
+      <button class="btn btn-outline" id="saveRecipeCancel">Annuler</button>
+      <button class="btn btn-primary" id="saveRecipeConfirm">Sauvegarder</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal ajouter recette au journal (v0.5) -->
+<div class="modal-overlay" id="recipeToMealModal">
+  <div class="modal">
+    <h3 id="recipeToMealTitle">➕ Ajouter au journal</h3>
+    <p class="hint" id="recipeToMealDesc">—</p>
+    <label>🍽️ Repas</label>
+    <div class="meal-choice" id="mealChoice"></div>
+    <div class="actions-2">
+      <button class="btn btn-outline" id="recipeToMealCancel">Annuler</button>
+      <button class="btn btn-primary" id="recipeToMealConfirm">Ajouter</button>
     </div>
   </div>
 </div>
@@ -724,8 +802,6 @@ const FR_TO_EN = {
   "lait d'avoine": "oat milk", "yaourt": "yogurt", "yaourt nature": "plain yogurt",
   "yaourt grec": "greek yogurt", "yaourt à la grecque": "greek yogurt",
   "fromage": "cheese", "fromage blanc": "fromage blanc",
-  "fromage blanc 0%": "nonfat fromage blanc", "fromage blanc 3%": "fromage blanc 3%",
-  "fromage blanc 20%": "fromage blanc 20%",
   "fromage frais": "cream cheese", "fromage râpé": "grated cheese", "parmesan": "parmesan",
   "mozzarella": "mozzarella", "gruyère": "gruyere", "emmental": "emmental", "chèvre": "goat cheese",
   "feta": "feta", "ricotta": "ricotta", "mascarpone": "mascarpone", "brie": "brie",
@@ -734,7 +810,6 @@ const FR_TO_EN = {
   "beurre": "butter", "beurre salé": "salted butter", "beurre demi-sel": "semi-salted butter",
   "crème": "cream", "crème fraîche": "sour cream", "crème liquide": "heavy cream",
   "crème épaisse": "sour cream", "crème chantilly": "whipped cream",
-  "ribot": "buttermilk", "babeurre": "buttermilk",
   "compote": "applesauce", "compote de pommes": "applesauce",
   "riz": "rice", "riz blanc": "white rice", "riz complet": "brown rice",
   "riz basmati": "basmati rice", "riz jasmin": "jasmine rice",
@@ -833,10 +908,12 @@ let customFoods = JSON.parse(localStorage.getItem('customFoods') || '[]');
 let customTranslations = JSON.parse(localStorage.getItem('customTranslations') || '{}');
 let journal = JSON.parse(localStorage.getItem('journal') || '{}');
 let recentFoods = JSON.parse(localStorage.getItem('recentFoods') || '[]');
+let recipes = JSON.parse(localStorage.getItem('recipes') || '[]');
 function saveCustomFoods() { localStorage.setItem('customFoods', JSON.stringify(customFoods)); }
 function saveCustomTranslations() { localStorage.setItem('customTranslations', JSON.stringify(customTranslations)); }
 function saveJournal() { localStorage.setItem('journal', JSON.stringify(journal)); }
 function saveRecentFoods() { localStorage.setItem('recentFoods', JSON.stringify(recentFoods)); }
+function saveRecipes() { localStorage.setItem('recipes', JSON.stringify(recipes)); }
 
 // ============================================================
 // UTILS
@@ -865,7 +942,8 @@ function getEmoji(name) {
     'jambon': '🥓', 'soja': '🫘', 'betterave': '🟣', 'maïs': '🌽',
     'petit pois': '🫛', 'dinde': '🦃', 'crevette': '🦐', 'amande': '🥜', 'cajou': '🥜',
     'noisette': '🥜', 'fraise': '🍓', 'framboise': '🫐', 'myrtille': '🫐',
-    'mûre': '🫐', 'groseille': '🫐', 'cassis': '🫐', 'fruit rouge': '🫐'
+    'mûre': '🫐', 'groseille': '🫐', 'cassis': '🫐', 'fruit rouge': '🫐',
+    'recette': '🍲'
   };
   const lower = name.toLowerCase();
   for (const [key, emoji] of Object.entries(map)) {
@@ -875,7 +953,7 @@ function getEmoji(name) {
 }
 
 // ============================================================
-// TRADUCTION FR → EN
+// TRADUCTION
 // ============================================================
 function traduire(texte) {
   const lower = texte.toLowerCase().trim();
@@ -926,7 +1004,7 @@ function filtrerAlimentsValides(foods) {
 }
 
 // ============================================================
-// AJOUT ALIMENT CUSTOM + ANTI-DOUBLON
+// AJOUT ALIMENT CUSTOM
 // ============================================================
 function isDuplicateFood(name) {
   const n = normaliserSansAccents(name);
@@ -993,7 +1071,6 @@ async function ajouterTraduction(fr, en) {
 // AUTOCOMPLETE
 // ============================================================
 const autocompletes = {};
-
 function scoreFood(foodName, query) {
   const n = normaliserSansAccents(foodName);
   const q = normaliserSansAccents(query);
@@ -1004,7 +1081,6 @@ function scoreFood(foodName, query) {
   if (n.includes(q)) return 3;
   return -1;
 }
-
 function initAutocomplete(inputId, listId, hiddenId, wrapId) {
   const input = document.getElementById(inputId);
   const list = document.getElementById(listId);
@@ -1090,10 +1166,7 @@ function initAutocomplete(inputId, listId, hiddenId, wrapId) {
       (list.querySelector('.ac-item.active') || items[items.length - 1]).scrollIntoView({ block: 'nearest' });
     } else if (e.key === 'Enter') {
       const active = list.querySelector('.ac-item.active');
-      if (active) {
-        e.preventDefault();
-        selectValue(active.dataset.name);
-      }
+      if (active) { e.preventDefault(); selectValue(active.dataset.name); }
     } else if (e.key === 'Escape') {
       list.classList.remove('show');
     }
@@ -1109,7 +1182,6 @@ function initAutocomplete(inputId, listId, hiddenId, wrapId) {
     refresh: () => { if (list.classList.contains('show')) renderList(input.value); }
   };
 }
-
 function refreshAllAutocompletes() {
   Object.values(autocompletes).forEach(ac => ac.refresh());
 }
@@ -1134,7 +1206,7 @@ document.getElementById('qtyInput').addEventListener('keypress', function(e) {
 });
 
 // ============================================================
-// RECETTE
+// RECETTE (calculateur temporaire)
 // ============================================================
 const recipeItems = [];
 function renderRecipeList() {
@@ -1173,20 +1245,11 @@ document.getElementById('addRecipeBtn').addEventListener('click', function() {
 });
 document.getElementById('calcRecipeBtn').addEventListener('click', function() {
   if (recipeItems.length === 0) { alert('Ajoute au moins un ingrédient à ta recette.'); return; }
-  let totalCal = 0, totalProt = 0, totalGluc = 0, totalLip = 0;
-  recipeItems.forEach(item => {
-    const food = findFood(item.name);
-    if (!food) return;
-    const ratio = item.qty / 100;
-    totalCal += food.calories * ratio;
-    totalProt += food.protein * ratio;
-    totalGluc += food.carbs * ratio;
-    totalLip += food.fat * ratio;
-  });
-  document.getElementById('recipeProt').textContent = round(totalProt);
-  document.getElementById('recipeGluc').textContent = round(totalGluc);
-  document.getElementById('recipeLip').textContent = round(totalLip);
-  document.getElementById('recipeCal').textContent = Math.round(totalCal);
+  const t = computeRecipeTotals(recipeItems);
+  document.getElementById('recipeProt').textContent = t.prot;
+  document.getElementById('recipeGluc').textContent = t.gluc;
+  document.getElementById('recipeLip').textContent = t.lip;
+  document.getElementById('recipeCal').textContent = t.cal;
   document.getElementById('recipeCount').textContent = recipeItems.length;
   document.getElementById('recipeResult').classList.add('show');
 });
@@ -1200,6 +1263,169 @@ document.getElementById('clearRecipeBtn').addEventListener('click', function() {
 });
 document.getElementById('recipeQty').addEventListener('keypress', function(e) {
   if (e.key === 'Enter') document.getElementById('addRecipeBtn').click();
+});
+function computeRecipeTotals(items) {
+  let cal = 0, prot = 0, gluc = 0, lip = 0, weight = 0;
+  items.forEach(it => {
+    const f = findFood(it.name);
+    if (!f) return;
+    const r = it.qty / 100;
+    cal += f.calories * r; prot += f.protein * r;
+    gluc += f.carbs * r; lip += f.fat * r;
+    weight += it.qty;
+  });
+  return { cal: Math.round(cal), prot: round(prot), gluc: round(gluc), lip: round(lip), weight: Math.round(weight) };
+}
+
+// ============================================================
+// MES RECETTES (v0.5)
+// ============================================================
+function genererId() {
+  return Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
+}
+function renderRecipes() {
+  const ul = document.getElementById('recipesList');
+  ul.innerHTML = '';
+  document.getElementById('recipesBadge').textContent = recipes.length;
+  if (recipes.length === 0) {
+    ul.innerHTML = '<li class="recipes-empty">Aucune recette sauvegardée pour l\'instant.</li>';
+    return;
+  }
+  recipes.forEach(recipe => {
+    const t = computeRecipeTotals(recipe.items);
+    const li = document.createElement('li');
+    li.className = 'recipe-card';
+    li.innerHTML = `
+      <div class="rc-head">
+        <span class="rc-name">🍲 ${recipe.name}</span>
+        <span class="rc-kcal">🔥 ${t.cal} kcal</span>
+      </div>
+      <div class="rc-macros">
+        <span class="m-prot">P: ${t.prot}g</span>
+        <span class="m-gluc">G: ${t.gluc}g</span>
+        <span class="m-lip">L: ${t.lip}g</span>
+      </div>
+      <div class="rc-actions">
+        <button class="rc-load" data-id="${recipe.id}">📥 Charger</button>
+        <button class="rc-journal" data-id="${recipe.id}">➕ Journal</button>
+        <button class="rc-del" data-id="${recipe.id}">🗑️</button>
+      </div>
+    `;
+    ul.appendChild(li);
+  });
+  ul.querySelectorAll('.rc-load').forEach(b => b.addEventListener('click', () => chargerRecette(b.dataset.id)));
+  ul.querySelectorAll('.rc-journal').forEach(b => b.addEventListener('click', () => ouvrirRecipeToMeal(b.dataset.id)));
+  ul.querySelectorAll('.rc-del').forEach(b => b.addEventListener('click', () => supprimerRecette(b.dataset.id)));
+}
+function ouvrirSaveRecipeModal() {
+  if (recipeItems.length === 0) { alert('Ajoute au moins un ingrédient avant de sauvegarder.'); return; }
+  document.getElementById('saveRecipeName').value = '';
+  const t = computeRecipeTotals(recipeItems);
+  document.getElementById('saveRecipeHint').textContent =
+    `${recipeItems.length} ingrédients • ${t.weight}g total • ${t.cal} kcal`;
+  document.getElementById('saveRecipeModal').classList.add('show');
+  document.getElementById('saveRecipeName').focus();
+}
+function fermerSaveRecipeModal() {
+  document.getElementById('saveRecipeModal').classList.remove('show');
+}
+document.getElementById('saveRecipeBtn').addEventListener('click', ouvrirSaveRecipeModal);
+document.getElementById('saveRecipeCancel').addEventListener('click', fermerSaveRecipeModal);
+document.getElementById('saveRecipeModal').addEventListener('click', e => {
+  if (e.target.id === 'saveRecipeModal') fermerSaveRecipeModal();
+});
+document.getElementById('saveRecipeConfirm').addEventListener('click', () => {
+  const name = document.getElementById('saveRecipeName').value.trim();
+  if (!name) { alert('Donne un nom à ta recette.'); return; }
+  recipes.unshift({
+    id: genererId(),
+    name,
+    items: recipeItems.map(it => ({ name: it.name, qty: it.qty })),
+    createdAt: Date.now()
+  });
+  saveRecipes();
+  renderRecipes();
+  fermerSaveRecipeModal();
+});
+function chargerRecette(id) {
+  const recipe = recipes.find(r => r.id === id);
+  if (!recipe) return;
+  recipeItems.length = 0;
+  recipe.items.forEach(it => recipeItems.push({ name: it.name, qty: it.qty }));
+  renderRecipeList();
+  document.getElementById('recipeResult').classList.remove('show');
+  document.getElementById('recipeCard').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+function supprimerRecette(id) {
+  const recipe = recipes.find(r => r.id === id);
+  if (!recipe) return;
+  if (!confirm(`Supprimer la recette "${recipe.name}" ?`)) return;
+  recipes = recipes.filter(r => r.id !== id);
+  saveRecipes();
+  renderRecipes();
+}
+
+// --- Ajouter recette au journal ---
+let recipeToMealId = null;
+let recipeToMealChoice = 'dejeuner';
+function ouvrirRecipeToMeal(id) {
+  const recipe = recipes.find(r => r.id === id);
+  if (!recipe) return;
+  recipeToMealId = id;
+  recipeToMealChoice = 'dejeuner';
+  const t = computeRecipeTotals(recipe.items);
+  document.getElementById('recipeToMealTitle').textContent = `➕ "${recipe.name}" au journal`;
+  document.getElementById('recipeToMealDesc').textContent =
+    `${t.weight}g • ${t.cal} kcal • P:${t.prot}g G:${t.gluc}g L:${t.lip}g`;
+  const zone = document.getElementById('mealChoice');
+  zone.innerHTML = MEALS.map(m =>
+    `<button data-meal="${m.key}" class="${m.key === recipeToMealChoice ? 'active' : ''}">${m.emoji} ${m.label}</button>`
+  ).join('');
+  zone.querySelectorAll('button').forEach(b => {
+    b.addEventListener('click', () => {
+      recipeToMealChoice = b.dataset.meal;
+      zone.querySelectorAll('button').forEach(x => x.classList.remove('active'));
+      b.classList.add('active');
+    });
+  });
+  document.getElementById('recipeToMealModal').classList.add('show');
+}
+function fermerRecipeToMeal() {
+  document.getElementById('recipeToMealModal').classList.remove('show');
+  recipeToMealId = null;
+}
+document.getElementById('recipeToMealCancel').addEventListener('click', fermerRecipeToMeal);
+document.getElementById('recipeToMealModal').addEventListener('click', e => {
+  if (e.target.id === 'recipeToMealModal') fermerRecipeToMeal();
+});
+document.getElementById('recipeToMealConfirm').addEventListener('click', () => {
+  const recipe = recipes.find(r => r.id === recipeToMealId);
+  if (!recipe) return;
+  const t = computeRecipeTotals(recipe.items);
+  if (t.weight <= 0) { alert('Recette vide ou invalide.'); return; }
+  const virtualName = `[Recette] ${recipe.name}`;
+  const ratio = 100 / t.weight;
+  const virtual = {
+    name: virtualName,
+    calories: Math.round(t.cal * ratio),
+    protein: round(t.prot * ratio),
+    carbs: round(t.gluc * ratio),
+    fat: round(t.fat * ratio)
+  };
+  const existing = customFoods.findIndex(f => f.name === virtualName);
+  if (existing >= 0) customFoods[existing] = virtual;
+  else customFoods.push(virtual);
+  saveCustomFoods();
+  const entry = getDayEntry(currentDay);
+  entry[recipeToMealChoice].push({ name: virtualName, qty: t.weight });
+  saveJournal();
+  pushRecentFood(virtualName);
+  fermerRecipeToMeal();
+  renderJournal();
+  renderRecents();
+  refreshAllAutocompletes();
+  const mealLabel = MEALS.find(m => m.key === recipeToMealChoice).label;
+  alert(`✅ "${recipe.name}" ajoutée au ${mealLabel}`);
 });
 
 // ============================================================
@@ -1567,8 +1793,10 @@ initAutocomplete('ingredientSelectInput', 'ingredientSelectList', 'ingredientSel
 initAutocomplete('recipeSelectInput', 'recipeSelectList', 'recipeSelect', 'recipeSelectWrap');
 initAutocomplete('addMealFoodInput', 'addMealFoodList', 'addMealFood', 'addMealFoodWrap');
 renderRecipeList();
+renderRecipes();
 renderRecents();
 renderJournal();
+
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
     navigator.serviceWorker.register('./sw.js').catch(() => {});
