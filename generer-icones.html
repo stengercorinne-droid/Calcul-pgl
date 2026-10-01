@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Générateur d'icônes PGL</title>
+<link href="https://fonts.googleapis.com/css2?family=Bangers&family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+body {
+  font-family: 'Inter', system-ui, sans-serif;
+  background: #d4c9b8;
+  background-image: radial-gradient(circle, rgba(26,24,21,0.08) 1px, transparent 1px);
+  background-size: 16px 16px;
+  padding: 24px 16px 60px; margin: 0;
+  color: #1a1815;
+}
+.wrap { max-width: 720px; margin: 0 auto; }
+h1 {
+  font-family: 'Bangers', cursive;
+  font-size: 36px; letter-spacing: 2px;
+  text-align: center; margin: 0 0 8px;
+  color: #f8f5f0; background: #5b7a99;
+  padding: 6px 20px; width: fit-content; margin-left: auto; margin-right: auto;
+  border: 3px solid #1a1815; box-shadow: 4px 4px 0 #1a1815;
+  transform: rotate(-2deg); text-shadow: 2px 2px 0 #1a1815;
+}
+.intro {
+  text-align: center; font-size: 13px; margin-bottom: 24px;
+  color: #3b2f2a; line-height: 1.5;
+}
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 16px;
+}
+.card {
+  background: #fdfbf7; border: 3px solid #1a1815;
+  box-shadow: 4px 4px 0 #1a1815;
+  padding: 14px 12px; text-align: center;
+}
+.card img {
+  display: block; margin: 0 auto 10px;
+  image-rendering: -webkit-optimize-contrast;
+  border: 1px solid rgba(26,24,21,0.15);
+}
+.card .name {
+  font-family: 'Archivo Black', 'Inter', sans-serif;
+  font-size: 10px; letter-spacing: 0.5px;
+  text-transform: uppercase; color: #1a1815; margin-bottom: 4px;
+}
+.card .size {
+  font-size: 11px; color: #6b5e50; margin-bottom: 10px;
+}
+.dl {
+  display: block; width: 100%;
+  padding: 8px; border: 2px solid #1a1815;
+  background: #7a9668; color: white; text-decoration: none;
+  font-family: 'Archivo Black', sans-serif; font-size: 10px;
+  text-transform: uppercase; letter-spacing: 0.5px;
+  cursor: pointer; box-shadow: 2px 2px 0 #1a1815;
+  box-sizing: border-box;
+}
+.dl:active { transform: translate(2px, 2px); box-shadow: none; }
+.note {
+  margin-top: 32px; padding: 14px 16px;
+  background: #fdfbf7; border: 3px dashed #1a1815;
+  font-size: 13px; line-height: 1.6; color: #3b2f2a;
+}
+.note code {
+  background: #f4ecd8; padding: 1px 6px;
+  border: 1px solid rgba(26,24,21,0.15); font-size: 12px;
+  border-radius: 3px;
+}
+.note h3 {
+  font-family: 'Archivo Black', sans-serif; font-size: 12px;
+  text-transform: uppercase; letter-spacing: 0.6px;
+  margin: 0 0 8px; color: #1a1815;
+}
+.note ol { padding-left: 18px; margin: 8px 0 0; }
+.note li { margin-bottom: 4px; }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <h1>🎨 Générateur d'icônes PGL</h1>
+  <p class="intro">
+    Clique sur <strong>💾 Télécharger</strong> sous chaque taille.<br>
+    Les 5 fichiers vont dans le dossier du projet, à côté de <code>index.html</code>.
+  </p>
+  <div class="grid" id="grid"></div>
+
+  <div class="note">
+    <h3>📌 Comment s'en servir</h3>
+    <ol>
+      <li>Ouvre cette page dans Chrome ou Safari (Mac ou PC).</li>
+      <li>Clique sur les 5 boutons <strong>💾 Télécharger</strong> → 5 fichiers PNG dans ton dossier <em>Téléchargements</em>.</li>
+      <li>Déplace-les dans le dossier du projet (à côté de <code>index.html</code>).</li>
+      <li>Applique les modifications sur <code>index.html</code>, <code>manifest.json</code> et <code>sw.js</code> (voir la suite du message).</li>
+      <li>Sur iPhone : Supprimer l'app de l'écran d'accueil → Safari → Partager → « Sur l'écran d'accueil » → la nouvelle icône apparaît.</li>
+    </ol>
+  </div>
+</div>
+
+<script>
+const ICONS = [
+  { name: 'icon-512.png',        size: 512 },
+  { name: 'icon-192.png',        size: 192 },
+  { name: 'apple-touch-icon.png', size: 180 },
+  { name: 'favicon-32.png',      size: 32 },
+  { name: 'favicon-16.png',      size: 16 }
+];
+
+function rr(ctx, x, y, w, h, r) {
+  ctx.beginPath();
+  ctx.moveTo(x + r, y);
+  ctx.lineTo(x + w - r, y);
+  ctx.quadraticCurveTo(x + w, y, x + w, y + r);
+  ctx.lineTo(x + w, y + h - r);
+  ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+  ctx.lineTo(x + r, y + h);
+  ctx.quadraticCurveTo(x, y + h, x, y + h - r);
+  ctx.lineTo(x, y + r);
+  ctx.quadraticCurveTo(x, y, x + r, y);
+  ctx.closePath();
+}
+
+function drawIcon(size) {
+  const canvas = document.createElement('canvas');
+  canvas.width = size;
+  canvas.height = size;
+  const ctx = canvas.getContext('2d');
+
+  // 1. Fond kraft
+  ctx.fillStyle = '#d4c9b8';
+  ctx.fillRect(0, 0, size, size);
+
+  // 2. Pois discrets
+  const dotR = Math.max(0.6, size * 0.007);
+  const spacing = size * 0.08;
+  ctx.fillStyle = 'rgba(26,24,21,0.10)';
+  for (let x = spacing / 2; x < size; x += spacing) {
+    for (let y = spacing / 2; y < size; y += spacing) {
+      ctx.beginPath();
+      ctx.arc(x, y, dotR, 0, Math.PI * 2);
+      ctx.fill();
+    }
+  }
+
+  // 3. Bordure noire épaisse arrondie
+  const borderW = size * 0.05;
+  const inset = size * 0.05;
+  ctx.strokeStyle = '#1a1815';
+  ctx.lineWidth = borderW;
+  rr(ctx, inset, inset, size - inset * 2, size - inset * 2, size * 0.18);
+  ctx.stroke();
+
+  // 4. Emoji 🍽️ centré (partie haute)
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  const emojiSize = size * 0.48;
+  ctx.font = `${emojiSize}px "Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif`;
+  ctx.fillText('🍽️', size / 2, size * 0.42);
+
+  // 5. Texte "PGL" en Bangers
+  const textSize = size * 0.22;
+  ctx.font = `${textSize}px Bangers, cursive`;
+  ctx.lineJoin = 'round';
+  ctx.lineWidth = size * 0.014;
+  ctx.strokeStyle = '#f8f5f0';
+  ctx.fillStyle = '#1a1815';
+  const textY = size * 0.76;
+  ctx.strokeText('PGL', size / 2, textY);
+  ctx.fillText('PGL', size / 2, textY);
+
+  return canvas.toDataURL('image/png');
+}
+
+function render() {
+  const grid = document.getElementById('grid');
+  ICONS.forEach(ic => {
+    const url = drawIcon(ic.size);
+    const card = document.createElement('div');
+    card.className = 'card';
+    // Préview visuelle à ~120px max pour homogénéité, sauf si plus petit
+    const previewSize = Math.min(ic.size, 120);
+    card.innerHTML = `
+      <img src="${url}" width="${previewSize}" height="${previewSize}" alt="${ic.name}">
+      <div class="name">${ic.name}</div>
+      <div class="size">${ic.size} × ${ic.size} px</div>
+      <a class="dl" download="${ic.name}" href="${url}">💾 Télécharger</a>
+    `;
+    grid.appendChild(card);
+  });
+}
+
+// Attendre les polices (Bangers) avant de dessiner
+if (document.fonts && document.fonts.ready) {
+  document.fonts.load('100px Bangers').then(() => {
+    document.fonts.ready.then(render);
+  });
+} else {
+  window.addEventListener('load', render);
+}
+</script>
+</body>
+</html>
