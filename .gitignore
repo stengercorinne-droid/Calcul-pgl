@@ -2,3 +2,5 @@ config.js
 calories_v01_backup.html
 calories html.backup0
 test_api.html
+	
+*.backup*
