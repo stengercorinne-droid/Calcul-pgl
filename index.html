@@ -16,7 +16,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Archivo+Black&family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
-<script src="config.js"></script>
+<<script>window.USDA_API_KEY = "fIR8VkC9CTbHLYuP06BnfhrlFoVeQZgo0Bx8vSI6";</script>
 <style>
 :root {
   --black: #1a1815;
@@ -1237,7 +1237,7 @@ function traduire(texte) {
 
 async function searchUSDA(query) {
   const url = new URL("https://api.nal.usda.gov/fdc/v1/foods/search");
-  url.searchParams.set("api_key", USDA_API_KEY);
+  url.searchParams.set("api_key", window.USDA_API_KEY);
   url.searchParams.set("query", query);
   url.searchParams.set("pageSize", "8");
   url.searchParams.set("dataType", "Foundation,SR Legacy");
