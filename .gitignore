@@ -1,6 +1,10 @@
+# Clé API USDA (privée)
 config.js
-calories_v01_backup.html
-calories html.backup0
-test_api.html
 	
+# Backups locaux
 *.backup*
+
+# Fichiers système
+.DS_Store
+Thumbs.db
+desktop.ini

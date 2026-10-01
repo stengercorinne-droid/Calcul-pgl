@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>Test API USDA</title>
+<style>
+body { font-family: system-ui, sans-serif; padding: 20px; max-width: 700px; margin: auto; }
+input, button { padding: 10px; font-size: 15px; }
+input { width: 60%; }
+pre { background: #f4f4f4; padding: 14px; overflow-x: auto; font-size: 12px; margin-top: 20px; }
+.food { background: #eef; padding: 10px; margin: 8px 0; border-radius: 6px; }
+.food strong { display: block; margin-bottom: 4px; }
+</style>
+</head>
+<body>
+
+<h1>Test API USDA</h1>
+
+<input type="text" id="query" placeholder="Ex: chicken breast, oats, avocado..." value="chicken breast">
+<button id="searchBtn">Rechercher</button>
+
+<div id="results"></div>
+<pre id="raw"></pre>
+
+<script>
+// ⚠️ Remplace par ta clé API USDA
+const USDA_API_KEY = "fIR8VkC9CTbHLYuP06BnfhrlFoVeQZgo0Bx8vSI6"; // DEMO_KEY fonctionne pour tester (limité à 30 req/h)
+
+async function searchUSDA(query) {
+    const url = new URL("https://api.nal.usda.gov/fdc/v1/foods/search");
+    url.searchParams.set("api_key", USDA_API_KEY);
+    url.searchParams.set("query", query);
+    url.searchParams.set("pageSize", "5");
+    // Filtre : uniquement les aliments génériques (pas les produits de marque)
+    url.searchParams.set("dataType", "Foundation,SR Legacy");
+
+    const res = await fetch(url);
+    if (!res.ok) throw new Error("Erreur HTTP: " + res.status);
+    const data = await res.json();
+    return data.foods || [];
+}
+
+function extractMacros(food) {
+    const get = (id) => {
+        const n = food.foodNutrients?.find(x => x.nutrientId === id);
+        return n ? n.value : 0;
+    };
+    return {
+        name: food.description,
+        calories: Math.round(get(1008) || get(2047) || 0),
+        protein: Math.round((get(1003) || 0) * 10) / 10,
+        carbs: Math.round((get(1005) || 0) * 10) / 10,
+        fat: Math.round((get(1004) || 0) * 10) / 10
+    };
+}
+
+document.getElementById('searchBtn').addEventListener('click', async () => {
+    const query = document.getElementById('query').value.trim();
+    const results = document.getElementById('results');
+    const raw = document.getElementById('raw');
+    results.innerHTML = "Recherche...";
+    raw.textContent = "";
+
+    try {
+        const foods = await searchUSDA(query);
+        if (foods.length === 0) {
+            results.innerHTML = "<p>Aucun résultat.</p>";
+            return;
+        }
+        const mapped = foods.map(extractMacros);
+        results.innerHTML = mapped.map(f => `
+            <div class="food">
+                <strong>${f.name}</strong>
+                🔥 ${f.calories} kcal • 💪 ${f.protein}g • 🌾 ${f.carbs}g • 🥑 ${f.fat}g
+                <small style="opacity:0.6">(pour 100 g)</small>
+            </div>
+        `).join('');
+        raw.textContent = JSON.stringify(foods[0], null, 2);
+    } catch (e) {
+        results.innerHTML = `<p style="color:red">Erreur : ${e.message}</p>`;
+    }
+});
+</script>
+
+</body>
+</html>
