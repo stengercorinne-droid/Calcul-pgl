@@ -7,9 +7,10 @@
 <link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
-<link rel="icon" type="image/png" sizes="16x16" href="favicon-16.png"><meta name="theme-color" content="#5b7a99">
+<link rel="icon" type="image/png" sizes="16x16" href="favicon-16.png">
+<meta name="theme-color" content="#5b7a99">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="mobile-web-app-capable" content="yes">    
+<meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="PGL">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -144,8 +145,6 @@ input:focus, textarea:focus { outline: none; transform: translate(-1px, -1px); b
   font-family: 'Bangers', cursive; font-size: 24px; color: var(--prot);
   letter-spacing: 1.5px; text-shadow: 1px 1px 0 var(--black); margin: 0 2px;
 }
-
-/* QUANTITÉ + UNITÉ */
 .qty-wrap { display: flex; gap: 8px; align-items: stretch; }
 .qty-wrap input[type="number"] { flex: 1; }
 .qty-wrap .unit-select {
@@ -161,7 +160,6 @@ input:focus, textarea:focus { outline: none; transform: translate(-1px, -1px); b
   font-size: 11px; font-style: italic; color: #6b5e50;
   margin-top: 4px; min-height: 14px;
 }
-
 .recipe-list {
   list-style: none; margin: 12px 0 4px; max-height: 180px; overflow-y: auto;
 }
@@ -222,8 +220,6 @@ input:focus, textarea:focus { outline: none; transform: translate(-1px, -1px); b
 .translate-prompt input { margin-bottom: 8px; }
 .translate-prompt .actions { display: flex; gap: 8px; }
 .translate-prompt .actions .btn { flex: 1; margin-top: 0; padding: 9px; font-size: 11px; }
-
-/* AUTOCOMPLETE */
 .ac-wrap { position: relative; }
 .ac-input {
   width: 100%; padding: 11px 32px 11px 13px;
@@ -254,8 +250,6 @@ input:focus, textarea:focus { outline: none; transform: translate(-1px, -1px); b
   padding: 12px; font-size: 12px; font-style: italic;
   opacity: 0.6; text-align: center;
 }
-
-/* MODALS */
 .modal-overlay {
   position: fixed; top: 0; left: 0; right: 0; bottom: 0;
   background: rgba(26,24,21,0.6); display: flex; justify-content: center;
@@ -301,8 +295,6 @@ input:focus, textarea:focus { outline: none; transform: translate(-1px, -1px); b
   padding: 10px; background: var(--cream); border: 2px solid var(--black);
   font-size: 11px; font-weight: 700; margin-top: 8px; text-align: center;
 }
-
-/* ACCORDÉON */
 .accordion {
   background: var(--paper); border: 3px solid var(--black);
   box-shadow: var(--shadow); margin-bottom: 22px;
@@ -349,8 +341,12 @@ input:focus, textarea:focus { outline: none; transform: translate(-1px, -1px); b
   border: 2px solid var(--black); box-shadow: var(--shadow-sm);
   font-size: 11px; filter: grayscale(0.4);
 }
-
-/* JOURNAL */
+.backup-actions { display: flex; gap: 8px; margin-top: 10px; }
+.backup-actions .btn { margin-top: 0; flex: 1; padding: 10px; font-size: 11px; }
+.backup-info {
+  font-size: 11px; font-style: italic; color: #6b5e50;
+  margin-top: 8px; line-height: 1.4; min-height: 14px;
+}
 .daynav { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
 .daynav button {
   width: 42px; height: 42px; flex: 0 0 42px; font-size: 18px; font-weight: 800;
@@ -480,8 +476,6 @@ input:focus, textarea:focus { outline: none; transform: translate(-1px, -1px); b
 .recents-empty {
   font-size: 12px; font-style: italic; opacity: 0.55; text-align: center; padding: 8px;
 }
-
-/* MES RECETTES */
 .recipes-list { list-style: none; margin: 0; padding: 0; }
 .recipe-card {
   background: var(--cream); border: 2px solid var(--black);
@@ -537,8 +531,6 @@ input:focus, textarea:focus { outline: none; transform: translate(-1px, -1px); b
 }
 .meal-choice button.active { background: var(--prot); color: white; }
 .meal-choice button:active { transform: translate(1px, 1px); box-shadow: 0 0 0 var(--black); }
-
-/* GÉRER MES ALIMENTS */
 .manage-search {
   width: 100%; padding: 9px 12px; border: 2px solid var(--black);
   font-size: 14px; font-family: 'Inter', sans-serif; background: white;
@@ -571,14 +563,11 @@ input:focus, textarea:focus { outline: none; transform: translate(-1px, -1px); b
 .manage-list li.hidden { opacity: 0.4; }
 .manage-list li.hidden .m-name::after { content: " (masqué)"; font-style: italic; font-weight: 400; }
 .manage-list li.hidden .m-del { background: var(--gluc); }
-
 .footer {
   text-align: center; font-family: 'Archivo Black', sans-serif; font-size: 9px;
   letter-spacing: 1px; text-transform: uppercase; color: var(--cream);
   background: var(--black); padding: 9px; border: 2px solid var(--black); margin-top: 6px;
 }
-
-/* TOAST */
 .toast {
   position: fixed; left: 50%; bottom: 24px;
   transform: translateX(-50%) translateY(20px);
@@ -591,7 +580,6 @@ input:focus, textarea:focus { outline: none; transform: translate(-1px, -1px); b
   z-index: 2000; max-width: 90vw; text-align: center;
 }
 .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
-
 .recipe-list::-webkit-scrollbar,
 .usda-results::-webkit-scrollbar,
 .modal::-webkit-scrollbar,
@@ -621,7 +609,6 @@ input:focus, textarea:focus { outline: none; transform: translate(-1px, -1px); b
     <button class="tab" data-view="journal">📓 Journal</button>
   </div>
 
-  <!-- ==================== VUE CALCULATEUR ==================== -->
   <div class="view active" id="view-calc">
 
     <div class="card">
@@ -677,12 +664,23 @@ input:focus, textarea:focus { outline: none; transform: translate(-1px, -1px); b
           <input type="text" class="manage-search" id="manageSearch" placeholder="🔍 Filtrer..." autocomplete="off" />
           <ul class="manage-list" id="manageList"></ul>
         </div>
+        <div class="acc-section">
+          <div class="acc-section-title"><span>💾</span> Sauvegarde / Restauration</div>
+          <p class="search-hint" style="text-align:left;margin-top:0;">
+            Exporte toutes tes données (aliments custom, journal, recettes, traductions, objectifs) dans un fichier JSON. Importe pour restaurer.
+          </p>
+          <div class="backup-actions">
+            <button class="btn btn-success" id="exportBtn">📤 Exporter</button>
+            <button class="btn btn-primary" id="importBtn">📥 Importer</button>
+          </div>
+          <input type="file" id="importFile" accept=".json,application/json" style="display:none;">
+          <div class="backup-info" id="backupInfo"></div>
+        </div>
       </div>
     </div>
 
   </div>
 
-  <!-- ==================== VUE RECETTES ==================== -->
   <div class="view" id="view-recipes">
 
     <div class="card" id="recipeCard">
@@ -739,7 +737,6 @@ input:focus, textarea:focus { outline: none; transform: translate(-1px, -1px); b
 
   </div>
 
-  <!-- ==================== VUE JOURNAL ==================== -->
   <div class="view" id="view-journal">
     <div class="card">
       <div class="daynav">
@@ -784,7 +781,6 @@ input:focus, textarea:focus { outline: none; transform: translate(-1px, -1px); b
   <div class="footer">✨ Données pour 100g • Base USDA FoodData Central</div>
 </div>
 
-<!-- Modal doublon traduction -->
 <div class="modal-overlay" id="modalOverlay">
   <div class="modal">
     <h3>⚠️ Ce mot existe déjà</h3>
@@ -799,7 +795,6 @@ input:focus, textarea:focus { outline: none; transform: translate(-1px, -1px); b
   </div>
 </div>
 
-<!-- Modal ajout au repas -->
 <div class="modal-overlay" id="addMealModal">
   <div class="modal">
     <h3 id="addMealTitle">➕ Ajouter un aliment</h3>
@@ -824,7 +819,6 @@ input:focus, textarea:focus { outline: none; transform: translate(-1px, -1px); b
   </div>
 </div>
 
-<!-- Modal ajout manuel -->
 <div class="modal-overlay" id="manualModal">
   <div class="modal">
     <h3>✏️ Ajouter manuellement</h3>
@@ -861,7 +855,6 @@ input:focus, textarea:focus { outline: none; transform: translate(-1px, -1px); b
   </div>
 </div>
 
-<!-- Modal renommage USDA -->
 <div class="modal-overlay" id="renameModal">
   <div class="modal">
     <h3>🏷️ Nommer cet aliment</h3>
@@ -879,7 +872,6 @@ input:focus, textarea:focus { outline: none; transform: translate(-1px, -1px); b
   </div>
 </div>
 
-<!-- Modal sauvegarder recette -->
 <div class="modal-overlay" id="saveRecipeModal">
   <div class="modal">
     <h3>💾 Nommer la recette</h3>
@@ -893,7 +885,6 @@ input:focus, textarea:focus { outline: none; transform: translate(-1px, -1px); b
   </div>
 </div>
 
-<!-- Modal ajouter recette au journal -->
 <div class="modal-overlay" id="recipeToMealModal">
   <div class="modal">
     <h3 id="recipeToMealTitle">➕ Ajouter au journal</h3>
@@ -907,7 +898,6 @@ input:focus, textarea:focus { outline: none; transform: translate(-1px, -1px); b
   </div>
 </div>
 
-<!-- Modal objectif kcal -->
 <div class="modal-overlay" id="goalModal">
   <div class="modal">
     <h3>🎯 Objectif quotidien</h3>
@@ -921,13 +911,9 @@ input:focus, textarea:focus { outline: none; transform: translate(-1px, -1px); b
   </div>
 </div>
 
-<!-- Toast -->
 <div class="toast" id="toast"></div>
 
 <script>
-// ============================================================
-// BASE DE DONNÉES (pour 100g)
-// ============================================================
 const FOOD_DB = [
   { name: "Poulet (blanc)", calories: 165, protein: 31, carbs: 0, fat: 3.6 },
   { name: "Poulet (cuisse)", calories: 177, protein: 26, carbs: 0, fat: 8 },
@@ -1160,9 +1146,6 @@ const FR_TO_EN = {
   "tapenade": "tapenade", "rillettes": "rillettes", "pâté": "pate", "terrine": "terrine",
 };
 
-// ============================================================
-// PERSISTANCE
-// ============================================================
 let customFoods = JSON.parse(localStorage.getItem('customFoods') || '[]');
 let customTranslations = JSON.parse(localStorage.getItem('customTranslations') || '{}');
 let journal = JSON.parse(localStorage.getItem('journal') || '{}');
@@ -1178,9 +1161,6 @@ function saveRecipes() { localStorage.setItem('recipes', JSON.stringify(recipes)
 function saveHiddenFoods() { localStorage.setItem('hiddenFoods', JSON.stringify(hiddenFoods)); }
 function saveDailyGoal() { localStorage.setItem('dailyGoal', JSON.stringify(dailyGoal)); }
 
-// ============================================================
-// UTILS
-// ============================================================
 function round(v) { return Math.round(v * 10) / 10; }
 function getAllFoods() {
   return [...FOOD_DB, ...customFoods].filter(f => !hiddenFoods.includes(f.name));
@@ -1229,7 +1209,6 @@ function formatQty(qty, unit) {
   return `${n} ${unit}`;
 }
 
-// Toast
 let toastTimer = null;
 function showToast(msg, duration = 2200) {
   const t = document.getElementById('toast');
@@ -1239,9 +1218,6 @@ function showToast(msg, duration = 2200) {
   toastTimer = setTimeout(() => t.classList.remove('show'), duration);
 }
 
-// ============================================================
-// TRADUCTION
-// ============================================================
 function traduire(texte) {
   const lower = texte.toLowerCase().trim();
   const normalisé = normaliserPourComparaison(lower);
@@ -1259,9 +1235,6 @@ function traduire(texte) {
   return null;
 }
 
-// ============================================================
-// API USDA
-// ============================================================
 async function searchUSDA(query) {
   const url = new URL("https://api.nal.usda.gov/fdc/v1/foods/search");
   url.searchParams.set("api_key", USDA_API_KEY);
@@ -1290,9 +1263,6 @@ function filtrerAlimentsValides(foods) {
   return foods.map(extractMacros).filter(f => f.calories > 0 || f.protein > 0 || f.carbs > 0 || f.fat > 0);
 }
 
-// ============================================================
-// AJOUT / SUPPRESSION ALIMENT
-// ============================================================
 function isDuplicateFood(name) {
   const n = normaliserSansAccents(name);
   return getAllFoods().some(f => normaliserSansAccents(f.name) === n);
@@ -1373,9 +1343,6 @@ function renderManageList() {
   });
 }
 
-// ============================================================
-// MODAL DOUBLON TRADUCTION
-// ============================================================
 let modalResolve = null;
 function demanderChoixDoublon(key, ancienne, nouvelle, source) {
   return new Promise(resolve => {
@@ -1419,9 +1386,6 @@ async function ajouterTraduction(fr, en) {
   saveCustomTranslations();
 }
 
-// ============================================================
-// AUTOCOMPLETE
-// ============================================================
 const autocompletes = {};
 function scoreFood(foodName, query) {
   const n = normaliserSansAccents(foodName);
@@ -1539,9 +1503,6 @@ function refreshAllAutocompletes() {
   Object.values(autocompletes).forEach(ac => ac.refresh());
 }
 
-// ============================================================
-// UNITÉS
-// ============================================================
 function bindUnitSelector(qtyInputId, unitSelectId, hintId, getFoodName) {
   const qtyInput = document.getElementById(qtyInputId);
   const unitSelect = document.getElementById(unitSelectId);
@@ -1576,9 +1537,6 @@ let singleQty = null;
 let recipeQty = null;
 let addMealQty = null;
 
-// ============================================================
-// INGRÉDIENT UNIQUE
-// ============================================================
 document.getElementById('calcBtn').addEventListener('click', function() {
   const name = autocompletes.ingredientSelect.getValue();
   const food = findFood(name);
@@ -1598,9 +1556,6 @@ document.getElementById('qtyInput').addEventListener('keypress', function(e) {
   if (e.key === 'Enter') document.getElementById('calcBtn').click();
 });
 
-// ============================================================
-// RECETTE
-// ============================================================
 const recipeItems = [];
 function renderRecipeList() {
   const ul = document.getElementById('recipeList');
@@ -1686,9 +1641,6 @@ function computeRecipeTotals(items) {
   return { cal: Math.round(cal), prot: round(prot), gluc: round(gluc), lip: round(lip), weight: Math.round(weight) };
 }
 
-// ============================================================
-// MES RECETTES
-// ============================================================
 function genererId() {
   return Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
 }
@@ -1855,9 +1807,6 @@ document.getElementById('recipeToMealConfirm').addEventListener('click', () => {
   showToast(`✅ "${recipe.name}" ajoutée au ${mealLabel}`);
 });
 
-// ============================================================
-// RECHERCHE USDA
-// ============================================================
 const usdaSearchInput = document.getElementById('usdaSearch');
 const usdaSearchBtn = document.getElementById('usdaSearchBtn');
 const usdaResultsZone = document.getElementById('usdaResultsZone');
@@ -1938,9 +1887,6 @@ usdaSearchInput.addEventListener('keypress', e => {
   if (e.key === 'Enter') usdaSearchBtn.click();
 });
 
-// ============================================================
-// MODAL RENOMMAGE USDA
-// ============================================================
 let renameFood = null;
 let renameBtn = null;
 function ouvrirModalRenommage(food, btn) {
@@ -1979,9 +1925,6 @@ document.getElementById('renameConfirm').addEventListener('click', async () => {
   showToast(`✅ "${nameFr}" ajouté à ta base`);
 });
 
-// ============================================================
-// MODAL AJOUT MANUEL
-// ============================================================
 document.getElementById('openManualBtn').addEventListener('click', () => {
   document.getElementById('manualName').value = '';
   document.getElementById('manualNameEn').value = '';
@@ -2018,9 +1961,6 @@ document.getElementById('manualConfirm').addEventListener('click', async () => {
   showToast(`✅ "${name}" ajouté à ta base`);
 });
 
-// ============================================================
-// ONGLETS + ACCORDÉON
-// ============================================================
 document.querySelectorAll('.tab').forEach(tab => {
   tab.addEventListener('click', () => {
     document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
@@ -2035,9 +1975,6 @@ document.getElementById('accBaseHead').addEventListener('click', () => {
   document.getElementById('accBase').classList.toggle('open');
 });
 
-// ============================================================
-// JOURNAL
-// ============================================================
 const MEALS = [
   { key: 'petitdej', label: 'Petit-déj', emoji: '☕' },
   { key: 'dejeuner', label: 'Déjeuner',  emoji: '🍽️' },
@@ -2227,7 +2164,6 @@ document.getElementById('dayNext').addEventListener('click', () => {
   renderJournal();
 });
 
-// --- Objectif ---
 document.getElementById('goalBtn').addEventListener('click', () => {
   document.getElementById('goalInput').value = dailyGoal || '';
   document.getElementById('goalModal').classList.add('show');
@@ -2249,7 +2185,6 @@ document.getElementById('goalConfirm').addEventListener('click', () => {
   renderJournal();
 });
 
-// --- Modal ajout au repas ---
 let addMealTarget = null;
 function openAddMealModal(mealKey, presetFood) {
   addMealTarget = mealKey;
@@ -2307,7 +2242,6 @@ document.addEventListener('change', e => {
   if (e.target.id === 'addMealFoodInput') updateAddMealPreview();
 });
 
-// --- Aliments récents ---
 function pushRecentFood(name) {
   recentFoods = [name, ...recentFoods.filter(n => n !== name)].slice(0, 10);
   saveRecentFoods();
@@ -2327,6 +2261,94 @@ function renderRecents() {
     zone.appendChild(chip);
   });
 }
+
+// ============================================================
+// EXPORT / IMPORT SAUVEGARDE
+// ============================================================
+const BACKUP_KEYS = [
+  'customFoods', 'customTranslations', 'journal',
+  'recentFoods', 'recipes', 'hiddenFoods', 'dailyGoal'
+];
+
+function exporterSauvegarde() {
+  const data = {
+    _meta: {
+      app: 'Calcul PGL',
+      version: 1,
+      exportedAt: new Date().toISOString()
+    }
+  };
+  BACKUP_KEYS.forEach(k => {
+    const raw = localStorage.getItem(k);
+    try { data[k] = raw ? JSON.parse(raw) : null; }
+    catch { data[k] = null; }
+  });
+  const json = JSON.stringify(data, null, 2);
+  const blob = new Blob([json], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const d = new Date();
+  const stamp = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}_${String(d.getHours()).padStart(2,'0')}h${String(d.getMinutes()).padStart(2,'0')}`;
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `pgl-sauvegarde_${stamp}.json`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  const nbAlim = (data.customFoods || []).length;
+  const nbRec = (data.recipes || []).length;
+  const nbJours = Object.keys(data.journal || {}).length;
+  const nbTrad = Object.keys(data.customTranslations || {}).length;
+  document.getElementById('backupInfo').textContent =
+    `✅ Export réussi — ${nbAlim} aliments custom, ${nbRec} recettes, ${nbJours} jours, ${nbTrad} traductions.`;
+  showToast('💾 Sauvegarde exportée');
+}
+
+function importerSauvegarde(file) {
+  const reader = new FileReader();
+  reader.onload = e => {
+    try {
+      const data = JSON.parse(e.target.result);
+      if (!data || typeof data !== 'object' || !data._meta || data._meta.app !== 'Calcul PGL') {
+        alert('❌ Fichier invalide : ce n\'est pas une sauvegarde Calcul PGL.');
+        return;
+      }
+      const nbAlim = (data.customFoods || []).length;
+      const nbRec = (data.recipes || []).length;
+      const nbJours = Object.keys(data.journal || {}).length;
+      const nbTrad = Object.keys(data.customTranslations || {}).length;
+      const msg = `⚠️ IMPORT — Tes données actuelles seront REMPLACÉES.\n\n` +
+        `Fichier :\n` +
+        `• ${nbAlim} aliments custom\n` +
+        `• ${nbRec} recettes\n` +
+        `• ${nbJours} jours de journal\n` +
+        `• ${nbTrad} traductions\n\n` +
+        `Continuer ?`;
+      if (!confirm(msg)) return;
+      BACKUP_KEYS.forEach(k => {
+        if (data[k] !== undefined && data[k] !== null) {
+          localStorage.setItem(k, JSON.stringify(data[k]));
+        }
+      });
+      showToast('✅ Sauvegarde importée — rechargement...');
+      setTimeout(() => location.reload(), 900);
+    } catch (err) {
+      alert('❌ Erreur de lecture : ' + err.message);
+    }
+  };
+  reader.onerror = () => alert('❌ Impossible de lire le fichier.');
+  reader.readAsText(file);
+}
+
+document.getElementById('exportBtn').addEventListener('click', exporterSauvegarde);
+document.getElementById('importBtn').addEventListener('click', () => {
+  document.getElementById('importFile').click();
+});
+document.getElementById('importFile').addEventListener('change', e => {
+  const file = e.target.files[0];
+  if (file) importerSauvegarde(file);
+  e.target.value = '';
+});
 
 // ============================================================
 // INIT
