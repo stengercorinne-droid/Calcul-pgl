@@ -1,4 +1,4 @@
-const CACHE = 'pgl-v2';    →    const CACHE = 'pgl-v4';';
+const CACHE = 'pgl-v11';
 const ASSETS = [
   './index.html',
   './manifest.json',

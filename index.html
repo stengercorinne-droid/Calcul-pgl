@@ -16,7 +16,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Archivo+Black&family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
-<<script>window.USDA_API_KEY = "fIR8VkC9CTbHLYuP06BnfhrlFoVeQZgo0Bx8vSI6";</script>
+<script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js" defer></script>
+<script src="config.js"></script>
 <style>
 :root {
   --black: #1a1815;
@@ -595,6 +596,38 @@ input:focus, textarea:focus { outline: none; transform: translate(-1px, -1px); b
 .modal::-webkit-scrollbar-thumb,
 .ac-list::-webkit-scrollbar-thumb,
 .manage-list::-webkit-scrollbar-thumb { background: var(--prot); }
+.fiber-line {
+  margin-top: 10px; padding: 8px 12px; text-align: center;
+  background: #f4ecd8; border: 2px dashed var(--black);
+  font-family: 'Archivo Black', sans-serif; font-size: 11px;
+  text-transform: uppercase; letter-spacing: 0.5px; color: var(--black);
+}
+.fiber-line b {
+  font-family: 'Bangers', cursive; font-size: 20px;
+  color: #7a9668; text-shadow: 1px 1px 0 var(--black); margin: 0 3px;
+}
+.day-total .dt-macros .m-fiber { color: #d4c9b8; }
+.day-total .dt-macros .m-fiber b { font-size: 12px; }
+.meal-macros .m-fiber { color: #7a9668; }
+.source-list { list-style: none; margin: 0; padding: 0; }
+.source-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 8px 12px; margin-bottom: 6px;
+  background: white; border: 2px solid var(--black);
+  box-shadow: var(--shadow-sm);
+}
+.source-item .src-flag { font-size: 18px; flex: 0 0 24px; text-align: center; }
+.source-item .src-name { flex: 1; font-size: 13px; font-weight: 700; color: var(--black); }
+.source-item .src-count { font-size: 11px; font-weight: 700; color: var(--black); white-space: nowrap; }
+.source-item .src-count.ok { color: #059669; }
+.source-item .src-count.pending { color: #d97706; font-style: italic; }
+.source-total {
+  margin-top: 10px; padding: 8px 12px; text-align: center;
+  background: var(--cream); border: 2px dashed var(--black);
+  font-family: 'Archivo Black', sans-serif; font-size: 11px;
+  text-transform: uppercase; letter-spacing: 0.5px; color: var(--black);
+}
+.source-total b { font-family: 'Bangers', cursive; font-size: 20px; color: var(--prot); margin-left: 4px; }
 </style>
 </head>
 <body>
@@ -637,6 +670,7 @@ input:focus, textarea:focus { outline: none; transform: translate(-1px, -1px); b
           <div class="pgl-item gluc"><span class="emoji">🌾</span><div class="value" id="singleGluc">0</div><div class="label">Glucides</div></div>
           <div class="pgl-item lip"><span class="emoji">🥑</span><div class="value" id="singleLip">0</div><div class="label">Lipides</div></div>
         </div>
+        <div class="fiber-line">🌿 Fibres : <b id="singleFiber">0</b> g</div>
         <div class="total">🔥 Calories : <span id="singleCal">0</span> kcal</div>
       </div>
     </div>
@@ -650,12 +684,19 @@ input:focus, textarea:focus { outline: none; transform: translate(-1px, -1px); b
       </div>
       <div class="accordion-body">
         <div class="acc-section">
+          <div class="acc-section-title"><span>📚</span> Sources de données</div>
+          <ul class="source-list" id="sourcesList"></ul>
+          <div class="source-total" id="sourcesTotal">—</div>
+        </div>
+        <div class="acc-section">
           <div class="acc-section-title"><span>➕</span> Ajouter un aliment</div>
-          <label>🔍 Rechercher sur USDA</label>
+          <label>🔍 Chercher sur USDA</label>
           <input type="text" id="usdaSearch" placeholder="Ex: poulet, saumon, œuf, oats..." autocomplete="off" />
-          <p class="search-hint">💡 FR ou EN acceptés • Base USDA (aliments bruts)</p>
+          <p class="search-hint">💡 Complément à Ciqual. FR ou EN acceptés.</p>
           <button class="btn btn-primary" id="usdaSearchBtn">🔎 Rechercher</button>
-          <button class="btn btn-outline" id="openManualBtn" style="margin-top:8px;font-size:11px;padding:10px;">✏️ Ajouter un aliment manuellement</button>
+          <button class="btn btn-outline" id="openManualBtn" style="margin-top:8px;font-size:11px;padding:10px;">✏️ Créer un aliment manuellement</button>
+          <button class="btn btn-primary" id="scanBarcodeBtn" style="margin-top:8px;font-size:11px;padding:10px;">📷 Scanner un code-barres</button>
+          <div id="barcodeReader" style="width:100%;margin-top:10px;"></div>
           <div id="usdaPromptZone"></div>
           <div id="usdaResultsZone" class="usda-results"></div>
         </div>
@@ -724,6 +765,7 @@ input:focus, textarea:focus { outline: none; transform: translate(-1px, -1px); b
           <div class="pgl-item gluc"><span class="emoji">🌾</span><div class="value" id="recipeGluc">0</div><div class="label">Glucides</div></div>
           <div class="pgl-item lip"><span class="emoji">🥑</span><div class="value" id="recipeLip">0</div><div class="label">Lipides</div></div>
         </div>
+        <div class="fiber-line">🌿 Fibres : <b id="recipeFiber">0</b> g</div>
         <div class="total">🔥 Calories : <span id="recipeCal">0</span> kcal • <span id="recipeCount">0</span> ingrédients</div>
       </div>
     </div>
@@ -757,6 +799,7 @@ input:focus, textarea:focus { outline: none; transform: translate(-1px, -1px); b
           <span class="m-prot">P: <b id="dayProt">0</b>g</span>
           <span class="m-gluc">G: <b id="dayGluc">0</b>g</span>
           <span class="m-lip">L: <b id="dayLip">0</b>g</span>
+          <span class="m-fiber">🌿 Fb: <b id="dayFiber">0</b>g</span>
         </div>
         <div class="dt-pgl-bar">
           <div class="seg-p" id="segP" style="flex-grow:1;"></div>
@@ -929,13 +972,13 @@ const FOOD_DB = [
   { name: "Blanc d'œuf", calories: 52, protein: 11, carbs: 1, fat: 0.2 },
   { name: "Jaune d'œuf", calories: 322, protein: 16, carbs: 3.6, fat: 27 },
   { name: "Riz (cuit)", calories: 130, protein: 2.7, carbs: 28, fat: 0.3 },
-  { name: "Riz brun (cuit)", calories: 111, protein: 2.6, carbs: 23, fat: 0.9 },
+  { name: "Riz brun (cuit)", calories: 111, protein: 2.6, carbs: 23, fat: 0.9, fiber: 1.8 },
   { name: "Pâtes (cuites)", calories: 131, protein: 5, carbs: 25, fat: 0.5 },
   { name: "Pâtes complètes", calories: 124, protein: 5.3, carbs: 26, fat: 0.9 },
-  { name: "Quinoa (cuit)", calories: 120, protein: 4.4, carbs: 21, fat: 1.9 },
-  { name: "Pain complet", calories: 247, protein: 9, carbs: 46, fat: 1.5 },
+  { name: "Quinoa (cuit)", calories: 120, protein: 4.4, carbs: 21, fat: 1.9, fiber: 2.8 },
+  { name: "Pain complet", calories: 247, protein: 9, carbs: 46, fat: 1.5, fiber: 6.8 },
   { name: "Pain blanc", calories: 265, protein: 9, carbs: 49, fat: 1.5 },
-  { name: "Flocons d'avoine", calories: 389, protein: 16.9, carbs: 66, fat: 6.9 },
+  { name: "Flocons d'avoine", calories: 389, protein: 16.9, carbs: 66, fat: 6.9, fiber: 10.6 },
   { name: "Lait (demi-écrémé)", calories: 50, protein: 3.3, carbs: 4.8, fat: 1.6 },
   { name: "Lait (entier)", calories: 64, protein: 3.2, carbs: 4.8, fat: 3.6 },
   { name: "Fromage blanc 0%", calories: 45, protein: 8, carbs: 4, fat: 0.2 },
@@ -953,13 +996,13 @@ const FOOD_DB = [
   { name: "Crème fraîche 30%", calories: 292, protein: 2.4, carbs: 3, fat: 30 },
   { name: "Crème fraîche 15%", calories: 162, protein: 2.8, carbs: 3.5, fat: 15 },
   { name: "Huile d'olive", calories: 884, protein: 0, carbs: 0, fat: 100 },
-  { name: "Amandes", calories: 579, protein: 21, carbs: 22, fat: 49 },
+  { name: "Amandes", calories: 579, protein: 21, carbs: 22, fat: 49, fiber: 12.5 },
   { name: "Noix de cajou", calories: 553, protein: 18, carbs: 30, fat: 44 },
   { name: "Noisettes", calories: 628, protein: 15, carbs: 17, fat: 61 },
-  { name: "Banane", calories: 89, protein: 1.1, carbs: 23, fat: 0.3 },
-  { name: "Pomme", calories: 52, protein: 0.3, carbs: 14, fat: 0.2 },
-  { name: "Avocat", calories: 160, protein: 2, carbs: 9, fat: 15 },
-  { name: "Fraise", calories: 32, protein: 0.7, carbs: 7.7, fat: 0.3 },
+  { name: "Banane", calories: 89, protein: 1.1, carbs: 23, fat: 0.3, fiber: 2.6 },
+  { name: "Pomme", calories: 52, protein: 0.3, carbs: 14, fat: 0.2, fiber: 2.4 },
+  { name: "Avocat", calories: 160, protein: 2, carbs: 9, fat: 15, fiber: 6.7 },
+  { name: "Fraise", calories: 32, protein: 0.7, carbs: 7.7, fat: 0.3, fiber: 2 },
   { name: "Framboise", calories: 52, protein: 1.2, carbs: 12, fat: 0.7 },
   { name: "Myrtille", calories: 57, protein: 0.7, carbs: 14, fat: 0.3 },
   { name: "Mûre", calories: 43, protein: 1.4, carbs: 10, fat: 0.5 },
@@ -967,19 +1010,19 @@ const FOOD_DB = [
   { name: "Cassis", calories: 63, protein: 1.4, carbs: 15, fat: 0.4 },
   { name: "Fruits rouges (mélange)", calories: 45, protein: 1, carbs: 9, fat: 0.3 },
   { name: "Compote de pommes", calories: 68, protein: 0.2, carbs: 17, fat: 0.1 },
-  { name: "Brocoli (cuit)", calories: 35, protein: 2.4, carbs: 7, fat: 0.4 },
-  { name: "Carotte", calories: 41, protein: 0.9, carbs: 10, fat: 0.2 },
+  { name: "Brocoli (cuit)", calories: 35, protein: 2.4, carbs: 7, fat: 0.4, fiber: 3.3 },
+  { name: "Carotte", calories: 41, protein: 0.9, carbs: 10, fat: 0.2, fiber: 2.8 },
   { name: "Tomate", calories: 18, protein: 0.9, carbs: 3.9, fat: 0.2 },
-  { name: "Lentilles (cuites)", calories: 116, protein: 9, carbs: 20, fat: 0.4 },
-  { name: "Pois chiches (cuits)", calories: 139, protein: 8.9, carbs: 27, fat: 2.6 },
+  { name: "Lentilles (cuites)", calories: 116, protein: 9, carbs: 20, fat: 0.4, fiber: 7.9 },
+  { name: "Pois chiches (cuits)", calories: 139, protein: 8.9, carbs: 27, fat: 2.6, fiber: 7.6 },
   { name: "Haricots rouges (cuits)", calories: 127, protein: 8.7, carbs: 23, fat: 0.5 },
   { name: "Tofu nature", calories: 76, protein: 8, carbs: 2, fat: 4.5 },
   { name: "Tofu soyeux", calories: 55, protein: 5, carbs: 3, fat: 2.5 },
   { name: "Seitan", calories: 120, protein: 25, carbs: 4, fat: 1.5 },
   { name: "Tempeh", calories: 193, protein: 20, carbs: 9, fat: 11 },
   { name: "Edamame", calories: 122, protein: 11, carbs: 10, fat: 5 },
-  { name: "Pomme de terre (cuite)", calories: 87, protein: 1.9, carbs: 20, fat: 0.1 },
-  { name: "Patate douce (cuite)", calories: 90, protein: 2, carbs: 21, fat: 0.1 },
+  { name: "Pomme de terre (cuite)", calories: 87, protein: 1.9, carbs: 20, fat: 0.1, fiber: 1.8 },
+  { name: "Patate douce (cuite)", calories: 90, protein: 2, carbs: 21, fat: 0.1, fiber: 3.3 },
   { name: "Miel", calories: 304, protein: 0.3, carbs: 82, fat: 0 },
   { name: "Sucre blanc", calories: 399, protein: 0, carbs: 100, fat: 0 },
   { name: "Chocolat noir 70%", calories: 598, protein: 7.8, carbs: 46, fat: 43 },
@@ -989,6 +1032,163 @@ const FOOD_DB = [
   { name: "Maïs (en boîte)", calories: 86, protein: 3.2, carbs: 19, fat: 1.2 },
   { name: "Petit pois (cuits)", calories: 81, protein: 5.4, carbs: 14, fat: 0.4 },
 ];
+
+// ============================================================
+// CIQUAL — Chargement et parsing du CSV officiel ANSES
+// ============================================================
+let CIQUAL_FOODS = [];
+
+function parseCSVLine(line, sep) {
+  const result = [];
+  let current = '';
+  let inQuote = false;
+  for (let i = 0; i < line.length; i++) {
+    const c = line[i];
+    if (c === '"') {
+      if (inQuote && line[i + 1] === '"') { current += '"'; i++; }
+      else inQuote = !inQuote;
+    } else if (c === sep && !inQuote) {
+      result.push(current); current = '';
+    } else {
+      current += c;
+    }
+  }
+  result.push(current);
+  return result;
+}
+
+function parseCiqualNumber(v) {
+  if (v === undefined || v === null) return 0;
+  v = String(v).trim();
+  if (!v || v === '-' || v.toLowerCase() === 'traces') return 0;
+  v = v.replace(/^</, '').replace(/\s/g, '').replace(',', '.');
+  const n = parseFloat(v);
+  return isNaN(n) ? 0 : n;
+}
+
+function parseCSVFull(text, sep) {
+  const rows = [];
+  let row = [];
+  let cell = '';
+  let inQuote = false;
+  for (let i = 0; i < text.length; i++) {
+    const c = text[i];
+    if (inQuote) {
+      if (c === '"') {
+        if (text[i + 1] === '"') { cell += '"'; i++; }
+        else inQuote = false;
+      } else {
+        cell += c;
+      }
+    } else {
+      if (c === '"') {
+        inQuote = true;
+      } else if (c === sep) {
+        row.push(cell); cell = '';
+      } else if (c === '\n') {
+        row.push(cell); cell = '';
+        if (row.length > 1 || row[0] !== '') rows.push(row);
+        row = [];
+      } else if (c === '\r') {
+        // skip
+      } else {
+        cell += c;
+      }
+    }
+  }
+  if (cell !== '' || row.length > 0) {
+    row.push(cell);
+    if (row.length > 1 || row[0] !== '') rows.push(row);
+  }
+  return rows;
+}
+
+function parserCiqual(csvText) {
+  csvText = csvText.replace(/^\uFEFF/, '');
+  const sep = csvText.includes(';') ? ';' : '\t';
+  const rows = parseCSVFull(csvText, sep);
+  if (rows.length < 2) { console.warn('[Ciqual] Trop peu de lignes'); return []; }
+
+  // Trouver l'entête : la 1re ligne contenant "alim_nom_fr"
+  let headerIdx = -1;
+  for (let i = 0; i < Math.min(10, rows.length); i++) {
+    if (rows[i].some(c => c.toLowerCase().includes('alim_nom_fr'))) { headerIdx = i; break; }
+  }
+  if (headerIdx < 0) { console.warn('[Ciqual] Entête introuvable'); return []; }
+
+  const headers = rows[headerIdx].map(h => h.toLowerCase().replace(/"/g, '').trim());
+
+  const findCol = (checks) => {
+    for (let i = 0; i < headers.length; i++) {
+      if (checks.every(k => headers[i].includes(k))) return i;
+    }
+    return -1;
+  };
+
+  const iName  = findCol(['alim_nom_fr']);
+  const iKcal  = findCol(['energie', 'kcal']);
+  const iProt  = findCol(['protéines', '(g']);
+  const iGluc  = findCol(['glucides', '(g']);
+  const iLip   = findCol(['lipides', '(g']);
+  const iFiber = findCol(['fibres alimentaires', '(g']);
+
+  console.log('[Ciqual] Headers :', headers.slice(0, 20));
+  console.log('[Ciqual] Index :', { iName, iKcal, iProt, iGluc, iLip, iFiber });
+
+  if (iName < 0 || iKcal < 0) {
+    console.warn('[Ciqual] Colonnes essentielles introuvables');
+    return [];
+  }
+
+  const foods = [];
+  for (let i = headerIdx + 1; i < rows.length; i++) {
+    const cols = rows[i];
+    if (!cols || cols.length <= iName) continue;
+    const name = (cols[iName] || '').trim();
+    if (!name) continue;
+
+    const calories = Math.round(parseCiqualNumber(cols[iKcal]));
+    const protein  = Math.round(parseCiqualNumber(cols[iProt]) * 10) / 10;
+    const carbs    = Math.round(parseCiqualNumber(cols[iGluc]) * 10) / 10;
+    const fat      = Math.round(parseCiqualNumber(cols[iLip]) * 10) / 10;
+    const fiber    = Math.round(parseCiqualNumber(cols[iFiber]) * 10) / 10;
+
+    if (calories === 0 && protein === 0 && carbs === 0 && fat === 0) continue;
+    foods.push({ name, calories, protein, carbs, fat, fiber, source: 'ciqual' });
+  }
+  return foods;
+}
+
+async function chargerCiqual() {
+  if (CIQUAL_FOODS.length > 0) return CIQUAL_FOODS;
+
+  try {
+    const cached = localStorage.getItem('ciqualCache');
+    if (cached) {
+      const parsed = JSON.parse(cached);
+      if (Array.isArray(parsed) && parsed.length > 0) {
+        CIQUAL_FOODS = parsed;
+        console.log('[Ciqual] ' + parsed.length + ' aliments depuis le cache.');
+        return CIQUAL_FOODS;
+      }
+    }
+  } catch {}
+
+  try {
+    const res = await fetch('ciqual.csv');
+    if (!res.ok) { console.warn('[Ciqual] Fichier introuvable'); return []; }
+    const text = await res.text();
+    const foods = parserCiqual(text);
+    if (foods.length === 0) { console.warn('[Ciqual] Aucun aliment extrait'); return []; }
+    CIQUAL_FOODS = foods;
+    try { localStorage.setItem('ciqualCache', JSON.stringify(foods)); } catch (e) { console.warn('[Ciqual] Cache échoué:', e.message); }
+    console.log('[Ciqual] ' + foods.length + ' aliments chargés.');
+    return foods;
+  } catch (e) {
+    console.warn('[Ciqual] Erreur:', e.message);
+    return [];
+  }
+}
 
 const UNIT_MAP = {
   "Œuf entier": [{ u: "œuf", g: 50 }],
@@ -1163,7 +1363,7 @@ function saveDailyGoal() { localStorage.setItem('dailyGoal', JSON.stringify(dail
 
 function round(v) { return Math.round(v * 10) / 10; }
 function getAllFoods() {
-  return [...FOOD_DB, ...customFoods].filter(f => !hiddenFoods.includes(f.name));
+  return [...FOOD_DB, ...CIQUAL_FOODS, ...customFoods].filter(f => !hiddenFoods.includes(f.name));
 }
 function findFood(name) { return getAllFoods().find(f => f.name === name); }
 function normaliserPourComparaison(texte) {
@@ -1174,6 +1374,37 @@ function normaliserSansAccents(texte) {
     .replace(/œ/g, 'oe').replace(/æ/g, 'ae')
     .normalize('NFD').replace(/[\u0300-\u036f]/g, '');
 }
+function getSourceFlag(name) {
+  if (FOOD_DB.some(f => f.name === name)) return '🍽️';
+  if (typeof CIQUAL_FOODS !== 'undefined' && CIQUAL_FOODS.some(f => f.name === name)) return '🇫🇷';
+  const custom = customFoods.find(f => f.name === name);
+  if (custom) {
+    if (custom.source === 'usda') return '🇺🇸';
+    if (custom.source === 'manual') return '✏️';
+    if (name.startsWith('[Recette]')) return '🍲';
+    return '✏️';
+  }
+  return '';
+}
+
+function renderSourcesSection() {
+  const ul = document.getElementById('sourcesList');
+  const total = document.getElementById('sourcesTotal');
+  if (!ul) return;
+  const nbBase = FOOD_DB.length;
+  const nbCiqual = (typeof CIQUAL_FOODS !== 'undefined') ? CIQUAL_FOODS.length : 0;
+  const nbCustom = customFoods.length;
+  const nbMaBase = nbBase + nbCustom;
+  const grandTotal = nbMaBase + nbCiqual;
+
+  ul.innerHTML =
+    '<li class="source-item"><span class="src-flag">🍽️</span><span class="src-name">Ma base</span><span class="src-count">' + nbMaBase + ' aliments</span></li>' +
+    '<li class="source-item"><span class="src-flag">🇫🇷</span><span class="src-name">Ciqual (ANSES)</span><span class="src-count ' + (nbCiqual > 0 ? 'ok' : 'pending') + '">' + (nbCiqual > 0 ? nbCiqual + ' ✓' : 'chargement…') + '</span></li>' +
+    '<li class="source-item"><span class="src-flag">🇺🇸</span><span class="src-name">USDA FoodData Central</span><span class="src-count">Recherche en ligne</span></li>';
+
+  if (total) total.innerHTML = 'Total utilisable <b>' + grandTotal + '</b> aliments';
+}
+
 function getEmoji(name) {
   const map = {
     'poulet': '🍗', 'boeuf': '🥩', 'bœuf': '🥩', 'saumon': '🐟', 'thon': '🐟', 'sardine': '🐟',
@@ -1192,9 +1423,9 @@ function getEmoji(name) {
   };
   const lower = name.toLowerCase();
   for (const [key, emoji] of Object.entries(map)) {
-    if (lower.includes(key)) return emoji;
+    if (lower.includes(key)) return getSourceFlag(name) + emoji;
   }
-  return '🍽️';
+  return getSourceFlag(name) + '🍽️';
 }
 function getUnitsForFood(foodName) { return UNIT_MAP[foodName] || []; }
 function computeGramsFromUnit(qty, unit, foodName) {
@@ -1237,7 +1468,7 @@ function traduire(texte) {
 
 async function searchUSDA(query) {
   const url = new URL("https://api.nal.usda.gov/fdc/v1/foods/search");
-  url.searchParams.set("api_key", window.USDA_API_KEY);
+  url.searchParams.set("api_key", USDA_API_KEY);
   url.searchParams.set("query", query);
   url.searchParams.set("pageSize", "8");
   url.searchParams.set("dataType", "Foundation,SR Legacy");
@@ -1256,7 +1487,8 @@ function extractMacros(food) {
     calories: Math.round(get(1008) || get(2047) || 0),
     protein: Math.round((get(1003) || 0) * 10) / 10,
     carbs: Math.round((get(1005) || 0) * 10) / 10,
-    fat: Math.round((get(1004) || 0) * 10) / 10
+    fat: Math.round((get(1004) || 0) * 10) / 10,
+    fiber: Math.round((get(1079) || 0) * 10) / 10
   };
 }
 function filtrerAlimentsValides(foods) {
@@ -1276,6 +1508,7 @@ function ajouterAlimentCustom(food) {
   saveCustomFoods();
   refreshAllAutocompletes();
   renderManageList();
+  if (typeof renderSourcesSection === 'function') renderSourcesSection();
   return true;
 }
 function supprimerAliment(name) {
@@ -1302,6 +1535,7 @@ function supprimerAliment(name) {
   refreshAllAutocompletes();
   renderManageList();
   renderJournal();
+  if (typeof renderSourcesSection === 'function') renderSourcesSection();
 }
 function restaurerAliment(name) {
   hiddenFoods = hiddenFoods.filter(n => n !== name);
@@ -1549,6 +1783,7 @@ document.getElementById('calcBtn').addEventListener('click', function() {
   document.getElementById('singleProt').textContent = round(food.protein * ratio);
   document.getElementById('singleGluc').textContent = round(food.carbs * ratio);
   document.getElementById('singleLip').textContent = round(food.fat * ratio);
+  document.getElementById('singleFiber').textContent = round((food.fiber || 0) * ratio);
   document.getElementById('singleCal').textContent = Math.round(food.calories * ratio);
   document.getElementById('singleResult').classList.add('show');
 });
@@ -1603,6 +1838,7 @@ document.getElementById('calcRecipeBtn').addEventListener('click', function() {
   document.getElementById('recipeProt').textContent = t.prot;
   document.getElementById('recipeGluc').textContent = t.gluc;
   document.getElementById('recipeLip').textContent = t.lip;
+  document.getElementById('recipeFiber').textContent = t.fiber;
   document.getElementById('recipeCal').textContent = t.cal;
   document.getElementById('recipeCount').textContent = recipeItems.length;
   document.getElementById('recipeResult').classList.add('show');
@@ -1621,24 +1857,27 @@ document.getElementById('recipeQty').addEventListener('keypress', function(e) {
   if (e.key === 'Enter') document.getElementById('addRecipeBtn').click();
 });
 function computeRecipeTotals(items) {
-  let cal = 0, prot = 0, gluc = 0, lip = 0, weight = 0;
+  let cal = 0, prot = 0, gluc = 0, lip = 0, fiber = 0, weight = 0;
   items.forEach(it => {
     const g = it.grams || it.qty || 0;
     const f = findFood(it.name);
     weight += g;
     if (!f) {
-      if (it.fixedCal) {
+      if (it.fixedCal !== undefined) {
         const r = g / 100;
         cal += it.fixedCal * r; prot += it.fixedProt * r;
         gluc += it.fixedGluc * r; lip += it.fixedLip * r;
+        fiber += (it.fixedFiber || 0) * r;
       }
       return;
     }
     const r = g / 100;
     cal += f.calories * r; prot += f.protein * r;
     gluc += f.carbs * r; lip += f.fat * r;
+    fiber += (f.fiber || 0) * r;
   });
-  return { cal: Math.round(cal), prot: round(prot), gluc: round(gluc), lip: round(lip), weight: Math.round(weight) };
+  return { cal: Math.round(cal), prot: round(prot), gluc: round(gluc),
+           lip: round(lip), fiber: round(fiber), weight: Math.round(weight) };
 }
 
 function genererId() {
@@ -1784,7 +2023,8 @@ document.getElementById('recipeToMealConfirm').addEventListener('click', () => {
     calories: Math.round(t.cal * ratio),
     protein: round(t.prot * ratio),
     carbs: round(t.gluc * ratio),
-    fat: round(t.lip * ratio)
+    fat: round(t.lip * ratio),
+    fiber: round((t.fiber || 0) * ratio)
   };
   const existing = customFoods.findIndex(f => f.name === virtualName);
   if (existing >= 0) customFoods[existing] = virtual;
@@ -1794,7 +2034,7 @@ document.getElementById('recipeToMealConfirm').addEventListener('click', () => {
   entry[recipeToMealChoice].push({
     name: virtualName, qty: t.weight, unit: 'g', grams: t.weight,
     fixedCal: virtual.calories, fixedProt: virtual.protein,
-    fixedGluc: virtual.carbs, fixedLip: virtual.fat
+    fixedGluc: virtual.carbs, fixedLip: virtual.fat, fixedFiber: virtual.fiber
   });
   saveJournal();
   pushRecentFood(virtualName);
@@ -1913,7 +2153,7 @@ document.getElementById('renameConfirm').addEventListener('click', async () => {
   const nameFr = document.getElementById('renameNameFr').value.trim();
   const nameEn = document.getElementById('renameNameEn').value.trim();
   if (!nameFr) { alert('Le nom en français est obligatoire.'); return; }
-  const foodToAdd = { ...renameFood, name: nameFr };
+  const foodToAdd = { ...renameFood, name: nameFr, source: 'usda' };
   const ok = ajouterAlimentCustom(foodToAdd);
   if (!ok) return;
   if (nameEn && normaliserSansAccents(nameEn) !== normaliserSansAccents(nameFr)) {
@@ -1950,7 +2190,7 @@ document.getElementById('manualConfirm').addEventListener('click', async () => {
   const gluc = parseFloat(document.getElementById('manualGluc').value) || 0;
   const lip = parseFloat(document.getElementById('manualLip').value) || 0;
   if (!name) { alert('Le nom en français est obligatoire.'); return; }
-  const food = { name, calories: Math.round(kcal), protein: prot, carbs: gluc, fat: lip };
+  const food = { name, calories: Math.round(kcal), protein: prot, carbs: gluc, fat: lip, source: 'manual' };
   const ok = ajouterAlimentCustom(food);
   if (!ok) return;
   if (nameEn && normaliserSansAccents(nameEn) !== normaliserSansAccents(name)) {
@@ -2034,21 +2274,24 @@ function migrateJournal() {
   if (migrated > 0) saveJournal();
 }
 function computeTotals(items) {
-  let cal = 0, prot = 0, gluc = 0, lip = 0;
+  let cal = 0, prot = 0, gluc = 0, lip = 0, fiber = 0;
   items.forEach(it => {
     const g = it.grams || it.qty || 0;
     const r = g / 100;
     if (it.fixedCal !== undefined) {
       cal += it.fixedCal * r; prot += it.fixedProt * r;
       gluc += it.fixedGluc * r; lip += it.fixedLip * r;
+      fiber += (it.fixedFiber || 0) * r;
       return;
     }
     const f = findFood(it.name);
     if (!f) return;
     cal += f.calories * r; prot += f.protein * r;
     gluc += f.carbs * r; lip += f.fat * r;
+    fiber += (f.fiber || 0) * r;
   });
-  return { cal: Math.round(cal), prot: round(prot), gluc: round(gluc), lip: round(lip) };
+  return { cal: Math.round(cal), prot: round(prot), gluc: round(gluc),
+           lip: round(lip), fiber: round(fiber) };
 }
 let currentDay = todayKey();
 function renderJournal() {
@@ -2118,6 +2361,7 @@ function renderJournal() {
   document.getElementById('dayProt').textContent = dayTotals.prot;
   document.getElementById('dayGluc').textContent = dayTotals.gluc;
   document.getElementById('dayLip').textContent = dayTotals.lip;
+  document.getElementById('dayFiber').textContent = dayTotals.fiber || 0;
   renderGoalAndPGL(dayTotals);
 }
 function renderGoalAndPGL(totals) {
@@ -2226,7 +2470,7 @@ document.getElementById('addMealConfirm').addEventListener('click', () => {
   entry[addMealTarget].push({
     name, qty, unit, grams: g,
     fixedCal: f.calories, fixedProt: f.protein,
-    fixedGluc: f.carbs, fixedLip: f.fat
+    fixedGluc: f.carbs, fixedLip: f.fat, fixedFiber: f.fiber || 0
   });
   saveJournal();
   pushRecentFood(name);
@@ -2351,6 +2595,105 @@ document.getElementById('importFile').addEventListener('change', e => {
 });
 
 // ============================================================
+// SCANNER CODE-BARRES + OPEN FOOD FACTS
+// ============================================================
+let html5QrCode = null;
+let scannerActif = false;
+
+async function rechercherParCodeBarre(code) {
+  showToast('🔍 Recherche ' + code + '…', 1500);
+  try {
+    const res = await fetch('https://world.openfoodfacts.org/api/v0/product/' + code + '.json');
+    const data = await res.json();
+    if (data.status !== 1 || !data.product) {
+      showToast('❌ Produit inconnu (code ' + code + ')');
+      return;
+    }
+    const p = data.product;
+    const n = p.nutriments || {};
+    const food = {
+      name: p.product_name_fr || p.product_name || ('Produit ' + code),
+      calories: Math.round(n['energy-kcal_100g'] || 0),
+      protein: round(n.proteins_100g || 0),
+      carbs: round(n.carbohydrates_100g || 0),
+      fat: round(n.fat_100g || 0),
+      fiber: round(n.fiber_100g || 0),
+      source: 'scan'
+    };
+    if (food.calories === 0 && food.protein === 0 && food.carbs === 0 && food.fat === 0) {
+      showToast('⚠️ "' + food.name + '" trouvé mais sans valeurs nutritionnelles');
+      return;
+    }
+    ouvrirModalRenommage(food, null);
+  } catch (e) {
+    showToast('❌ Erreur : ' + e.message);
+  }
+}
+
+function arreterScanner() {
+  if (html5QrCode && scannerActif) {
+    html5QrCode.stop().then(() => {
+      html5QrCode.clear();
+      html5QrCode = null;
+      scannerActif = false;
+      const btn = document.getElementById('scanBarcodeBtn');
+      if (btn) btn.textContent = '📷 Scanner un code-barres';
+    }).catch(() => {
+      html5QrCode = null;
+      scannerActif = false;
+      const btn = document.getElementById('scanBarcodeBtn');
+      if (btn) btn.textContent = '📷 Scanner un code-barres';
+    });
+  }
+}
+
+document.getElementById('scanBarcodeBtn').addEventListener('click', async () => {
+  const btn = document.getElementById('scanBarcodeBtn');
+  if (scannerActif) { arreterScanner(); return; }
+
+  if (typeof Html5Qrcode === 'undefined') {
+    showToast('❌ Librairie scanner non chargée — recharge la page');
+    return;
+  }
+
+  // Sécurité : caméra nécessite HTTPS ou localhost
+  if (location.protocol !== 'https:' && location.hostname !== 'localhost' && location.hostname !== '127.0.0.1') {
+    showToast('⚠️ La caméra nécessite HTTPS ou localhost');
+    return;
+  }
+
+  html5QrCode = new Html5Qrcode('barcodeReader');
+  scannerActif = true;
+  btn.textContent = '⏹ Arrêter le scan';
+
+  try {
+    await html5QrCode.start(
+      { facingMode: 'environment' },
+      {
+        fps: 10,
+        qrbox: { width: 250, height: 150 },
+        formatsToSupport: [
+          Html5QrcodeSupportedFormats.EAN_13,
+          Html5QrcodeSupportedFormats.EAN_8,
+          Html5QrcodeSupportedFormats.UPC_A,
+          Html5QrcodeSupportedFormats.UPC_E,
+          Html5QrcodeSupportedFormats.CODE_128
+        ]
+      },
+      (decodedText) => {
+        arreterScanner();
+        rechercherParCodeBarre(decodedText);
+      },
+      () => {}
+    );
+  } catch (e) {
+    scannerActif = false;
+    btn.textContent = '📷 Scanner un code-barres';
+    showToast('❌ Caméra : ' + (e.message || e));
+  }
+});
+
+// ============================================================
 // INIT
 // ============================================================
 initAutocomplete('ingredientSelectInput', 'ingredientSelectList', 'ingredientSelect', 'ingredientSelectWrap');
@@ -2376,6 +2719,7 @@ const origAddMealSet = autocompletes.addMealFood.setValue;
 autocompletes.addMealFood.setValue = (name) => { origAddMealSet(name); addMealQty.refreshUnits(); updateAddMealPreview(); };
 
 migrateJournal();
+if (typeof renderSourcesSection === 'function') renderSourcesSection();
 renderRecipeList();
 renderRecipes();
 renderRecents();
@@ -2383,6 +2727,21 @@ renderManageList();
 renderJournal();
 
 document.getElementById('manageSearch').addEventListener('input', renderManageList);
+
+chargerCiqual().then(foods => {
+  if (foods.length > 0) {
+    console.log('✅ Ciqual prêt : ' + foods.length + ' aliments');
+    if (typeof renderSourcesSection === 'function') renderSourcesSection();
+    const st = document.getElementById('ciqualStatus');
+    if (st) st.innerHTML = '🇫🇷 Ciqual : <b style="color:#059669;">' + foods.length + ' aliments chargés</b>';
+    refreshAllAutocompletes();
+    renderManageList();
+    showToast('🇫🇷 Ciqual : ' + foods.length + ' aliments chargés');
+  } else {
+    const st = document.getElementById('ciqualStatus');
+    if (st) st.innerHTML = '🇫🇷 Ciqual : <b style="color:#d97706;">non chargé</b> — place ciqual.csv dans le dossier.';
+  }
+});
 
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {

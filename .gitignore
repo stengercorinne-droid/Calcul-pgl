@@ -7,4 +7,14 @@ config.js
 # Fichiers système
 .DS_Store
 Thumbs.db
-desktop.ini
+desktop.iniconfig.js
+
+# Identifiants OAuth (privés)
+Piste authentification.txt
+*.txt.bak
+
+# Identifiants OAuth (privés)
+Piste authentification.txt
+
+# Fichiers d'environnement
+.env
