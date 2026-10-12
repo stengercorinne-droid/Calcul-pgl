@@ -1,5 +1,6 @@
-const CACHE = 'pgl-v11';
+const CACHE = 'pgl-v10';
 const ASSETS = [
+  './',
   './index.html',
   './manifest.json',
   './icon-192.png',
@@ -7,32 +8,79 @@ const ASSETS = [
   './apple-touch-icon.png',
   './favicon-32.png',
   './favicon-16.png'
-];  
+];
 
 self.addEventListener('install', e => {
-  e.waitUntil(caches.open(CACHE).then(c => c.addAll(ASSETS)));
-  self.skipWaiting();
+  e.waitUntil(
+    caches.open(CACHE)
+      .then(c => c.addAll(ASSETS).catch(() => {}))
+      .then(() => self.skipWaiting())
+  );
 });
 
 self.addEventListener('activate', e => {
   e.waitUntil(
-    caches.keys().then(keys =>
-      Promise.all(keys.filter(k => k !== CACHE).map(k => caches.delete(k)))
-    )
+    caches.keys()
+      .then(keys => Promise.all(keys.filter(k => k !== CACHE).map(k => caches.delete(k))))
+      .then(() => self.clients.claim())
   );
-  self.clients.claim();
 });
 
 self.addEventListener('fetch', e => {
   if (e.request.method !== 'GET') return;
-  if (!e.request.url.startsWith(self.location.origin)) return;
+
+  let url;
+  try { url = new URL(e.request.url); } catch { return; }
+  if (url.origin !== location.origin) return;
+
+  const accept = e.request.headers.get('accept') || '';
+  const isHTML = accept.includes('text/html') || url.pathname === '/' || url.pathname.endsWith('.html');
+  const isCode = /\.(js|css)$/.test(url.pathname);
+  const isImage = /\.(png|jpg|jpeg|svg|gif|webp|ico)$/.test(url.pathname);
+
+  // HTML / JS / CSS → NETWORK FIRST (toujours la dernière version)
+  if (isHTML || isCode) {
+    e.respondWith(
+      fetch(e.request)
+        .then(res => {
+          if (res && res.status === 200) {
+            const clone = res.clone();
+            caches.open(CACHE).then(c => c.put(e.request, clone)).catch(() => {});
+          }
+          return res;
+        })
+        .catch(() =>
+          caches.match(e.request).then(cached =>
+            cached || new Response('', { status: 503, statusText: 'Offline' })
+          )
+        )
+    );
+    return;
+  }
+
+  // Images → CACHE FIRST (changent rarement)
+  if (isImage) {
+    e.respondWith(
+      caches.match(e.request).then(cached => {
+        if (cached) return cached;
+        return fetch(e.request)
+          .then(res => {
+            if (res && res.status === 200) {
+              const clone = res.clone();
+              caches.open(CACHE).then(c => c.put(e.request, clone)).catch(() => {});
+            }
+            return res;
+          })
+          .catch(() => new Response('', { status: 503, statusText: 'Offline' }));
+      })
+    );
+    return;
+  }
+
+  // Reste : network puis cache
   e.respondWith(
-    caches.match(e.request).then(r =>
-      r || fetch(e.request).then(res => {
-        const clone = res.clone();
-        caches.open(CACHE).then(c => c.put(e.request, clone));
-        return res;
-      }).catch(() => caches.match('./index.html'))
-    )
+    fetch(e.request)
+      .then(res => res)
+      .catch(() => caches.match(e.request).then(c => c || new Response('', { status: 503 })))
   );
 });
