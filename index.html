@@ -628,6 +628,17 @@ input:focus, textarea:focus { outline: none; transform: translate(-1px, -1px); b
   text-transform: uppercase; letter-spacing: 0.5px; color: var(--black);
 }
 .source-total b { font-family: 'Bangers', cursive; font-size: 20px; color: var(--prot); margin-left: 4px; }
+.subtabs {
+  display: flex; gap: 8px; margin: 0 0 20px;
+}
+.subtab {
+  flex: 1; font-family: 'Archivo Black', sans-serif; font-size: 11px;
+  letter-spacing: 0.5px; text-transform: uppercase; padding: 10px 6px; cursor: pointer;
+  color: var(--black); background: var(--cream); border: 3px solid var(--black);
+  box-shadow: var(--shadow-sm); transition: transform 0.1s, box-shadow 0.1s, background 0.15s;
+}
+.subtab:active { transform: translate(2px, 2px); box-shadow: 0 0 0 var(--black); }
+.subtab.active { background: var(--gluc); color: white; }
 </style>
 </head>
 <body>
@@ -724,7 +735,13 @@ input:focus, textarea:focus { outline: none; transform: translate(-1px, -1px); b
 
   <div class="view" id="view-recipes">
 
-    <div class="card" id="recipeCard">
+
+    <div class="subtabs">
+      <button class="subtab active" data-subview="recipes">🍲 Recettes</button>
+      <button class="subtab" data-subview="menus">📋 Menus</button>
+    </div>
+
+    <div id="recipesContent">    <div class="card" id="recipeCard">
       <h2><span>🔸</span> Recette <span class="badge" id="recipeBadge">0</span></h2>
       <div class="row">
         <div style="flex:2;">
@@ -776,6 +793,18 @@ input:focus, textarea:focus { outline: none; transform: translate(-1px, -1px); b
         <li class="recipes-empty">Aucune recette sauvegardée pour l'instant.</li>
       </ul>
     </div>
+    </div><!-- /recipesContent -->
+
+    <div id="menusContent" style="display:none;">
+      <div class="card">
+        <h2><span>📋</span> Menus</h2>
+        <p class="search-hint" style="text-align:left;margin-top:0;">
+          Un menu assemble des aliments et des recettes. Utile pour les repas-types (ex : "Soupie rapide" = soupe + toast + fromage blanc).
+        </p>
+        <p class="recipes-empty">🚧 En construction — l'UI arrive à l'étape 6b.2</p>
+      </div>
+    </div>
+
 
   </div>
 
@@ -1882,6 +1911,25 @@ function computeRecipeTotals(items) {
 function genererId() {
   return Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
 }
+// ============================================================
+// SUB-TABS Recettes / Menus
+// ============================================================
+function switchSubtab(name) {
+  document.querySelectorAll('.subtab').forEach(t => {
+    t.classList.toggle('active', t.dataset.subview === name);
+  });
+  const rc = document.getElementById('recipesContent');
+  const mc = document.getElementById('menusContent');
+  if (rc) rc.style.display = (name === 'recipes') ? 'block' : 'none';
+  if (mc) mc.style.display = (name === 'menus') ? 'block' : 'none';
+}
+
+document.addEventListener('click', e => {
+  const btn = e.target.closest('.subtab');
+  if (!btn) return;
+  switchSubtab(btn.dataset.subview);
+});
+
 // ============================================================
 // MENUS — Assemblage d'aliments et de recettes
 // ============================================================
