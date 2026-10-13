@@ -1467,11 +1467,8 @@ function traduire(texte) {
 }
 
 async function searchUSDA(query) {
-  const url = new URL("https://api.nal.usda.gov/fdc/v1/foods/search");
-  url.searchParams.set("api_key", USDA_API_KEY);
+  const url = new URL("https://usda-proxy.stenger-corinne.workers.dev/");
   url.searchParams.set("query", query);
-  url.searchParams.set("pageSize", "8");
-  url.searchParams.set("dataType", "Foundation,SR Legacy");
   const res = await fetch(url);
   if (!res.ok) throw new Error("Erreur HTTP " + res.status);
   const data = await res.json();
