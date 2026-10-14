@@ -26,6 +26,7 @@
   --lip: #7a9668; --lip-dark: #5d7a4a;
   --accent: #7a9668;
   --danger: #a8453c; --danger-dark: #8a352d;
+  --menu: #c98b3d; --menu-dark: #a06e2c;
   --cream: #f8f5f0; --paper: #fdfbf7; --bg: #d4c9b8; --text: #2c2c2c;
   --shadow: 4px 4px 0 var(--black);
   --shadow-sm: 2px 2px 0 var(--black);
@@ -639,6 +640,10 @@ input:focus, textarea:focus { outline: none; transform: translate(-1px, -1px); b
 }
 .subtab:active { transform: translate(2px, 2px); box-shadow: 0 0 0 var(--black); }
 .subtab.active { background: var(--gluc); color: white; }
+#menusList .recipe-card { border-left: 6px solid var(--menu); }
+#menusList .recipe-card .rc-kcal { color: var(--menu-dark); }
+#menusList .recipe-card .rc-del { background: var(--menu) !important; color: white; }
+.subtab[data-subview="menus"].active { background: var(--menu); color: white; }
 .menu-toggle {
   display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 6px 0 12px;
 }
@@ -664,7 +669,7 @@ input:focus, textarea:focus { outline: none; transform: translate(-1px, -1px); b
   background: var(--gluc); color: white; font-family: 'Archivo Black', sans-serif;
   text-transform: uppercase; letter-spacing: 0.5px; flex: 0 0 auto;
 }
-.menu-items-list li .item-type.recipe { background: var(--prot); }
+.menu-items-list li .item-type.recipe { background: var(--menu); }
 .menu-items-list li .remove {
   color: var(--danger); font-weight: 800; cursor: pointer; padding: 0 6px;
   font-size: 16px; flex: 0 0 auto;
@@ -831,8 +836,8 @@ input:focus, textarea:focus { outline: none; transform: translate(-1px, -1px); b
     </div><!-- /recipesContent -->
 
     <div id="menusContent" style="display:none;">
-      <div class="card" id="menuCard">
-        <h2><span>📋</span> Composer un menu <span class="badge" id="menuItemsBadge">0</span></h2>
+      <div class="card" id="menuCard" style="border-color:var(--menu);">
+        <h2 style="color:var(--menu-dark);"><span style="background:var(--menu);color:white;">📋</span> Composer un menu <span class="badge" id="menuItemsBadge">0</span></h2>
 
         <label>📝 Nom du menu</label>
         <input type="text" id="menuName" placeholder="Ex : Soupie rapide" autocomplete="off" />
@@ -887,7 +892,7 @@ input:focus, textarea:focus { outline: none; transform: translate(-1px, -1px); b
           <button class="btn btn-success" id="calcMenuBtn" style="flex:3;margin-top:0;">📊 Aperçu</button>
           <button class="btn btn-danger" id="clearMenuBtn" style="flex:1;margin-top:0;">🗑️</button>
         </div>
-        <button class="btn btn-primary" id="saveMenuBtn" style="margin-top:8px;">💾 Sauvegarder ce menu</button>
+        <button class="btn" id="saveMenuBtn" style="margin-top:8px;background:var(--menu);color:white;">💾 Sauvegarder ce menu</button>
       </div>
 
       <div class="card">
