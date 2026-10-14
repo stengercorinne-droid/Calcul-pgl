@@ -26,7 +26,6 @@
   --lip: #7a9668; --lip-dark: #5d7a4a;
   --accent: #7a9668;
   --danger: #a8453c; --danger-dark: #8a352d;
-  --menu: #c98b3d; --menu-dark: #a06e2c;
   --cream: #f8f5f0; --paper: #fdfbf7; --bg: #d4c9b8; --text: #2c2c2c;
   --shadow: 4px 4px 0 var(--black);
   --shadow-sm: 2px 2px 0 var(--black);
@@ -640,45 +639,6 @@ input:focus, textarea:focus { outline: none; transform: translate(-1px, -1px); b
 }
 .subtab:active { transform: translate(2px, 2px); box-shadow: 0 0 0 var(--black); }
 .subtab.active { background: var(--gluc); color: white; }
-#menusList .recipe-card { border-left: 6px solid var(--menu); }
-#menusList .recipe-card .rc-kcal { color: var(--menu-dark); }
-#menusList .recipe-card .rc-del { background: var(--menu) !important; color: white; }
-.subtab[data-subview="menus"].active { background: var(--menu); color: white; }
-.menu-toggle {
-  display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 6px 0 12px;
-}
-.menu-toggle button {
-  padding: 10px; border: 2px solid var(--black);
-  font-family: 'Archivo Black', sans-serif; font-size: 11px;
-  text-transform: uppercase; cursor: pointer; background: var(--cream);
-  color: var(--black); box-shadow: var(--shadow-sm);
-}
-.menu-toggle button.active { background: var(--prot); color: white; }
-.menu-toggle button:active { transform: translate(1px, 1px); box-shadow: 0 0 0 var(--black); }
-.menu-items-list {
-  list-style: none; margin: 12px 0 4px; padding: 0;
-}
-.menu-items-list li {
-  display: flex; justify-content: space-between; align-items: center;
-  padding: 8px 12px; background: var(--cream); border: 2px solid var(--black);
-  box-shadow: var(--shadow-sm); margin-bottom: 6px; font-size: 13px; font-weight: 600;
-  color: var(--black); gap: 8px;
-}
-.menu-items-list li .item-type {
-  font-size: 9px; padding: 1px 6px; border: 1px solid var(--black);
-  background: var(--gluc); color: white; font-family: 'Archivo Black', sans-serif;
-  text-transform: uppercase; letter-spacing: 0.5px; flex: 0 0 auto;
-}
-.menu-items-list li .item-type.recipe { background: var(--menu); }
-.menu-items-list li .remove {
-  color: var(--danger); font-weight: 800; cursor: pointer; padding: 0 6px;
-  font-size: 16px; flex: 0 0 auto;
-}
-.menu-items-list li .remove:hover { transform: scale(1.3); }
-.menu-items-list .menu-empty {
-  text-align: center; color: var(--black); padding: 14px; font-size: 12px;
-  opacity: 0.6; font-style: italic; border: none; background: transparent; box-shadow: none;
-}
 </style>
 </head>
 <body>
@@ -836,74 +796,19 @@ input:focus, textarea:focus { outline: none; transform: translate(-1px, -1px); b
     </div><!-- /recipesContent -->
 
     <div id="menusContent" style="display:none;">
-      <div class="card" id="menuCard" style="border-color:var(--menu);">
-        <h2 style="color:var(--menu-dark);"><span style="background:var(--menu);color:white;">📋</span> Composer un menu <span class="badge" id="menuItemsBadge">0</span></h2>
-
-        <label>📝 Nom du menu</label>
-        <input type="text" id="menuName" placeholder="Ex : Soupie rapide" autocomplete="off" />
-
-        <label>🔀 Type d'ajout</label>
-        <div class="menu-toggle">
-          <button class="active" id="menuTypeFood" data-type="food">🍱 Aliment</button>
-          <button id="menuTypeRecipe" data-type="recipe">🍲 Recette</button>
-        </div>
-
-        <div id="menuFoodBlock">
-          <label>🍱 Aliment</label>
-          <div class="ac-wrap" id="menuSelectWrap">
-            <input type="text" class="ac-input" id="menuSelectInput" placeholder="Tape pour chercher..." autocomplete="off">
-            <button type="button" class="ac-clear" data-target="menuSelectWrap">✕</button>
-            <div class="ac-list" id="menuSelectList"></div>
-            <input type="hidden" id="menuSelect">
-          </div>
-          <label>⚖️ Quantité</label>
-          <div class="qty-wrap">
-            <input type="number" id="menuQty" value="100" min="0.1" step="0.1" />
-            <select class="unit-select" id="menuQtyUnit"></select>
-          </div>
-          <div class="qty-hint" id="menuQtyHint"></div>
-        </div>
-
-        <div id="menuRecipeBlock" style="display:none;">
-          <label>🍲 Recette</label>
-          <select id="menuRecipeSelect" style="width:100%;padding:11px 13px;border:2px solid var(--black);background:white;font-size:14px;font-weight:700;box-shadow:var(--shadow-sm);"></select>
-          <label>⚖️ Poids de la portion (g)</label>
-          <input type="number" id="menuRecipeGrams" value="100" min="0.1" step="0.1" />
-          <div class="qty-hint" id="menuRecipeHint"></div>
-        </div>
-
-        <button class="btn btn-outline" id="addMenuItemBtn" style="margin-top:8px;">➕ Ajouter au menu</button>
-
-        <ul class="menu-items-list" id="menuItemsList">
-          <li class="menu-empty">Aucun item — ajoute un aliment ou une recette</li>
-        </ul>
-
-        <div class="result" id="menuResult">
-          <div class="pgl-grid">
-            <div class="pgl-item prot"><span class="emoji">💪</span><div class="value" id="menuProt">0</div><div class="label">Protéines</div></div>
-            <div class="pgl-item gluc"><span class="emoji">🌾</span><div class="value" id="menuGluc">0</div><div class="label">Glucides</div></div>
-            <div class="pgl-item lip"><span class="emoji">🥑</span><div class="value" id="menuLip">0</div><div class="label">Lipides</div></div>
-          </div>
-          <div class="fiber-line">🌿 Fibres : <b id="menuFiber">0</b> g</div>
-          <div class="total">🔥 Calories : <span id="menuCal">0</span> kcal • <span id="menuWeight">0</span> g</div>
-        </div>
-
-        <div style="display:flex; gap:8px; margin-top:8px;">
-          <button class="btn btn-success" id="calcMenuBtn" style="flex:3;margin-top:0;">📊 Aperçu</button>
-          <button class="btn btn-danger" id="clearMenuBtn" style="flex:1;margin-top:0;">🗑️</button>
-        </div>
-        <button class="btn" id="saveMenuBtn" style="margin-top:8px;background:var(--menu);color:white;">💾 Sauvegarder ce menu</button>
-      </div>
-
       <div class="card">
-        <h2><span>📚</span> Mes menus <span class="badge" id="menusBadge">0</span></h2>
-        <ul class="recipes-list" id="menusList">
-          <li class="recipes-empty">Aucun menu sauvegardé pour l'instant.</li>
-        </ul>
+        <h2><span>📋</span> Menus</h2>
+        <p class="search-hint" style="text-align:left;margin-top:0;">
+          Un menu assemble des aliments et des recettes. Utile pour les repas-types (ex : "Soupie rapide" = soupe + toast + fromage blanc).
+        </p>
+        <p class="recipes-empty">🚧 En construction — l'UI arrive à l'étape 6b.2</p>
       </div>
     </div>
 
-    <div class="view" id="view-journal">
+
+  </div>
+
+  <div class="view" id="view-journal">
     <div class="card">
       <div class="daynav">
         <button id="dayPrev">←</button>
@@ -2007,120 +1912,6 @@ function genererId() {
   return Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
 }
 // ============================================================
-// COMPOSEUR DE MENU (6b.2 — poids en grammes)
-// ============================================================
-const menuItems = [];
-let menuType = 'food';
-let menuQty = null;
-
-function setMenuType(type) {
-  menuType = type;
-  document.getElementById('menuTypeFood').classList.toggle('active', type === 'food');
-  document.getElementById('menuTypeRecipe').classList.toggle('active', type === 'recipe');
-  document.getElementById('menuFoodBlock').style.display = (type === 'food') ? 'block' : 'none';
-  document.getElementById('menuRecipeBlock').style.display = (type === 'recipe') ? 'block' : 'none';
-}
-
-function renderMenuItems() {
-  const ul = document.getElementById('menuItemsList');
-  ul.innerHTML = '';
-  if (menuItems.length === 0) {
-    ul.innerHTML = '<li class="menu-empty">Aucun item — ajoute un aliment ou une recette</li>';
-    document.getElementById('menuItemsBadge').textContent = '0';
-    document.getElementById('menuResult').classList.remove('show');
-    return;
-  }
-  menuItems.forEach((item, index) => {
-    const li = document.createElement('li');
-    let display, tag;
-    if (item.type === 'recipe') {
-      tag = '<span class="item-type recipe">🍲 Recette</span>';
-      display = item.recipeName + ' — ' + Math.round(item.grams) + ' g';
-    } else {
-      tag = '<span class="item-type">🍱</span>';
-      const u = item.unit && item.unit !== 'g'
-        ? item.qty + ' ' + item.unit + ' (' + Math.round(item.grams) + ' g)'
-        : item.grams + ' g';
-      display = item.name + ' — ' + u;
-    }
-    li.innerHTML = tag + '<span style="flex:1;">' + display + '</span><span class="remove" data-index="' + index + '">✕</span>';
-    ul.appendChild(li);
-  });
-  document.getElementById('menuItemsBadge').textContent = menuItems.length;
-  ul.querySelectorAll('.remove').forEach(el => {
-    el.addEventListener('click', function () {
-      menuItems.splice(parseInt(this.dataset.index), 1);
-      renderMenuItems();
-    });
-  });
-}
-
-function updateMenuPreview() {
-  const tmp = { items: menuItems };
-  const t = computeMenuTotals(tmp);
-  document.getElementById('menuProt').textContent = t.prot;
-  document.getElementById('menuGluc').textContent = t.gluc;
-  document.getElementById('menuLip').textContent = t.lip;
-  document.getElementById('menuFiber').textContent = t.fiber;
-  document.getElementById('menuCal').textContent = t.cal;
-  document.getElementById('menuWeight').textContent = t.weight;
-  document.getElementById('menuResult').classList.add('show');
-}
-
-function renderMenus() {
-  const ul = document.getElementById('menusList');
-  ul.innerHTML = '';
-  document.getElementById('menusBadge').textContent = menus.length;
-  if (menus.length === 0) {
-    ul.innerHTML = '<li class="recipes-empty">Aucun menu sauvegardé pour l\'instant.</li>';
-    return;
-  }
-  menus.forEach(menu => {
-    const t = computeMenuTotals(menu);
-    const li = document.createElement('li');
-    li.className = 'recipe-card';
-    li.innerHTML =
-      '<div class="rc-head">' +
-        '<span class="rc-name">' + menu.name + '</span>' +
-        '<span class="rc-kcal">🔥 ' + t.cal + ' kcal</span>' +
-      '</div>' +
-      '<div class="rc-macros">' +
-        '<span class="m-prot">P: ' + t.prot + 'g</span>' +
-        '<span class="m-gluc">G: ' + t.gluc + 'g</span>' +
-        '<span class="m-lip">L: ' + t.lip + 'g</span>' +
-      '</div>' +
-      '<div class="rc-actions">' +
-        '<button class="rc-del" data-id="' + menu.id + '">🗑️ Supprimer</button>' +
-      '</div>';
-    ul.appendChild(li);
-  });
-  ul.querySelectorAll('.rc-del').forEach(b => {
-    b.addEventListener('click', () => {
-      if (!confirm('Supprimer ce menu ?')) return;
-      supprimerMenu(b.dataset.id);
-      renderMenus();
-      showToast('🗑️ Menu supprimé');
-    });
-  });
-}
-
-function renderMenuRecipeSelect() {
-  const sel = document.getElementById('menuRecipeSelect');
-  sel.innerHTML = '';
-  if (recipes.length === 0) {
-    sel.innerHTML = '<option value="">— aucune recette sauvegardée —</option>';
-    return;
-  }
-  recipes.forEach(r => {
-    const opt = document.createElement('option');
-    opt.value = r.id;
-    const t = computeRecipeTotals(r.items);
-    opt.textContent = r.name + ' (' + t.weight + ' g)';
-    sel.appendChild(opt);
-  });
-}
-
-// ============================================================
 // SUB-TABS Recettes / Menus
 // ============================================================
 function switchSubtab(name) {
@@ -2156,14 +1947,13 @@ function computeMenuTotals(menu) {
       const r = recipes.find(x => x.id === item.recipeId);
       if (!r) return;
       const t = computeRecipeTotals(r.items);
-      if (t.weight <= 0) return;
-      const ratio = item.grams / t.weight;
-      cal += t.cal * ratio;
-      prot += t.prot * ratio;
-      gluc += t.gluc * ratio;
-      lip += t.lip * ratio;
-      fiber += t.fiber * ratio;
-      weight += item.grams;
+      const mult = item.portions || 1;
+      cal += t.cal * mult;
+      prot += t.prot * mult;
+      gluc += t.gluc * mult;
+      lip += t.lip * mult;
+      fiber += t.fiber * mult;
+      weight += t.weight * mult;
     } else {
       const f = findFood(item.name);
       const g = item.grams || item.qty || 0;
@@ -2295,12 +2085,6 @@ function chargerRecette(id) {
   document.getElementById('recipeResult').classList.remove('show');
   document.getElementById('recipeCard').scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
-const _origRenderRecipes = renderRecipes;
-renderRecipes = function() {
-  _origRenderRecipes.apply(this, arguments);
-  if (typeof renderMenuRecipeSelect === 'function') renderMenuRecipeSelect();
-};
-
 function supprimerRecette(id) {
   const recipe = recipes.find(r => r.id === id);
   if (!recipe) return;
@@ -3038,12 +2822,6 @@ recipeQty = bindUnitSelector('recipeQty', 'recipeQtyUnit', 'recipeQtyHint',
   () => autocompletes.recipeSelect.getValue());
 addMealQty = bindUnitSelector('addMealQty', 'addMealQtyUnit', 'addMealQtyHint',
   () => autocompletes.addMealFood.getValue());
-initAutocomplete('menuSelectInput', 'menuSelectList', 'menuSelect', 'menuSelectWrap');
-menuQty = bindUnitSelector('menuQty', 'menuQtyUnit', 'menuQtyHint',
-  () => autocompletes.menuSelect.getValue());
-document.getElementById('menuSelectInput').addEventListener('change', () => menuQty.refreshUnits());
-const origMenuSet = autocompletes.menuSelect.setValue;
-autocompletes.menuSelect.setValue = (name) => { origMenuSet(name); menuQty.refreshUnits(); };
 
 document.getElementById('ingredientSelectInput').addEventListener('change', () => singleQty.refreshUnits());
 document.getElementById('recipeSelectInput').addEventListener('change', () => recipeQty.refreshUnits());
@@ -3080,66 +2858,6 @@ chargerCiqual().then(foods => {
     if (st) st.innerHTML = '🇫🇷 Ciqual : <b style="color:#d97706;">non chargé</b> — place ciqual.csv dans le dossier.';
   }
 });
-
-// Bindings du composeur de menu
-document.getElementById('menuTypeFood').addEventListener('click', () => setMenuType('food'));
-document.getElementById('menuTypeRecipe').addEventListener('click', () => setMenuType('recipe'));
-
-document.getElementById('addMenuItemBtn').addEventListener('click', () => {
-  if (menuType === 'food') {
-    const name = autocompletes.menuSelect.getValue();
-    if (!findFood(name)) { alert('Sélectionne un aliment dans la liste.'); return; }
-    const qty = menuQty.getQty();
-    const unit = menuQty.getUnit();
-    const grams = computeGramsFromUnit(qty, unit, name);
-    if (grams <= 0) { alert('Quantité invalide.'); return; }
-    menuItems.push({ type: 'food', name, qty, unit, grams });
-    document.getElementById('menuQty').value = 100;
-    menuQty.refreshUnits();
-  } else {
-    const rid = document.getElementById('menuRecipeSelect').value;
-    const r = recipes.find(x => x.id === rid);
-    if (!r) { alert('Aucune recette sélectionnée.'); return; }
-    const grams = parseFloat(document.getElementById('menuRecipeGrams').value) || 0;
-    if (grams <= 0) { alert('Poids invalide.'); return; }
-    menuItems.push({ type: 'recipe', recipeId: r.id, recipeName: r.name, grams });
-    document.getElementById('menuRecipeGrams').value = 100;
-  }
-  renderMenuItems();
-  document.getElementById('menuResult').classList.remove('show');
-});
-
-document.getElementById('calcMenuBtn').addEventListener('click', () => {
-  if (menuItems.length === 0) { alert('Ajoute au moins un item.'); return; }
-  updateMenuPreview();
-});
-
-document.getElementById('clearMenuBtn').addEventListener('click', () => {
-  if (menuItems.length === 0) return;
-  if (!confirm('Vider le menu ?')) return;
-  menuItems.length = 0;
-  document.getElementById('menuName').value = '';
-  renderMenuItems();
-});
-
-document.getElementById('saveMenuBtn').addEventListener('click', () => {
-  const name = document.getElementById('menuName').value.trim();
-  if (!name) { alert('Donne un nom à ton menu.'); return; }
-  if (menuItems.length === 0) { alert('Ajoute au moins un item.'); return; }
-  const menu = creerMenu(name, menuItems.map(it => Object.assign({}, it)));
-  if (!menu) { alert('Erreur lors de la sauvegarde.'); return; }
-  menuItems.length = 0;
-  document.getElementById('menuName').value = '';
-  renderMenuItems();
-  renderMenus();
-  document.getElementById('menuResult').classList.remove('show');
-  showToast('✅ Menu "' + name + '" sauvegardé');
-});
-
-setTimeout(() => {
-  renderMenuRecipeSelect();
-  renderMenus();
-}, 100);
 
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
