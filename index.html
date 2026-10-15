@@ -27,6 +27,7 @@
   --accent: #7a9668;
   --danger: #a8453c; --danger-dark: #8a352d;
   --cream: #f8f5f0; --paper: #fdfbf7; --bg: #d4c9b8; --text: #2c2c2c;
+  --food: #3A004B; --food-dark: #2a0035;
   --shadow: 4px 4px 0 var(--black);
   --shadow-sm: 2px 2px 0 var(--black);
 }
@@ -63,6 +64,7 @@ h1 {
 }
 .tab:active { transform: translate(2px, 2px); box-shadow: 0 0 0 var(--black); }
 .tab.active { background: var(--lip); color: white; }
+.tab[data-view="calc"].active { background: var(--food); color: white; }
 .view { display: none; }
 .view.active { display: block; }
 .card {
@@ -628,6 +630,63 @@ input:focus, textarea:focus { outline: none; transform: translate(-1px, -1px); b
   text-transform: uppercase; letter-spacing: 0.5px; color: var(--black);
 }
 .source-total b { font-family: 'Bangers', cursive; font-size: 20px; color: var(--prot); margin-left: 4px; }
+.addmeal-filters {
+  display: flex; gap: 6px; margin: 12px 0 8px; flex-wrap: wrap;
+}
+.addmeal-filter {
+  padding: 6px 12px; border: 2px solid var(--black);
+  font-family: 'Archivo Black', sans-serif; font-size: 10px;
+  text-transform: uppercase; letter-spacing: 0.4px;
+  cursor: pointer; background: var(--cream); color: var(--black);
+  box-shadow: var(--shadow-sm);
+}
+.addmeal-filter:active { transform: translate(1px, 1px); box-shadow: 0 0 0 var(--black); }
+.addmeal-filter.active { background: var(--prot); color: white; }
+.addmeal-results {
+  margin-top: 8px; max-height: 260px; overflow-y: auto;
+  border: 2px solid var(--black); background: white;
+}
+.addmeal-empty {
+  padding: 16px; text-align: center; font-size: 12px;
+  font-style: italic; opacity: 0.6; color: var(--black);
+}
+.addmeal-item {
+  display: flex; align-items: center; gap: 8px;
+  padding: 8px 12px; border-bottom: 1px solid #efe4cd;
+  cursor: pointer; font-size: 13px; color: var(--black);
+}
+.addmeal-item:last-child { border-bottom: none; }
+.addmeal-item:hover { background: var(--cream); }
+.addmeal-item .ami-flag { font-size: 14px; flex: 0 0 20px; text-align: center; }
+.addmeal-item .ami-name { flex: 1; word-break: break-word; line-height: 1.2; }
+.addmeal-item .ami-kcal { font-size: 11px; font-weight: 700; opacity: 0.7; white-space: nowrap; }
+.addmeal-item .ami-tag {
+  font-size: 9px; padding: 1px 5px; border: 1px solid var(--black);
+  font-family: 'Archivo Black', sans-serif; letter-spacing: 0.3px;
+  background: var(--food); color: white; flex: 0 0 auto;
+}
+.addmeal-item .ami-tag.recipe { background: #c98b3d; }
+.addmeal-item .ami-tag.menu { background: var(--prot); }
+.addmeal-group {
+  padding: 8px 12px; background: #f1e8d2;
+  border-bottom: 1px solid #efe4cd; cursor: pointer;
+  display: flex; align-items: center; gap: 8px;
+  font-weight: 700; font-size: 13px; color: var(--black);
+}
+.addmeal-group .amg-arrow { transition: transform 0.2s; display: inline-block; }
+.addmeal-group.open .amg-arrow { transform: rotate(90deg); }
+.addmeal-group .amg-count {
+  font-size: 10px; opacity: 0.7; margin-left: auto;
+  font-family: 'Archivo Black', sans-serif;
+}
+.addmeal-group-items { display: none; }
+.addmeal-group.open + .addmeal-group-items { display: block; }
+.addmeal-group-items .addmeal-item { padding-left: 24px; background: #fbf8f2; }
+.addmeal-selected {
+  padding: 10px 12px; margin-bottom: 10px;
+  background: var(--cream); border: 2px dashed var(--black);
+  font-size: 12px; font-weight: 700; text-align: center; color: var(--black);
+}
 .subtabs {
   display: flex; gap: 8px; margin: 0 0 20px;
 }
@@ -639,6 +698,46 @@ input:focus, textarea:focus { outline: none; transform: translate(-1px, -1px); b
 }
 .subtab:active { transform: translate(2px, 2px); box-shadow: 0 0 0 var(--black); }
 .subtab.active { background: var(--gluc); color: white; }
+.subtab[data-subview="menus"].active { background: #c98b3d; color: white; }
+.menu-toggle {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 6px 0 12px;
+}
+.menu-toggle button {
+  padding: 10px; border: 2px solid var(--black);
+  font-family: 'Archivo Black', sans-serif; font-size: 11px;
+  text-transform: uppercase; cursor: pointer; background: var(--cream);
+  color: var(--black); box-shadow: var(--shadow-sm);
+}
+.menu-toggle button.active { background: var(--prot); color: white; }
+.menu-toggle button:active { transform: translate(1px, 1px); box-shadow: 0 0 0 var(--black); }
+.menu-items-list {
+  list-style: none; margin: 12px 0 4px; padding: 0;
+}
+.menu-items-list li {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 8px 12px; background: var(--cream); border: 2px solid var(--black);
+  box-shadow: var(--shadow-sm); margin-bottom: 6px; font-size: 13px; font-weight: 600;
+  color: var(--black); gap: 8px;
+}
+.menu-items-list li .item-type {
+  font-size: 9px; padding: 1px 6px; border: 1px solid var(--black);
+  background: var(--gluc); color: white; font-family: 'Archivo Black', sans-serif;
+  text-transform: uppercase; letter-spacing: 0.5px; flex: 0 0 auto;
+}
+.menu-items-list li .item-type.recipe { background: #c98b3d; }
+.menu-items-list li .remove {
+  color: var(--danger); font-weight: 800; cursor: pointer; padding: 0 6px;
+  font-size: 16px; flex: 0 0 auto;
+}
+.menu-items-list li .remove:hover { transform: scale(1.3); }
+.menu-items-list .menu-empty {
+  text-align: center; color: var(--black); padding: 14px; font-size: 12px;
+  opacity: 0.6; font-style: italic; border: none; background: transparent; box-shadow: none;
+}
+#saveMenuBtn { background: #c98b3d; color: white; }
+#saveMenuBtn:hover { background: #a06e2c; }
+#menusList .recipe-card { border-left: 6px solid #c98b3d; }
+#menusList .recipe-card .rc-kcal { color: #a06e2c; }
 </style>
 </head>
 <body>
@@ -927,24 +1026,47 @@ input:focus, textarea:focus { outline: none; transform: translate(-1px, -1px); b
 
 <div class="modal-overlay" id="addMealModal">
   <div class="modal">
-    <h3 id="addMealTitle">➕ Ajouter un aliment</h3>
-    <label>🍱 Aliment</label>
-    <div class="ac-wrap" id="addMealFoodWrap">
-      <input type="text" class="ac-input" id="addMealFoodInput" placeholder="Tape pour chercher..." autocomplete="off">
-      <button type="button" class="ac-clear" data-target="addMealFoodWrap">✕</button>
-      <div class="ac-list" id="addMealFoodList"></div>
-      <input type="hidden" id="addMealFood">
+    <h3 id="addMealTitle">➕ Ajouter au repas</h3>
+
+    <div class="ac-wrap" id="addMealSearchWrap">
+      <input type="text" class="ac-input" id="addMealSearchInput" placeholder="Chercher aliment, recette ou menu..." autocomplete="off">
+      <button type="button" class="ac-clear" data-target="addMealSearchWrap">✕</button>
     </div>
-    <label>⚖️ Quantité</label>
-    <div class="qty-wrap">
-      <input type="number" id="addMealQty" value="100" min="0.1" step="0.1" />
-      <select class="unit-select" id="addMealQtyUnit"></select>
+
+    <div class="addmeal-filters" id="addMealFilters">
+      <button class="addmeal-filter active" data-filter="all">Tous</button>
+      <button class="addmeal-filter" data-filter="food">🍱 Aliments</button>
+      <button class="addmeal-filter" data-filter="recipe">🍲 Recettes</button>
+      <button class="addmeal-filter" data-filter="menu">📋 Menus</button>
     </div>
-    <div class="qty-hint" id="addMealQtyHint"></div>
-    <div class="preview" id="addMealPreview">—</div>
+
+    <div class="addmeal-results" id="addMealResults">
+      <div class="addmeal-empty">Tape pour chercher…</div>
+    </div>
+
+    <div id="addMealQtyBlock" style="display:none;">
+      <div class="addmeal-selected" id="addMealSelected">—</div>
+      <label>⚖️ Quantité</label>
+      <div class="qty-wrap">
+        <input type="number" id="addMealQty" value="100" min="0.1" step="0.1" />
+        <select class="unit-select" id="addMealQtyUnit"></select>
+      </div>
+      <div class="qty-hint" id="addMealQtyHint"></div>
+      <div class="preview" id="addMealPreview">—</div>
+    </div>
+
     <div class="actions-2">
       <button class="btn btn-outline" id="addMealCancel">Annuler</button>
       <button class="btn btn-primary" id="addMealConfirm">Ajouter</button>
+    </div>
+
+    <!-- Legacy hidden elements (ancien JS préservé) -->
+    <div style="display:none">
+      <div class="ac-wrap" id="addMealFoodWrap">
+        <input type="text" id="addMealFoodInput">
+        <div class="ac-list" id="addMealFoodList"></div>
+        <input type="hidden" id="addMealFood">
+      </div>
     </div>
   </div>
 </div>
@@ -2143,7 +2265,7 @@ function renderMenus() {
         '<span class="m-lip">L: ' + t.lip + 'g</span>' +
       '</div>' +
       '<div class="rc-actions">' +
-        '<button class="rc-del" data-menu-del="' + menu.id + '">🗑️ Supprimer</button>' +
+        '<button class="rc-del" data-menu-del="' + menu.id + '">🗑️</button>' +
       '</div>';
     ul.appendChild(li);
   });
@@ -2295,6 +2417,7 @@ function ouvrirRecipeToMeal(id) {
   });
   document.getElementById('recipeToMealModal').classList.add('show');
 }
+
 function fermerRecipeToMeal() {
   document.getElementById('recipeToMealModal').classList.remove('show');
   recipeToMealId = null;
@@ -2721,61 +2844,310 @@ document.getElementById('goalConfirm').addEventListener('click', () => {
   renderJournal();
 });
 
+// ============================================================
+// AJOUT AU REPAS — Recherche unifiée + regroupement intelligent
+// ============================================================
 let addMealTarget = null;
+let addMealSelection = null;
+let addMealFilter = 'all';
+let addMealLastResults = [];
+
+function getAddMealRoot(name) {
+  const STOP = ['le','la','les','du','de','des','au','aux','a','à','et','en','un','une'];
+  const words = name.toLowerCase().replace(/[(),'"]/g,' ').split(/\s+/).filter(Boolean);
+  for (const w of words) {
+    if (w.length > 2 && !STOP.includes(w)) return w;
+  }
+  return words[0] || name.toLowerCase();
+}
+
+function buildVirtualFood(selection) {
+  if (selection.kind === 'food') return selection.data;
+  const t = selection.totals;
+  if (!t || t.weight <= 0) return null;
+  const ratio = 100 / t.weight;
+  return {
+    name: (selection.kind === 'recipe' ? '[Recette] ' : '[Menu] ') + selection.name,
+    calories: Math.round(t.cal * ratio),
+    protein: round(t.prot * ratio),
+    carbs: round(t.gluc * ratio),
+    fat: round(t.lip * ratio),
+    fiber: round((t.fiber || 0) * ratio)
+  };
+}
+
+function searchAddMeal(query) {
+  const q = normaliserSansAccents(query);
+  if (!q) return [];
+  const results = [];
+
+  if (addMealFilter === 'all' || addMealFilter === 'food') {
+    getAllFoods().forEach(f => {
+      const s = scoreFood(f.name, query);
+      if (s >= 0) results.push({
+        kind: 'food', name: f.name, data: f, score: s,
+        kcal: f.calories, flag: getSourceFlag(f.name)
+      });
+    });
+  }
+  if (addMealFilter === 'all' || addMealFilter === 'recipe') {
+    recipes.forEach(r => {
+      const s = scoreFood(r.name, query);
+      if (s >= 0) {
+        const t = computeRecipeTotals(r.items);
+        results.push({
+          kind: 'recipe', name: r.name, data: r, score: s,
+          kcal: t.cal, totals: t, flag: '🍲'
+        });
+      }
+    });
+  }
+  if (addMealFilter === 'all' || addMealFilter === 'menu') {
+    menus.forEach(m => {
+      const s = scoreFood(m.name, query);
+      if (s >= 0) {
+        const t = computeMenuTotals(m);
+        results.push({
+          kind: 'menu', name: m.name, data: m, score: s,
+          kcal: t.cal, totals: t, flag: '📋'
+        });
+      }
+    });
+  }
+  results.sort((a,b) => a.score - b.score || a.name.localeCompare(b.name));
+  return results;
+}
+
+function renderAddMealItemHTML(idx, item) {
+  const tagClass = item.kind === 'recipe' ? 'recipe' : (item.kind === 'menu' ? 'menu' : '');
+  const tagLabel = item.kind === 'recipe' ? 'Recette' : (item.kind === 'menu' ? 'Menu' : '🍱');
+  const flag = item.flag || '';
+  const kcalStr = item.kcal ? item.kcal + ' kcal' : '';
+  return '<div class="addmeal-item" data-idx="' + idx + '">' +
+    '<span class="ami-flag">' + flag + '</span>' +
+    '<span class="ami-tag ' + tagClass + '">' + tagLabel + '</span>' +
+    '<span class="ami-name">' + item.name + '</span>' +
+    '<span class="ami-kcal">' + kcalStr + '</span>' +
+  '</div>';
+}
+
+function renderAddMealResults(query) {
+  const container = document.getElementById('addMealResults');
+  if (!container) return;
+
+  if (!query || !query.trim()) {
+    container.innerHTML = '<div class="addmeal-empty">Tape pour chercher…</div>';
+    addMealLastResults = [];
+    return;
+  }
+
+  const results = searchAddMeal(query);
+  addMealLastResults = results;
+
+  if (results.length === 0) {
+    container.innerHTML = '<div class="addmeal-empty">Aucun résultat</div>';
+    return;
+  }
+
+  const groupsMap = {};
+  results.forEach((r, idx) => {
+    const root = getAddMealRoot(r.name);
+    if (!groupsMap[root]) groupsMap[root] = [];
+    groupsMap[root].push({ idx, item: r });
+  });
+  const groups = Object.values(groupsMap);
+
+  let html = '';
+  groups.forEach(group => {
+    if (group.length === 1) {
+      html += renderAddMealItemHTML(group[0].idx, group[0].item);
+    } else {
+      const root = getAddMealRoot(group[0].item.name);
+      const rootCap = root.charAt(0).toUpperCase() + root.slice(1);
+      html += '<div class="addmeal-group" data-group="' + root + '">';
+      html += '<span class="amg-arrow">▶</span>';
+      html += '<span>' + rootCap + '</span>';
+      html += '<span class="amg-count">' + group.length + '</span>';
+      html += '</div>';
+      html += '<div class="addmeal-group-items">';
+      group.slice(0, 20).forEach(g => {
+        html += renderAddMealItemHTML(g.idx, g.item);
+      });
+      html += '</div>';
+    }
+  });
+  container.innerHTML = html;
+
+  container.querySelectorAll('.addmeal-group').forEach(el => {
+    el.addEventListener('click', () => el.classList.toggle('open'));
+  });
+  container.querySelectorAll('.addmeal-item').forEach(el => {
+    el.addEventListener('click', () => {
+      const idx = parseInt(el.dataset.idx);
+      selectAddMealItem(addMealLastResults[idx]);
+    });
+  });
+}
+
+function selectAddMealItem(item) {
+  addMealSelection = item;
+  const virtual = buildVirtualFood(item);
+  if (!virtual) {
+    showToast('❌ Impossible de calculer les valeurs');
+    return;
+  }
+  addMealSelection.virtualFood = virtual;
+
+  const selected = document.getElementById('addMealSelected');
+  const prefix = item.kind === 'food' ? '🍱 ' : (item.kind === 'recipe' ? '🍲 [Recette] ' : '📋 [Menu] ');
+  selected.textContent = prefix + item.name;
+
+  document.getElementById('addMealQtyBlock').style.display = 'block';
+  document.getElementById('addMealQty').value = 100;
+
+  const unitSelect = document.getElementById('addMealQtyUnit');
+  if (item.kind === 'food') {
+    const units = getUnitsForFood(item.name);
+    unitSelect.innerHTML = '<option value="g">g</option>' +
+      units.map(u => '<option value="' + u.u + '">' + u.u + '</option>').join('');
+  } else {
+    unitSelect.innerHTML = '<option value="g">g</option>';
+  }
+
+  updateAddMealPreview();
+}
+
+function updateAddMealPreview() {
+  if (!addMealSelection) return;
+  const vf = addMealSelection.virtualFood;
+  if (!vf) return;
+
+  const qtyInput = document.getElementById('addMealQty');
+  const unitSelect = document.getElementById('addMealQtyUnit');
+  const hint = document.getElementById('addMealQtyHint');
+  const preview = document.getElementById('addMealPreview');
+
+  const qty = parseFloat(qtyInput.value) || 0;
+  const unit = unitSelect.value;
+  const grams = computeGramsFromUnit(qty, unit, addMealSelection.name);
+
+  hint.textContent = unit === 'g' ? '' : '≈ ' + Math.round(grams * 10) / 10 + ' g';
+
+  if (grams <= 0) { preview.textContent = '—'; return; }
+  const r = grams / 100;
+  preview.textContent = '🔥 ' + Math.round(vf.calories * r) + ' kcal • 💪 ' + round(vf.protein * r) + 'g • 🌾 ' + round(vf.carbs * r) + 'g • 🥑 ' + round(vf.fat * r) + 'g';
+}
+
 function openAddMealModal(mealKey, presetFood) {
   addMealTarget = mealKey;
+  addMealSelection = null;
+  addMealFilter = 'all';
+  addMealLastResults = [];
+
   const meal = MEALS.find(m => m.key === mealKey);
-  document.getElementById('addMealTitle').textContent = `➕ Ajouter à : ${meal.label}`;
-  if (presetFood) autocompletes.addMealFood.setValue(presetFood);
-  else autocompletes.addMealFood.clear();
-  document.getElementById('addMealQty').value = 100;
-  addMealQty.refreshUnits();
-  updateAddMealPreview();
+  document.getElementById('addMealTitle').textContent = '➕ Ajouter à : ' + meal.label;
+
+  document.getElementById('addMealSearchInput').value = '';
+  document.getElementById('addMealResults').innerHTML = '<div class="addmeal-empty">Tape pour chercher…</div>';
+  document.getElementById('addMealQtyBlock').style.display = 'none';
+  document.querySelectorAll('#addMealFilters .addmeal-filter').forEach(b => {
+    b.classList.toggle('active', b.dataset.filter === 'all');
+  });
+
   document.getElementById('addMealModal').classList.add('show');
+  setTimeout(() => document.getElementById('addMealSearchInput').focus(), 150);
+
+  if (presetFood) {
+    const f = findFood(presetFood);
+    if (f) {
+      document.getElementById('addMealSearchInput').value = presetFood;
+      renderAddMealResults(presetFood);
+      setTimeout(() => selectAddMealItem({
+        kind: 'food', name: f.name, data: f, kcal: f.calories, flag: getSourceFlag(f.name)
+      }), 100);
+    }
+  }
 }
+
 function closeAddMealModal() {
   document.getElementById('addMealModal').classList.remove('show');
   addMealTarget = null;
+  addMealSelection = null;
 }
-function updateAddMealPreview() {
-  const name = autocompletes.addMealFood.getValue();
-  const qty = addMealQty.getQty();
-  const unit = addMealQty.getUnit();
-  const g = computeGramsFromUnit(qty, unit, name);
-  const f = findFood(name);
-  if (!f || g <= 0) { document.getElementById('addMealPreview').textContent = '—'; return; }
-  const r = g / 100;
-  document.getElementById('addMealPreview').textContent =
-    `🔥 ${Math.round(f.calories * r)} kcal • 💪 ${round(f.protein * r)}g • 🌾 ${round(f.carbs * r)}g • 🥑 ${round(f.fat * r)}g`;
-}
-document.getElementById('addMealQty').addEventListener('input', updateAddMealPreview);
-document.getElementById('addMealCancel').addEventListener('click', closeAddMealModal);
-document.getElementById('addMealConfirm').addEventListener('click', () => {
-  if (!addMealTarget) return;
-  const name = autocompletes.addMealFood.getValue();
-  const qty = addMealQty.getQty();
-  const unit = addMealQty.getUnit();
-  const g = computeGramsFromUnit(qty, unit, name);
-  const f = findFood(name);
-  if (!name || g <= 0 || !f) return;
-  const entry = getDayEntry(currentDay);
-  entry[addMealTarget].push({
-    name, qty, unit, grams: g,
-    fixedCal: f.calories, fixedProt: f.protein,
-    fixedGluc: f.carbs, fixedLip: f.fat, fixedFiber: f.fiber || 0
-  });
-  saveJournal();
-  pushRecentFood(name);
-  closeAddMealModal();
-  renderJournal();
-  renderRecents();
-  showToast(`✅ ${name} ajouté`);
+
+// --- Bindings ---
+document.getElementById('addMealSearchInput').addEventListener('input', e => {
+  renderAddMealResults(e.target.value);
 });
+
+document.getElementById('addMealSearchInput').addEventListener('keydown', e => {
+  if (e.key === 'Escape') {
+    e.target.value = '';
+    renderAddMealResults('');
+  }
+});
+
+const addMealClearBtn = document.querySelector('#addMealSearchWrap .ac-clear');
+if (addMealClearBtn) addMealClearBtn.addEventListener('click', () => {
+  document.getElementById('addMealSearchInput').value = '';
+  renderAddMealResults('');
+  document.getElementById('addMealSearchInput').focus();
+});
+
+document.querySelectorAll('#addMealFilters .addmeal-filter').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('#addMealFilters .addmeal-filter').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    addMealFilter = btn.dataset.filter;
+    const q = document.getElementById('addMealSearchInput').value;
+    if (q) renderAddMealResults(q);
+  });
+});
+
+document.getElementById('addMealQty').addEventListener('input', updateAddMealPreview);
+document.getElementById('addMealQtyUnit').addEventListener('change', updateAddMealPreview);
+
+document.getElementById('addMealCancel').addEventListener('click', closeAddMealModal);
+
 document.getElementById('addMealModal').addEventListener('click', e => {
   if (e.target.id === 'addMealModal') closeAddMealModal();
 });
-document.addEventListener('change', e => {
-  if (e.target.id === 'addMealFoodInput') updateAddMealPreview();
+
+document.getElementById('addMealConfirm').addEventListener('click', () => {
+  if (!addMealTarget || !addMealSelection) {
+    alert('Sélectionne d\'abord un élément');
+    return;
+  }
+  const vf = addMealSelection.virtualFood;
+  const qty = parseFloat(document.getElementById('addMealQty').value) || 0;
+  const unit = document.getElementById('addMealQtyUnit').value;
+  const grams = computeGramsFromUnit(qty, unit, addMealSelection.name);
+  if (grams <= 0) { alert('Quantité invalide'); return; }
+
+  if (addMealSelection.kind !== 'food') {
+    const existing = customFoods.findIndex(f => f.name === vf.name);
+    if (existing >= 0) customFoods[existing] = vf;
+    else customFoods.push(vf);
+    saveCustomFoods();
+  }
+
+  const entry = getDayEntry(currentDay);
+  entry[addMealTarget].push({
+    name: vf.name, qty, unit, grams,
+    fixedCal: vf.calories, fixedProt: vf.protein,
+    fixedGluc: vf.carbs, fixedLip: vf.fat, fixedFiber: vf.fiber || 0
+  });
+  saveJournal();
+  pushRecentFood(vf.name);
+  const labelName = vf.name;
+  closeAddMealModal();
+  renderJournal();
+  renderRecents();
+  if (addMealSelection && addMealSelection.kind !== 'food') {
+    refreshAllAutocompletes();
+    renderManageList();
+  }
+  showToast('✅ ' + labelName + ' ajouté');
 });
 
 function pushRecentFood(name) {
