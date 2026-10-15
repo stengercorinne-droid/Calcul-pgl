@@ -738,6 +738,84 @@ input:focus, textarea:focus { outline: none; transform: translate(-1px, -1px); b
 #saveMenuBtn:hover { background: #a06e2c; }
 #menusList .recipe-card { border-left: 6px solid #c98b3d; }
 #menusList .recipe-card .rc-kcal { color: #a06e2c; }
+.weight-block {
+  margin: 14px 0 6px;
+  border: 3px solid var(--black);
+  background: var(--paper);
+  box-shadow: var(--shadow-sm);
+}
+.weight-head {
+  display: flex; align-items: center; gap: 8px;
+  padding: 8px 12px;
+  background: #f1e8d2;
+  border-bottom: 2px solid var(--black);
+}
+.weight-head .weight-icon { font-size: 15px; }
+.weight-head .weight-title {
+  flex: 1;
+  font-family: 'Archivo Black', sans-serif;
+  font-size: 11px; text-transform: uppercase;
+  letter-spacing: 0.5px; color: var(--black);
+}
+.weight-icon-btn {
+  width: 26px; height: 26px; padding: 0;
+  border: 2px solid var(--black); background: white;
+  font-size: 12px; cursor: pointer; line-height: 1;
+  box-shadow: var(--shadow-sm); border-radius: 0;
+  display: inline-flex; align-items: center; justify-content: center;
+}
+.weight-icon-btn:active { transform: translate(1px, 1px); box-shadow: 0 0 0 var(--black); }
+.weight-icon-btn.primary {
+  background: var(--prot); color: white; font-size: 17px; font-weight: 800;
+}
+.weight-body {
+  padding: 12px 14px; font-size: 13px; color: var(--black);
+}
+.weight-empty {
+  text-align: center; font-style: italic; opacity: 0.6;
+  color: var(--black); padding: 6px 0; font-size: 12px;
+}
+.weight-current {
+  display: flex; align-items: baseline; gap: 10px;
+  margin-bottom: 6px;
+}
+.weight-current .wc-value {
+  font-family: 'Bangers', cursive; font-size: 32px;
+  letter-spacing: 1px; color: var(--prot); line-height: 1;
+  text-shadow: 1px 1px 0 var(--black);
+}
+.weight-current .wc-unit {
+  font-family: 'Archivo Black', sans-serif; font-size: 13px;
+  color: var(--black);
+}
+.weight-current .wc-delta {
+  font-family: 'Archivo Black', sans-serif; font-size: 12px;
+  padding: 2px 8px; border: 2px solid var(--black);
+}
+.weight-current .wc-delta.up { background: #f8d7da; color: #a8453c; }
+.weight-current .wc-delta.down { background: #d1e7dd; color: #0f5132; }
+.weight-current .wc-delta.same { background: var(--cream); color: var(--black); }
+.weight-current .wc-time {
+  font-size: 11px; opacity: 0.6; font-style: italic;
+  margin-left: auto;
+}
+.weight-goal-line {
+  display: flex; align-items: center; gap: 8px;
+  font-size: 11px; font-weight: 700; color: var(--black);
+  margin-top: 8px; padding-top: 8px;
+  border-top: 2px dashed #c9bda3;
+}
+.weight-goal-line .wg-value { color: var(--prot); }
+.weight-goal-line .wg-diff { margin-left: auto; opacity: 0.7; }
+.weight-history-link {
+  display: block; width: 100%; margin-top: 8px; padding: 6px;
+  background: var(--cream); border: 2px solid var(--black);
+  font-family: 'Archivo Black', sans-serif; font-size: 10px;
+  text-transform: uppercase; letter-spacing: 0.5px;
+  cursor: pointer; color: var(--black);
+  box-shadow: var(--shadow-sm);
+}
+.weight-history-link:active { transform: translate(1px, 1px); box-shadow: 0 0 0 var(--black); }
 </style>
 </head>
 <body>
@@ -998,6 +1076,18 @@ input:focus, textarea:focus { outline: none; transform: translate(-1px, -1px); b
           <span class="p-l" id="pctL">L 0%</span>
         </div>
       </div>
+            <div class="weight-block" id="weightBlock">
+        <div class="weight-head">
+          <span class="weight-icon">⚖️</span>
+          <span class="weight-title">Poids du jour</span>
+          <button class="weight-icon-btn" id="weightGoalBtn" title="Objectif poids">⚙️</button>
+          <button class="weight-icon-btn primary" id="weightAddBtn" title="Ajouter une pesée">+</button>
+        </div>
+        <div class="weight-body" id="weightBody">
+          <div class="weight-empty">Aucune pesée enregistrée</div>
+        </div>
+      </div>
+
       <div id="mealsContainer"></div>
     </div>
 
@@ -1159,6 +1249,46 @@ input:focus, textarea:focus { outline: none; transform: translate(-1px, -1px); b
     <div class="actions-2">
       <button class="btn btn-outline" id="goalCancel">Annuler</button>
       <button class="btn btn-primary" id="goalConfirm">Enregistrer</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="weightModal">
+  <div class="modal">
+    <h3 id="weightModalTitle">⚖️ Ajouter une pesée</h3>
+    <label>Poids (kg) *</label>
+    <input type="number" id="weightInput" min="20" max="300" step="0.1" placeholder="Ex: 72.4" />
+    <label>Date et heure</label>
+    <input type="datetime-local" id="weightDate" style="width:100%;padding:11px 13px;border:2px solid var(--black);background:white;font-size:14px;font-weight:700;font-family:'Inter',sans-serif;box-shadow:var(--shadow-sm);" />
+    <label>Note (optionnel)</label>
+    <input type="text" id="weightNote" placeholder="Ex: à jeun" autocomplete="off" />
+    <div class="actions-2" style="grid-template-columns: 1fr 1fr 1fr;">
+      <button class="btn btn-outline" id="weightCancel">Annuler</button>
+      <button class="btn btn-danger" id="weightDelete" style="display:none;">🗑️</button>
+      <button class="btn btn-primary" id="weightConfirm">Enregistrer</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="weightGoalModal">
+  <div class="modal">
+    <h3>🎯 Objectif de poids</h3>
+    <p class="hint">Définis ton objectif. Laisse vide pour désactiver.</p>
+    <label>⚖️ Poids cible (kg)</label>
+    <input type="number" id="weightGoalInput" min="20" max="300" step="0.1" placeholder="Ex: 70" />
+    <div class="actions-2">
+      <button class="btn btn-outline" id="weightGoalCancel">Annuler</button>
+      <button class="btn btn-primary" id="weightGoalConfirm">Enregistrer</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="weightHistoryModal">
+  <div class="modal">
+    <h3>📅 Historique des pesées</h3>
+    <div id="weightHistoryList" style="max-height:60vh;overflow-y:auto;margin-top:8px;"></div>
+    <div class="actions-2">
+      <button class="btn btn-outline" id="weightHistoryClose" style="grid-column: span 2;">Fermer</button>
     </div>
   </div>
 </div>
@@ -1563,6 +1693,8 @@ let recipes = JSON.parse(localStorage.getItem('recipes') || '[]');
 let menus = JSON.parse(localStorage.getItem('menus') || '[]');
 let hiddenFoods = JSON.parse(localStorage.getItem('hiddenFoods') || '[]');
 let dailyGoal = JSON.parse(localStorage.getItem('dailyGoal') || 'null');
+let weightLog = JSON.parse(localStorage.getItem('weightLog') || '[]');
+let weightGoal = JSON.parse(localStorage.getItem('weightGoal') || 'null');
 function saveCustomFoods() { localStorage.setItem('customFoods', JSON.stringify(customFoods)); }
 function saveCustomTranslations() { localStorage.setItem('customTranslations', JSON.stringify(customTranslations)); }
 function saveJournal() { localStorage.setItem('journal', JSON.stringify(journal)); }
@@ -1571,6 +1703,8 @@ function saveRecipes() { localStorage.setItem('recipes', JSON.stringify(recipes)
 function saveMenus() { localStorage.setItem('menus', JSON.stringify(menus)); }
 function saveHiddenFoods() { localStorage.setItem('hiddenFoods', JSON.stringify(hiddenFoods)); }
 function saveDailyGoal() { localStorage.setItem('dailyGoal', JSON.stringify(dailyGoal)); }
+function saveWeightLog() { localStorage.setItem('weightLog', JSON.stringify(weightLog)); }
+function saveWeightGoal() { localStorage.setItem('weightGoal', JSON.stringify(weightGoal)); }
 
 function round(v) { return Math.round(v * 10) / 10; }
 function getAllFoods() {
@@ -2297,6 +2431,62 @@ function renderMenuRecipeSelect() {
 }
 
 
+// ============================================================
+// SUIVI DU POIDS
+// ============================================================
+function genererIdPoids() {
+  return Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
+}
+
+function ajouterPesee(weight, timestamp, note) {
+  if (!weight || weight <= 0) return null;
+  const p = {
+    id: genererIdPoids(),
+    weight: Math.round(weight * 10) / 10,
+    timestamp: timestamp || Date.now(),
+    note: (note || '').trim()
+  };
+  weightLog.unshift(p);
+  weightLog.sort((a, b) => b.timestamp - a.timestamp);
+  saveWeightLog();
+  return p;
+}
+
+function supprimerPesee(id) {
+  weightLog = weightLog.filter(p => p.id !== id);
+  saveWeightLog();
+}
+
+function modifierPesee(id, changes) {
+  const p = weightLog.find(x => x.id === id);
+  if (!p) return null;
+  if (changes.weight) p.weight = Math.round(changes.weight * 10) / 10;
+  if (changes.timestamp) p.timestamp = changes.timestamp;
+  if (changes.note !== undefined) p.note = changes.note.trim();
+  weightLog.sort((a, b) => b.timestamp - a.timestamp);
+  saveWeightLog();
+  return p;
+}
+
+function getPeseesTriees() {
+  return weightLog.slice().sort((a, b) => b.timestamp - a.timestamp);
+}
+
+function getVariation(weightLog, index) {
+  // Variation vs pesée precedente (plus ancienne dans la liste triee desc)
+  if (index >= weightLog.length - 1) return null; // pas de precedente
+  return Math.round((weightLog[index].weight - weightLog[index + 1].weight) * 10) / 10;
+}
+
+function formatWeightDate(ts) {
+  const d = new Date(ts);
+  const jours = ['dim.', 'lun.', 'mar.', 'mer.', 'jeu.', 'ven.', 'sam.'];
+  const mois = ['janv.', 'fevr.', 'mars', 'avr.', 'mai', 'juin', 'juil.', 'aout', 'sept.', 'oct.', 'nov.', 'dec.'];
+  const hh = String(d.getHours()).padStart(2, '0');
+  const mm = String(d.getMinutes()).padStart(2, '0');
+  return jours[d.getDay()] + ' ' + d.getDate() + ' ' + mois[d.getMonth()] + ' ' + hh + ':' + mm;
+}
+
 function renderRecipes() {
   const ul = document.getElementById('recipesList');
   ul.innerHTML = '';
@@ -2709,6 +2899,76 @@ function computeTotals(items) {
            lip: round(lip), fiber: round(fiber) };
 }
 let currentDay = todayKey();
+// ============================================================
+// AFFICHAGE BLOC POIDS DANS JOURNAL
+// ============================================================
+function renderWeightBlock() {
+  const body = document.getElementById('weightBody');
+  if (!body) return;
+
+  const today = todayKey();
+  const peseesToday = weightLog.filter(p => {
+    const d = new Date(p.timestamp);
+    return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0') === today;
+  });
+  const p = peseesToday.length > 0 ? peseesToday[0] : null;
+
+  let html = '';
+
+  if (p) {
+    // Chercher la pesee precedente (la plus recente, hors aujourd'hui)
+    const sorted = weightLog.slice().sort((a, b) => b.timestamp - a.timestamp);
+    const idx = sorted.findIndex(x => x.id === p.id);
+    const prev = idx >= 0 && idx < sorted.length - 1 ? sorted[idx + 1] : null;
+    const diff = prev ? Math.round((p.weight - prev.weight) * 10) / 10 : null;
+
+    let diffHtml = '';
+    if (diff !== null) {
+      let cls = 'same';
+      let label = '=' + Math.abs(diff) + ' kg';
+      if (diff > 0) { cls = 'up'; label = '▲ +' + diff + ' kg'; }
+      else if (diff < 0) { cls = 'down'; label = '▼ ' + diff + ' kg'; }
+      diffHtml = '<span class="wc-delta ' + cls + '">' + label + '</span>';
+    } else {
+      diffHtml = '<span class="wc-delta same">1ère pesée</span>';
+    }
+
+    const hh = String(new Date(p.timestamp).getHours()).padStart(2,'0');
+    const mm = String(new Date(p.timestamp).getMinutes()).padStart(2,'0');
+
+    html += '<div class="weight-current">';
+    html += '<span class="wc-value">' + p.weight + '</span>';
+    html += '<span class="wc-unit">kg</span>';
+    html += diffHtml;
+    html += '<span class="wc-time">' + hh + ':' + mm + '</span>';
+    html += '</div>';
+  } else {
+    html += '<div class="weight-empty">Pas de pesée aujourd\'hui — clique sur +</div>';
+  }
+
+  if (weightGoal && weightGoal > 0) {
+    const current = p ? p.weight : (weightLog[0] ? weightLog[0].weight : null);
+    let diffStr = '';
+    if (current) {
+      const diffGoal = Math.round((current - weightGoal) * 10) / 10;
+      diffStr = diffGoal > 0 ? '+' + diffGoal + ' kg à perdre' : (diffGoal < 0 ? Math.abs(diffGoal) + ' kg à prendre' : 'atteint !');
+    }
+    html += '<div class="weight-goal-line">';
+    html += '<span>🎯 Objectif : <span class="wg-value">' + weightGoal + ' kg</span></span>';
+    if (diffStr) html += '<span class="wg-diff">' + diffStr + '</span>';
+    html += '</div>';
+  }
+
+  if (weightLog.length > 0) {
+    html += '<button class="weight-history-link" id="weightHistoryBtn">📅 Historique (' + weightLog.length + ' pesée' + (weightLog.length > 1 ? 's' : '') + ')</button>';
+  }
+
+  body.innerHTML = html;
+
+  const histBtn = document.getElementById('weightHistoryBtn');
+  if (histBtn) histBtn.addEventListener('click', openWeightHistoryModal);
+}
+
 function renderJournal() {
   document.getElementById('dayLabel').textContent = formatDayLabel(currentDay);
   const entry = getDayEntry(currentDay);
@@ -3175,7 +3435,7 @@ function renderRecents() {
 // ============================================================
 const BACKUP_KEYS = [
   'customFoods', 'customTranslations', 'journal',
-  'recentFoods', 'recipes', 'hiddenFoods', 'dailyGoal', 'menus'
+  'recentFoods', 'recipes', 'hiddenFoods', 'dailyGoal', 'menus', 'weightLog', 'weightGoal'
 ];
 
 function exporterSauvegarde() {
@@ -3465,6 +3725,139 @@ document.getElementById('saveMenuBtn').addEventListener('click', () => {
   document.getElementById('menuResult').classList.remove('show');
   showToast('✅ Menu "' + name + '" sauvegardé');
 });
+// ============================================================
+// BINDINGS POIDS
+// ============================================================
+let weightEditId = null;
+
+function toLocalDatetimeValue(ts) {
+  const d = new Date(ts);
+  const pad = n => String(n).padStart(2, '0');
+  return d.getFullYear() + '-' + pad(d.getMonth()+1) + '-' + pad(d.getDate()) + 'T' + pad(d.getHours()) + ':' + pad(d.getMinutes());
+}
+
+function fromLocalDatetimeValue(v) {
+  if (!v) return Date.now();
+  const d = new Date(v);
+  return isNaN(d.getTime()) ? Date.now() : d.getTime();
+}
+
+function openWeightModal(pesee) {
+  weightEditId = pesee ? pesee.id : null;
+  document.getElementById('weightModalTitle').textContent = pesee ? '✏️ Modifier la pesée' : '⚖️ Ajouter une pesée';
+  document.getElementById('weightInput').value = pesee ? pesee.weight : '';
+  document.getElementById('weightDate').value = toLocalDatetimeValue(pesee ? pesee.timestamp : Date.now());
+  document.getElementById('weightNote').value = pesee ? (pesee.note || '') : '';
+  document.getElementById('weightDelete').style.display = pesee ? 'block' : 'none';
+  document.getElementById('weightModal').classList.add('show');
+  setTimeout(() => document.getElementById('weightInput').focus(), 150);
+}
+
+function closeWeightModal() {
+  document.getElementById('weightModal').classList.remove('show');
+  weightEditId = null;
+}
+
+document.getElementById('weightAddBtn').addEventListener('click', () => openWeightModal(null));
+document.getElementById('weightCancel').addEventListener('click', closeWeightModal);
+document.getElementById('weightModal').addEventListener('click', e => {
+  if (e.target.id === 'weightModal') closeWeightModal();
+});
+
+document.getElementById('weightConfirm').addEventListener('click', () => {
+  const w = parseFloat(document.getElementById('weightInput').value);
+  const ts = fromLocalDatetimeValue(document.getElementById('weightDate').value);
+  const note = document.getElementById('weightNote').value;
+  if (!w || w <= 0) { alert('Poids invalide'); return; }
+
+  if (weightEditId) {
+    modifierPesee(weightEditId, { weight: w, timestamp: ts, note });
+    showToast('✅ Pesée modifiée');
+  } else {
+    ajouterPesee(w, ts, note);
+    showToast('✅ Pesée ajoutée');
+  }
+  closeWeightModal();
+  renderWeightBlock();
+});
+
+document.getElementById('weightDelete').addEventListener('click', () => {
+  if (!weightEditId) return;
+  if (!confirm('Supprimer cette pesée ?')) return;
+  supprimerPesee(weightEditId);
+  closeWeightModal();
+  renderWeightBlock();
+  showToast('🗑️ Pesée supprimée');
+});
+
+// Objectif poids
+document.getElementById('weightGoalBtn').addEventListener('click', () => {
+  document.getElementById('weightGoalInput').value = weightGoal || '';
+  document.getElementById('weightGoalModal').classList.add('show');
+  setTimeout(() => document.getElementById('weightGoalInput').focus(), 150);
+});
+document.getElementById('weightGoalCancel').addEventListener('click', () => {
+  document.getElementById('weightGoalModal').classList.remove('show');
+});
+document.getElementById('weightGoalModal').addEventListener('click', e => {
+  if (e.target.id === 'weightGoalModal') document.getElementById('weightGoalModal').classList.remove('show');
+});
+document.getElementById('weightGoalConfirm').addEventListener('click', () => {
+  const v = parseFloat(document.getElementById('weightGoalInput').value);
+  weightGoal = (!v || v <= 0) ? null : Math.round(v * 10) / 10;
+  saveWeightGoal();
+  document.getElementById('weightGoalModal').classList.remove('show');
+  renderWeightBlock();
+  showToast(weightGoal ? '🎯 Objectif : ' + weightGoal + ' kg' : '🎯 Objectif désactivé');
+});
+
+// Historique
+function openWeightHistoryModal() {
+  const list = document.getElementById('weightHistoryList');
+  const sorted = getPeseesTriees();
+  if (sorted.length === 0) {
+    list.innerHTML = '<div class="weight-empty">Aucune pesée enregistrée</div>';
+    document.getElementById('weightHistoryModal').classList.add('show');
+    return;
+  }
+  let h = '<ul class="recipes-list">';
+  sorted.forEach((p, i) => {
+    const v = getVariation(sorted, i);
+    let deltaStr = '';
+    if (v !== null) {
+      const cls = v > 0 ? 'up' : (v < 0 ? 'down' : 'same');
+      const label = v > 0 ? '+' + v : (v < 0 ? '' + v : '=');
+      deltaStr = '<span class="wc-delta ' + cls + '" style="margin-left:8px;font-size:11px;padding:1px 6px;">' + label + ' kg</span>';
+    }
+    h += '<li class="recipe-card" data-pesee-id="' + p.id + '" style="cursor:pointer;">';
+    h += '<div class="rc-head">';
+    h += '<span class="rc-name">' + p.weight + ' kg' + deltaStr + '</span>';
+    h += '<span class="rc-kcal">' + formatWeightDate(p.timestamp) + '</span>';
+    h += '</div>';
+    if (p.note) h += '<div style="font-size:11px;font-style:italic;color:#6b5e50;margin-top:4px;">' + p.note + '</div>';
+    h += '</li>';
+  });
+  h += '</ul>';
+  list.innerHTML = h;
+  list.querySelectorAll('[data-pesee-id]').forEach(el => {
+    el.addEventListener('click', () => {
+      const p = weightLog.find(x => x.id === el.dataset.peseeId);
+      if (p) {
+        document.getElementById('weightHistoryModal').classList.remove('show');
+        openWeightModal(p);
+      }
+    });
+  });
+  document.getElementById('weightHistoryModal').classList.add('show');
+}
+
+document.getElementById('weightHistoryClose').addEventListener('click', () => {
+  document.getElementById('weightHistoryModal').classList.remove('show');
+});
+document.getElementById('weightHistoryModal').addEventListener('click', e => {
+  if (e.target.id === 'weightHistoryModal') document.getElementById('weightHistoryModal').classList.remove('show');
+});
+
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
     navigator.serviceWorker.register('./sw.js').catch(() => {});
