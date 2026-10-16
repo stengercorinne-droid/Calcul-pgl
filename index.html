@@ -893,6 +893,27 @@ input:focus, textarea:focus { outline: none; transform: translate(-1px, -1px); b
           <input type="text" class="manage-search" id="manageSearch" placeholder="🔍 Filtrer..." autocomplete="off" />
           <ul class="manage-list" id="manageList"></ul>
         </div>
+        <div class="acc-section" id="syncBlock">
+          <div class="acc-section-title"><span>☁️</span> Synchronisation multi-appareils</div>
+          <p class="search-hint" style="text-align:left;margin-top:0;">Sync PC ↔ iPhone via Gist privé.</p>
+          <label>🔑 Gist ID</label>
+          <input type="text" id="syncGistId" placeholder="ID du Gist privé" autocomplete="off" />
+          <label>🔐 Token GitHub</label>
+          <input type="password" id="syncToken" placeholder="github_pat_..." autocomplete="off" />
+          <div class="backup-actions">
+            <button class="btn btn-outline" id="syncTestBtn">🔗 Tester</button>
+            <button class="btn btn-primary" id="syncSaveBtn">💾 Sauver</button>
+          </div>
+          <div class="backup-actions">
+            <button class="btn btn-success" id="syncPushBtn">⬆️ Envoyer</button>
+            <button class="btn btn-primary" id="syncPullBtn">⬇️ Récupérer</button>
+          </div>
+          <label style="display:flex;align-items:center;gap:8px;margin-top:14px;cursor:pointer;text-transform:none;font-family:'Inter',sans-serif;font-size:13px;font-weight:700;">
+            <input type="checkbox" id="syncAutoToggle" style="width:auto;box-shadow:none;" />
+            Sync auto au démarrage
+          </label>
+          <div class="backup-info" id="syncInfo"></div>
+        </div>
         <div class="acc-section">
           <div class="acc-section-title"><span>💾</span> Sauvegarde / Restauration</div>
           <p class="search-hint" style="text-align:left;margin-top:0;">
@@ -1695,6 +1716,7 @@ let hiddenFoods = JSON.parse(localStorage.getItem('hiddenFoods') || '[]');
 let dailyGoal = JSON.parse(localStorage.getItem('dailyGoal') || 'null');
 let weightLog = JSON.parse(localStorage.getItem('weightLog') || '[]');
 let weightGoal = JSON.parse(localStorage.getItem('weightGoal') || 'null');
+let syncConfig = JSON.parse(localStorage.getItem('syncConfig') || '{"gistId":"","token":"","autoSync":false}');
 function saveCustomFoods() { localStorage.setItem('customFoods', JSON.stringify(customFoods)); }
 function saveCustomTranslations() { localStorage.setItem('customTranslations', JSON.stringify(customTranslations)); }
 function saveJournal() { localStorage.setItem('journal', JSON.stringify(journal)); }
@@ -1705,6 +1727,7 @@ function saveHiddenFoods() { localStorage.setItem('hiddenFoods', JSON.stringify(
 function saveDailyGoal() { localStorage.setItem('dailyGoal', JSON.stringify(dailyGoal)); }
 function saveWeightLog() { localStorage.setItem('weightLog', JSON.stringify(weightLog)); }
 function saveWeightGoal() { localStorage.setItem('weightGoal', JSON.stringify(weightGoal)); }
+function saveSyncConfig() { localStorage.setItem('syncConfig', JSON.stringify(syncConfig)); }
 
 function round(v) { return Math.round(v * 10) / 10; }
 function getAllFoods() {
@@ -3521,6 +3544,50 @@ document.getElementById('importFile').addEventListener('change', e => {
 // ============================================================
 // SCANNER CODE-BARRES + OPEN FOOD FACTS
 // ============================================================
+async function pushToGist() {
+  if (!syncConfig.gistId || !syncConfig.token) throw new Error('Config sync incomplète');
+  const data = { _meta: { app: 'Calcul PGL', version: 1, updatedAt: Date.now() }, customFoods, customTranslations, journal, recentFoods, recipes, hiddenFoods, dailyGoal, menus, weightLog, weightGoal };
+  const body = { files: { 'pgl-data.json': { content: JSON.stringify(data, null, 2) } } };
+  const res = await fetch('https://api.github.com/gists/' + syncConfig.gistId, { method: 'PATCH', headers: { 'Authorization': 'Bearer ' + syncConfig.token, 'Accept': 'application/vnd.github+json', 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
+  if (!res.ok) { const err = await res.json().catch(() => ({})); throw new Error(err.message || 'HTTP ' + res.status); }
+  return await res.json();
+}
+async function pullFromGist() {
+  if (!syncConfig.gistId || !syncConfig.token) throw new Error('Config sync incomplète');
+  const res = await fetch('https://api.github.com/gists/' + syncConfig.gistId, { headers: { 'Authorization': 'Bearer ' + syncConfig.token, 'Accept': 'application/vnd.github+json' } });
+  if (!res.ok) { const err = await res.json().catch(() => ({})); throw new Error(err.message || 'HTTP ' + res.status); }
+  const data = await res.json();
+  const file = data.files && data.files['pgl-data.json'];
+  if (!file) throw new Error('Fichier pgl-data.json absent du Gist');
+  const content = file.content || (file.raw_url ? await (await fetch(file.raw_url)).text() : null);
+  if (!content) throw new Error('Contenu vide');
+  return JSON.parse(content);
+}
+async function testSyncConnection() {
+  try {
+    const res = await fetch('https://api.github.com/gists/' + syncConfig.gistId, { headers: { 'Authorization': 'Bearer ' + syncConfig.token, 'Accept': 'application/vnd.github+json' } });
+    if (res.status === 401) return { ok: false, msg: 'Token invalide ou expiré' };
+    if (res.status === 404) return { ok: false, msg: 'Gist introuvable' };
+    if (!res.ok) return { ok: false, msg: 'Erreur HTTP ' + res.status };
+    const data = await res.json();
+    const hasFile = !!(data.files && data.files['pgl-data.json']);
+    return { ok: hasFile, msg: hasFile ? 'Connexion OK' : 'pgl-data.json manquant' };
+  } catch (e) { return { ok: false, msg: 'Erreur : ' + e.message }; }
+}
+function appliquerDonneesSync(data) {
+  if (!data || typeof data !== 'object') throw new Error('Format invalide');
+  if (Array.isArray(data.customFoods)) { customFoods = data.customFoods; saveCustomFoods(); }
+  if (data.customTranslations && typeof data.customTranslations === 'object') { customTranslations = data.customTranslations; saveCustomTranslations(); }
+  if (data.journal && typeof data.journal === 'object') { journal = data.journal; saveJournal(); }
+  if (Array.isArray(data.recentFoods)) { recentFoods = data.recentFoods; saveRecentFoods(); }
+  if (Array.isArray(data.recipes)) { recipes = data.recipes; saveRecipes(); }
+  if (Array.isArray(data.hiddenFoods)) { hiddenFoods = data.hiddenFoods; saveHiddenFoods(); }
+  if (data.dailyGoal !== undefined) { dailyGoal = data.dailyGoal; saveDailyGoal(); }
+  if (Array.isArray(data.menus)) { menus = data.menus; saveMenus(); }
+  if (Array.isArray(data.weightLog)) { weightLog = data.weightLog; saveWeightLog(); }
+  if (data.weightGoal !== undefined) { weightGoal = data.weightGoal; saveWeightGoal(); }
+}
+
 let html5QrCode = null;
 let scannerActif = false;
 
@@ -3620,6 +3687,73 @@ document.getElementById('scanBarcodeBtn').addEventListener('click', async () => 
 // ============================================================
 // INIT
 // ============================================================
+// ============================================================
+// BINDINGS SYNC GIST
+// ============================================================
+function setSyncInfo(msg, cls) {
+  const el = document.getElementById('syncInfo');
+  if (!el) return;
+  el.textContent = msg;
+  el.className = 'backup-info' + (cls ? ' ' + cls : '');
+}
+
+function loadSyncUI() {
+  const gid = document.getElementById('syncGistId');
+  const tk = document.getElementById('syncToken');
+  const at = document.getElementById('syncAutoToggle');
+  if (gid) gid.value = syncConfig.gistId || '';
+  if (tk) tk.value = syncConfig.token || '';
+  if (at) at.checked = !!syncConfig.autoSync;
+}
+
+document.getElementById('syncSaveBtn').addEventListener('click', () => {
+  syncConfig.gistId = document.getElementById('syncGistId').value.trim();
+  syncConfig.token = document.getElementById('syncToken').value.trim();
+  syncConfig.autoSync = document.getElementById('syncAutoToggle').checked;
+  saveSyncConfig();
+  setSyncInfo('✅ Config sauvegardée', 'success');
+});
+
+document.getElementById('syncTestBtn').addEventListener('click', async () => {
+  syncConfig.gistId = document.getElementById('syncGistId').value.trim();
+  syncConfig.token = document.getElementById('syncToken').value.trim();
+  saveSyncConfig();
+  setSyncInfo('⏳ Test en cours...');
+  const r = await testSyncConnection();
+  setSyncInfo((r.ok ? '✅ ' : '❌ ') + r.msg, r.ok ? 'success' : 'error');
+});
+
+document.getElementById('syncPushBtn').addEventListener('click', async () => {
+  syncConfig.gistId = document.getElementById('syncGistId').value.trim();
+  syncConfig.token = document.getElementById('syncToken').value.trim();
+  saveSyncConfig();
+  if (!syncConfig.gistId || !syncConfig.token) { setSyncInfo('❌ Config incomplète', 'error'); return; }
+  setSyncInfo('⏳ Envoi en cours...');
+  try {
+    await pushToGist();
+    setSyncInfo('✅ Données envoyées sur GitHub', 'success');
+    showToast('⬆️ Sync envoyée');
+  } catch (e) { setSyncInfo('❌ ' + e.message, 'error'); }
+});
+
+document.getElementById('syncPullBtn').addEventListener('click', async () => {
+  syncConfig.gistId = document.getElementById('syncGistId').value.trim();
+  syncConfig.token = document.getElementById('syncToken').value.trim();
+  saveSyncConfig();
+  if (!syncConfig.gistId || !syncConfig.token) { setSyncInfo('❌ Config incomplète', 'error'); return; }
+  if (!confirm('Récupérer les données du Gist va REMPLACER tes données locales. Continuer ?')) return;
+  setSyncInfo('⏳ Récupération...');
+  try {
+    const data = await pullFromGist();
+    appliquerDonneesSync(data);
+    setSyncInfo('✅ Données récupérées — rechargement...', 'success');
+    showToast('⬇️ Sync récupérée');
+    setTimeout(() => location.reload(), 900);
+  } catch (e) { setSyncInfo('❌ ' + e.message, 'error'); }
+});
+
+setTimeout(loadSyncUI, 200);
+
 initAutocomplete('ingredientSelectInput', 'ingredientSelectList', 'ingredientSelect', 'ingredientSelectWrap');
 initAutocomplete('recipeSelectInput', 'recipeSelectList', 'recipeSelect', 'recipeSelectWrap');
 initAutocomplete('addMealFoodInput', 'addMealFoodList', 'addMealFood', 'addMealFoodWrap');
