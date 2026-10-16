@@ -3461,7 +3461,7 @@ const BACKUP_KEYS = [
   'recentFoods', 'recipes', 'hiddenFoods', 'dailyGoal', 'menus', 'weightLog', 'weightGoal'
 ];
 
-function exporterSauvegarde() {
+async function exporterSauvegarde() {
   const data = {
     _meta: {
       app: 'Calcul PGL',
@@ -3475,24 +3475,50 @@ function exporterSauvegarde() {
     catch { data[k] = null; }
   });
   const json = JSON.stringify(data, null, 2);
-  const blob = new Blob([json], { type: 'application/json' });
-  const url = URL.createObjectURL(blob);
   const d = new Date();
-  const stamp = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}_${String(d.getHours()).padStart(2,'0')}h${String(d.getMinutes()).padStart(2,'0')}`;
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = `pgl-sauvegarde_${stamp}.json`;
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
-  URL.revokeObjectURL(url);
+  const stamp = d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0') + '_' + String(d.getHours()).padStart(2,'0') + 'h' + String(d.getMinutes()).padStart(2,'0');
+  const filename = 'pgl-sauvegarde_' + stamp + '.json';
+
   const nbAlim = (data.customFoods || []).length;
   const nbRec = (data.recipes || []).length;
   const nbJours = Object.keys(data.journal || {}).length;
   const nbTrad = Object.keys(data.customTranslations || {}).length;
-  document.getElementById('backupInfo').textContent =
-    `✅ Export réussi — ${nbAlim} aliments custom, ${nbRec} recettes, ${nbJours} jours, ${nbTrad} traductions.`;
-  showToast('💾 Sauvegarde exportée');
+  const info = '✅ Export réussi — ' + nbAlim + ' aliments custom, ' + nbRec + ' recettes, ' + nbJours + ' jours, ' + nbTrad + ' traductions.';
+
+  // Tentative Web Share API (iOS + Android moderne)
+  try {
+    const file = new File([json], filename, { type: 'application/json' });
+    if (navigator.canShare && navigator.canShare({ files: [file] })) {
+      await navigator.share({
+        files: [file],
+        title: 'Sauvegarde PGL',
+        text: 'Ma sauvegarde Calculateur PGL'
+      });
+      document.getElementById('backupInfo').textContent = info + ' (partagée via iOS/Android)';
+      showToast('💾 Sauvegarde partagée');
+      return;
+    }
+  } catch (err) {
+    if (err.name === 'AbortError') {
+      // Utilisateur a annulé — on ne fait rien
+      return;
+    }
+    // Sinon on tombe sur la méthode classique
+    console.warn('Share API a échoué, fallback téléchargement:', err.message);
+  }
+
+  // Fallback : téléchargement classique (PC, navigateur desktop)
+  const blob = new Blob([json], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  document.getElementById('backupInfo').textContent = info + ' (téléchargé)';
+  showToast('💾 Sauvegarde téléchargée');
 }
 
 function importerSauvegarde(file) {
