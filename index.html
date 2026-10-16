@@ -896,10 +896,14 @@ input:focus, textarea:focus { outline: none; transform: translate(-1px, -1px); b
         <div class="acc-section" id="syncBlock">
           <div class="acc-section-title"><span>☁️</span> Synchronisation multi-appareils</div>
           <p class="search-hint" style="text-align:left;margin-top:0;">Sync PC ↔ iPhone via Gist privé.</p>
+          <form id="syncForm" autocomplete="off" onsubmit="return false;">
           <label>🔑 Gist ID</label>
           <input type="text" id="syncGistId" placeholder="ID du Gist privé" autocomplete="off" />
           <label>🔐 Token GitHub</label>
-          <input type="password" id="syncToken" placeholder="github_pat_..." autocomplete="off" />
+          <div style="position:relative;">
+            <input type="text" id="syncToken" placeholder="github_pat_..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" style="-webkit-text-security: disc; text-security: disc;" />
+            <button type="button" id="syncTokenToggle" style="position:absolute;top:50%;right:8px;transform:translateY(-50%);width:28px;height:28px;padding:0;border:2px solid var(--black);background:white;cursor:pointer;font-size:14px;line-height:1;box-shadow:none;">👁</button>
+          </div>
           <div class="backup-actions">
             <button class="btn btn-outline" id="syncTestBtn">🔗 Tester</button>
             <button class="btn btn-primary" id="syncSaveBtn">💾 Sauver</button>
@@ -913,6 +917,7 @@ input:focus, textarea:focus { outline: none; transform: translate(-1px, -1px); b
             Sync auto au démarrage
           </label>
           <div class="backup-info" id="syncInfo"></div>
+          </form>
         </div>
         <div class="acc-section">
           <div class="acc-section-title"><span>💾</span> Sauvegarde / Restauration</div>
@@ -3461,7 +3466,7 @@ const BACKUP_KEYS = [
   'recentFoods', 'recipes', 'hiddenFoods', 'dailyGoal', 'menus', 'weightLog', 'weightGoal'
 ];
 
-async function exporterSauvegarde() {
+function exporterSauvegarde() {
   const data = {
     _meta: {
       app: 'Calcul PGL',
@@ -3475,50 +3480,24 @@ async function exporterSauvegarde() {
     catch { data[k] = null; }
   });
   const json = JSON.stringify(data, null, 2);
-  const d = new Date();
-  const stamp = d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0') + '_' + String(d.getHours()).padStart(2,'0') + 'h' + String(d.getMinutes()).padStart(2,'0');
-  const filename = 'pgl-sauvegarde_' + stamp + '.json';
-
-  const nbAlim = (data.customFoods || []).length;
-  const nbRec = (data.recipes || []).length;
-  const nbJours = Object.keys(data.journal || {}).length;
-  const nbTrad = Object.keys(data.customTranslations || {}).length;
-  const info = '✅ Export réussi — ' + nbAlim + ' aliments custom, ' + nbRec + ' recettes, ' + nbJours + ' jours, ' + nbTrad + ' traductions.';
-
-  // Tentative Web Share API (iOS + Android moderne)
-  try {
-    const file = new File([json], filename, { type: 'application/json' });
-    if (navigator.canShare && navigator.canShare({ files: [file] })) {
-      await navigator.share({
-        files: [file],
-        title: 'Sauvegarde PGL',
-        text: 'Ma sauvegarde Calculateur PGL'
-      });
-      document.getElementById('backupInfo').textContent = info + ' (partagée via iOS/Android)';
-      showToast('💾 Sauvegarde partagée');
-      return;
-    }
-  } catch (err) {
-    if (err.name === 'AbortError') {
-      // Utilisateur a annulé — on ne fait rien
-      return;
-    }
-    // Sinon on tombe sur la méthode classique
-    console.warn('Share API a échoué, fallback téléchargement:', err.message);
-  }
-
-  // Fallback : téléchargement classique (PC, navigateur desktop)
   const blob = new Blob([json], { type: 'application/json' });
   const url = URL.createObjectURL(blob);
+  const d = new Date();
+  const stamp = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}_${String(d.getHours()).padStart(2,'0')}h${String(d.getMinutes()).padStart(2,'0')}`;
   const a = document.createElement('a');
   a.href = url;
-  a.download = filename;
+  a.download = `pgl-sauvegarde_${stamp}.json`;
   document.body.appendChild(a);
   a.click();
   document.body.removeChild(a);
   URL.revokeObjectURL(url);
-  document.getElementById('backupInfo').textContent = info + ' (téléchargé)';
-  showToast('💾 Sauvegarde téléchargée');
+  const nbAlim = (data.customFoods || []).length;
+  const nbRec = (data.recipes || []).length;
+  const nbJours = Object.keys(data.journal || {}).length;
+  const nbTrad = Object.keys(data.customTranslations || {}).length;
+  document.getElementById('backupInfo').textContent =
+    `✅ Export réussi — ${nbAlim} aliments custom, ${nbRec} recettes, ${nbJours} jours, ${nbTrad} traductions.`;
+  showToast('💾 Sauvegarde exportée');
 }
 
 function importerSauvegarde(file) {
@@ -3721,6 +3700,27 @@ function setSyncInfo(msg, cls) {
   if (!el) return;
   el.textContent = msg;
   el.className = 'backup-info' + (cls ? ' ' + cls : '');
+}
+
+function loadSyncUI() {
+  const gid = document.getElementById('syncGistId');
+  const tk = document.getElementById('syncToken');
+  const at = document.getElementById('syncAutoToggle');
+  if (gid) gid.value = syncConfig.gistId || '';
+  if (tk) tk.value = syncConfig.token || '';
+  if (at) at.checked = !!syncConfig.autoSync;
+}
+
+const _toggleBtn = document.getElementById('syncTokenToggle');
+if (_toggleBtn) {
+  _toggleBtn.addEventListener('click', () => {
+    const inp = document.getElementById('syncToken');
+    if (!inp) return;
+    const isMasked = inp.style.webkitTextSecurity !== 'none';
+    inp.style.webkitTextSecurity = isMasked ? 'none' : 'disc';
+    inp.style.textSecurity = isMasked ? 'none' : 'disc';
+    _toggleBtn.textContent = isMasked ? '🙈' : '👁';
+  });
 }
 
 function loadSyncUI() {

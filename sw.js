@@ -1,4 +1,4 @@
-const CACHE = 'pgl-v27'
+const CACHE = 'pgl-v29'
 const ASSETS = [
   './',
   './index.html',
